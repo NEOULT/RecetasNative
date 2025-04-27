@@ -7,7 +7,7 @@ export const ThemedButton = ({ title, onPress }) => {
   
   return (
     <TouchableOpacity 
-      style={[styles.button, { backgroundColor: colors.regular_textcolor }]}
+      style={[styles.button, { backgroundColor: colors.navigation_backgroundcolor }]}
       onPress={onPress}
     >
       <Text style={[styles.text, { color: colors.text }]}>{title}</Text>

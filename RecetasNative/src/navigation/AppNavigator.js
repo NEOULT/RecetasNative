@@ -1,8 +1,9 @@
-import { createBottomTabNavigator, } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import Layout from '../components/common/Layout.js';
 import { useTheme } from '../styles/theme/ThemeContext.js';
 import { ThemeSwitch } from '../components/common/ThemedSwitch.js';
+import CustomTabBar from '../components/common/CustomTabBar.js'; // Importa el footer personalizado
 
 const Tab = createBottomTabNavigator();
 
@@ -11,18 +12,13 @@ export default function AppNavigator() {
 
   return (
     <NavigationContainer>
-      {/* Aquí puedes agregar más componentes o lógica según sea necesario */}
       <Tab.Navigator
-        screenOptions={{
-          headerShown: false, // Oculta el header
-          tabBarStyle: {
-            backgroundColor: colors.layout_backgroundcolor, // Personaliza el fondo del footer
-            height: 60, // Ajusta la altura del footer
-          },
-          tabBarActiveTintColor: '#6200EE', // Color de íconos/texto activos
-          tabBarInactiveTintColor: '#B0BEC5', // Color de íconos/texto inactivos
-        }}
-      >
+      screenOptions={{
+        headerShown: false, // Oculta el header
+
+      }}
+      tabBar={(props) => <CustomTabBar {...props} />} // Usa el footer personalizado
+    >
         <Tab.Screen 
           name="Home" 
           component={Layout} 
@@ -31,10 +27,17 @@ export default function AppNavigator() {
           }}
         />
         <Tab.Screen 
-          name="Profile" 
+          name="Add" 
           component={ThemeSwitch} 
           options={{
             tabBarLabel: 'Perfil', // Etiqueta de la pestaña
+          }}
+        />
+        <Tab.Screen 
+          name="Favorites" 
+          component={Layout} 
+          options={{
+            tabBarLabel: 'Favoritos', // Etiqueta de la pestaña
           }}
         />
       </Tab.Navigator>
