@@ -12,7 +12,7 @@ const AppContent = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.layout_backgroundcolor }]}>
-      <Text style={{ color: colors.regular_textcolor }}>Open up App.js to start working on your app!</Text>
+      //<Text style={{ color: 'red' }}>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" />
       <ThemeSwitch />
       <ThemedButton title={'Botonazo'} />

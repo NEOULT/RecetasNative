@@ -1,11 +1,13 @@
 // theme/ThemeContext.js
 import React, { createContext, useState, useContext } from 'react';
 import { lightTheme,darkTheme } from './colors';
+import { fonts } from './fonts';
 
 export const ThemeContext = createContext({
   isDark: false,
   colors: lightTheme,
   setScheme: () => {},
+  fonts: fonts,
 });
 
 export const ThemeProvider = ({ children }) => {
@@ -15,6 +17,7 @@ export const ThemeProvider = ({ children }) => {
     colors: isDark ? darkTheme : lightTheme,
     isDark,
     setScheme: (scheme) => {setIsDark(scheme === 'dark')},
+    fonts: fonts
   };
   console.log(isDark);
   

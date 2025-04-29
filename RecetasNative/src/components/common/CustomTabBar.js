@@ -8,7 +8,7 @@ export default function CustomTabBar({ state, descriptors, navigation }) {
 
   return (
     <View style={{ backgroundColor: colors.navigation_backgroundcolor }}>
-      <View style={[styles.container, { backgroundColor: colors.navigation_backgroundcolor }]}>
+      <View style={[styles.container, { backgroundColor: colors.footer_backgroundcolor }]}>
         {state.routes.map((route, index) => {
           const isFocused = state.index === index;
           let sizeIcon = 28;

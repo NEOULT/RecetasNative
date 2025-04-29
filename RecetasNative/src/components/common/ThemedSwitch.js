@@ -6,7 +6,7 @@ export const ThemeSwitch = () => {
   const { isDark, setScheme, colors } = useTheme();
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', padding: 100 }}>
       <Text style={{ color: colors.primary_color }}>Modo oscuro</Text>
       <Switch
         value={isDark}

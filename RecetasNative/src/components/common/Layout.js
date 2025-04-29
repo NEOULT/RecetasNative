@@ -21,7 +21,7 @@ function Layout() {
 
 const styles = StyleSheet.create({
   HeaderContainer: {
-    height: height * 1, // Ocupa el 17.44% de la altura de la pantalla
+    height: height * 0.1744, // Ocupa el 17.44% de la altura de la pantalla
     justifyContent: 'space-between', // Espacia los elementos dentro del contenedor
     alignItems: 'center',
     borderWidth: width * 0.01, // Borde dinámico basado en el 1% del ancho de la pantalla
