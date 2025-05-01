@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { useTheme } from '../../styles/theme/ThemeContext';
 import { fonts } from '../../styles/theme/fonts';
+import RecipesScreen from '../RecipesScreen';
+import CategoriesScreen from '../CategoriesScreen';
 
 export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState('Recetas');
@@ -62,8 +64,8 @@ export default function HomeScreen() {
 
       {/* Contenido dinámico según tab */}
       <View style={styles.contentContainer}>
-        {activeTab === 'Recetas' && <Text>Contenido de Recetas</Text>}
-        {activeTab === 'Categorías' && <Text>Contenido de Categorías</Text>}
+        {activeTab === 'Recetas' && <RecipesScreen/>}
+        {activeTab === 'Categorías' && <CategoriesScreen/>}
         {activeTab === 'Grupos' && <Text>Contenido de Grupos</Text>}
       </View>
     </View>
