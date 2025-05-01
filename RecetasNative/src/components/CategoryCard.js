@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, ImageBackground, StyleSheet, Pressable } from 'react-native';
 
-const ImageCard = ({ title, imageUrl, onPress }) => {
+const CategoryCard = ({ title, imageUrl, onPress }) => {
   return (
     <View style={styles.shadowContainer}>
         <Pressable onPress={() =>{ onPress }}
@@ -55,4 +55,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ImageCard;
+export default CategoryCard;

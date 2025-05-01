@@ -67,6 +67,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center', // Centra verticalmente
     alignItems: 'center', // Centra horizontalmente
-    backgroundColor: '#f5f5f5', // Fondo opcional
   },
 });

@@ -8,6 +8,7 @@ import Layout from '../components/common/Layout.js';
 import CustomTabBar from '../components/common/CustomTabBar.js'; // Importa el footer personalizado
 import HomeScreen from '../screens/Home/HomeScreen.js'; // Importa la pantalla de inicio
 import RecipesScreen from '../screens/RecipesScreen.js';
+import { StatusBar } from 'expo-status-bar';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator(); // Crea el stack de navegación para la pantalla de inicio
@@ -50,6 +51,7 @@ export default function AppNavigator() {
 
   return (
     <NavigationContainer theme={MyTheme}> 
+    <StatusBar style={isDark ? 'light' : 'dark'} backgroundColor={colors.layout_backgroundcolor} />
       <Tab.Navigator
       screenOptions={{
         headerShown: false, // Oculta el header

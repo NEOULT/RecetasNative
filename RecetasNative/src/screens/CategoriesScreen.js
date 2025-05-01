@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, styles } from 'react-native';
-import ImageCardList from '../components/ImageCardList';
+import CategoryCardList from '../components/CategoryCardList';
 
 export default function CategoriesScreen() {
 
@@ -21,7 +21,7 @@ export default function CategoriesScreen() {
       
     return (
         <View style={style.screenContainer}>
-            <ImageCardList data={sampleData} />
+            <CategoryCardList data={sampleData} />
         </View>
     );
       

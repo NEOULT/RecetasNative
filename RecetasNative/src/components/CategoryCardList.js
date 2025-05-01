@@ -1,11 +1,11 @@
 import React from 'react';
 import { FlatList, View, StyleSheet, Dimensions } from 'react-native';
-import ImageCard from './ImageCard';
+import CategoryCard from './CategoryCard';
 
-const ImageCardList = ({ data }) => {
+const CategoryCardList = ({ data }) => {
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-      <ImageCard title={item.title} imageUrl={item.imageUrl} />
+      <CategoryCard title={item.title} imageUrl={item.imageUrl} />
     </View>
   );
 
@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ImageCardList;
+export default CategoryCardList;
