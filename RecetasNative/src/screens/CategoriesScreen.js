@@ -18,10 +18,14 @@ export default function CategoriesScreen() {
         { title: 'Cascada', imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' },
         { title: 'Selva', imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' },
       ];
-      
+
+    const handlePressCategory = (category) => {
+        console.log('Categoría seleccionada:', category.title);
+    }
+
     return (
         <View style={style.screenContainer}>
-            <CategoryCardList data={sampleData} />
+            <CategoryCardList data={sampleData} onPressCategory={handlePressCategory} />
         </View>
     );
       

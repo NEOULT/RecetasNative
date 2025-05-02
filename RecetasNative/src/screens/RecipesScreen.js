@@ -11,7 +11,7 @@ export default function RecipesScreen() {
       rating: 4.5,
       recipeImage: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
       recipeTitle: 'Spaghetti Carbonara',
-      isFavorite: false,
+      isFavorite: true,
     },
     {
       id: 2,
@@ -51,11 +51,21 @@ export default function RecipesScreen() {
     );
   };
 
+  const handlePressRecipe = (recipe) => {
+    console.log('Recipe selected:', recipe.recipeTitle);
+  }
+
+  const handlePressAvatar = (avatar) => {
+    console.log('Avatar selected:', avatar.username);
+  }
+
   return (
     <View style={styles.screenContainer}>
       <RecipeCardList
         data={recipes}
         onFavoriteToggle={toggleFavorite}
+        onPressAvatar={handlePressAvatar}
+        onPressRecipe={handlePressRecipe}
       />
     </View>
   );

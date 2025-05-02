@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, ImageBackground, StyleSheet, Pressable } from 'react-native';
 
-const CategoryCard = ({ title, imageUrl, onPress }) => {
+const CategoryCard = ({ title, imageUrl, onPressCategory }) => {
   return (
     <View style={styles.shadowContainer}>
-        <Pressable onPress={() =>{ onPress }}
+        <Pressable onPress={ onPressCategory }
             style={({pressed}) =>[{ flex: 1, borderRadius: 16, overflow: 'hidden', opacity: pressed ? 0.3 : 1 }]} // Asegúrate de que el Pressable ocupe todo el espacio del contenedor
             >
             <ImageBackground

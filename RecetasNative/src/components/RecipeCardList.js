@@ -2,8 +2,9 @@ import React from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
 import RecipeCard from './RecipeCard';
 
-const RecipeCardList = ({ data, onFavoriteToggle }) => {
+const RecipeCardList = ({ data, onFavoriteToggle, onPressRecipe, onPressAvatar }) => {
   const renderItem = ({ item }) => (
+
     <RecipeCard
       avatar={item.avatar}
       username={item.username}
@@ -12,6 +13,9 @@ const RecipeCardList = ({ data, onFavoriteToggle }) => {
       recipeTitle={item.recipeTitle}
       isFavorite={item.isFavorite}
       onFavoriteToggle={() => onFavoriteToggle(item.id)}
+      onPressRecipe={() => onPressRecipe(item)}
+      onPressAvatar={() => onPressAvatar(item)}
+      
     />
   );
 

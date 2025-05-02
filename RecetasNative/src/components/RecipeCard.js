@@ -3,13 +3,15 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
 
-const RecipeCard = ({ avatar, username, rating, recipeImage, recipeTitle, isFavorite, onFavoriteToggle }) => {
+const RecipeCard = ({ avatar, username, rating, recipeImage, recipeTitle, isFavorite, onFavoriteToggle, onPressRecipe, onPressAvatar }) => {
   return (
     <View style={[styles.cardContainer]}>
-      <TouchableOpacity onPress={() => console.log('Card Pressed!')}>
+      <TouchableOpacity onPress={onPressRecipe}>
       {/* Header */}
       <View style={styles.header}>
-        <Image source={{ uri: avatar }} style={styles.avatar} />
+        <TouchableOpacity onPress={onPressAvatar}>
+          <Image source={{ uri: avatar }} style={styles.avatar} />
+        </TouchableOpacity>
         <View style={styles.userInfo}>
           <Text style={styles.username}>{username}</Text>
           <View style={styles.ratingContainer}>

@@ -2,10 +2,14 @@ import React from 'react';
 import { FlatList, View, StyleSheet, Dimensions } from 'react-native';
 import CategoryCard from './CategoryCard';
 
-const CategoryCardList = ({ data }) => {
+const CategoryCardList = ({ data, onPressCategory }) => {
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-      <CategoryCard title={item.title} imageUrl={item.imageUrl} />
+      <CategoryCard 
+      title={item.title} 
+      imageUrl={item.imageUrl}
+      onPressCategory={() => onPressCategory(item)} // Asegúrate de pasar la función correctamente
+      />
     </View>
   );
 
@@ -16,6 +20,7 @@ const CategoryCardList = ({ data }) => {
       keyExtractor={(item, index) => index.toString()}
       numColumns={2}
       contentContainerStyle={styles.list}
+      
     />
   );
 };

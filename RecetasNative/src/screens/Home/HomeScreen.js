@@ -4,6 +4,8 @@ import { useTheme } from '../../styles/theme/ThemeContext';
 import { fonts } from '../../styles/theme/fonts';
 import RecipesScreen from '../RecipesScreen';
 import CategoriesScreen from '../CategoriesScreen';
+import GroupScreen from '../GroupScreen';
+import CategoriesIDScreen from '../CategoriesIDScreen';
 
 export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState('Recetas');
@@ -64,9 +66,9 @@ export default function HomeScreen() {
 
       {/* Contenido dinámico según tab */}
       <View style={styles.contentContainer}>
-        {activeTab === 'Recetas' && <RecipesScreen/>}
-        {activeTab === 'Categorías' && <CategoriesScreen/>}
-        {activeTab === 'Grupos' && <Text>Contenido de Grupos</Text>}
+        {activeTab === 'Recetas' && <RecipesScreen />}
+        {activeTab === 'Categorías' && <CategoriesIDScreen />}
+        {activeTab === 'Grupos' && <GroupScreen />}
       </View>
     </View>
   );
