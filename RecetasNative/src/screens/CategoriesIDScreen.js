@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import RecipeItemList from '../components/RecipeItemList';
 
-export default function CategoriesIDScreen() {}
+export default function CategoriesIDScreen() {
 
     const sampleData = [
         { imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', title: 'Receta 1', time: '30 min', difficulty: 'Fácil', servings: 4, rating: 4.5 },
