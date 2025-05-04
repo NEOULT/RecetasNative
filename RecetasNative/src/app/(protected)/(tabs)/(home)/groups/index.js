@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import GroupCardList from '../components/GroupCardList'; // Ajusta la ruta según tu estructura
+import GroupCardList from '../../../../../components/GroupCardList'; // Ajusta la ruta según tu estructura
 
 const groups = [
   {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import RecipeItemList from '../../../../components/RecipeItemList';
+import RecipeItemList from '../../../../../components/RecipeItemList';
 import { useLocalSearchParams } from 'expo-router';
 
 export default function CategoriesIDScreen() {

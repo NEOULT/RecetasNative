@@ -8,15 +8,15 @@ import { useColorScheme } from '../hooks/useColorScheme';
 
 export default function RootLayout() {
 
-  const colorScheme = useColorScheme();
+    const colorScheme = useColorScheme();
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{headerShown: false}} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Stack>
+                <Stack.Screen name="(protected)" options={{headerShown: false}} />
+            </Stack>
+            <StatusBar style="auto" />
+        </ThemeProvider>
+    );
 }
+

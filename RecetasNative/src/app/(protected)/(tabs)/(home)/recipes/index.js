@@ -1,4 +1,4 @@
-import RecipeCardList from "../components/RecipeCardList";
+import RecipeCardList from "../../../../../components/RecipeCardList";
 import React from "react";
 import { View, StyleSheet } from "react-native";
 
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   screenContainer: {
     width: '100%',
     flex: 1,
-    justifyContent: 'center', // Centra verticalmente
-    alignItems: 'center', // Centra horizontalmente
+    justifyContent: 'center', 
+    alignItems: 'center', 
   },
 });

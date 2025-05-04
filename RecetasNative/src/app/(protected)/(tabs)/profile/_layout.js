@@ -1,11 +1,11 @@
 import { Stack } from 'expo-router';
 
-export default function GroupsLayout() {
+export default function PerfilLayout() {
   return (
     <Stack
       screenOptions={{
         headerShown: false,
-        title: 'Favoritos',
+        title: 'Perfil',
         headerTitleAlign: 'center',
         headerStyle: {
           backgroundColor: '#f8f8f8',
@@ -13,7 +13,7 @@ export default function GroupsLayout() {
         headerTintColor: '#333',
       }}
     >
-        <Stack.Screen name="index" options={{ title: 'Categorias' }} />
+        <Stack.Screen name="index" options={{ title: 'Perfil' }} /> 
     </Stack>
   )
 }

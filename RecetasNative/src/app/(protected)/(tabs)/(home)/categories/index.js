@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, styles } from 'react-native';
-import CategoryCardList from '../../../../components/CategoryCardList';
+import CategoryCardList from '../../../../../components/CategoryCardList';
 import { useRouter } from 'expo-router';
 
 export default function CategoriesScreen() {
