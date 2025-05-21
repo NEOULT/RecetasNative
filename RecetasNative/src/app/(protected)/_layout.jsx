@@ -1,12 +1,16 @@
 
 import { Stack,Redirect } from 'expo-router';
-
-
-const isLoggedIn = true; 
+import { useContext } from 'react';
+import { AuthContext } from '../../context/authContext.jsx';
 
 export default function ProtectedLayout() {
 
-  if (!isLoggedIn) {
+  const { isLoggedIn, token } = useContext(AuthContext);
+
+  if (!isLoggedIn){
+    return null;
+  }
+  if (!token) {
     return <Redirect href="/login" />;
   }
 

@@ -15,7 +15,7 @@ const RecipeCard = ({ avatar, username, rating, recipeImage, recipeTitle, isFavo
         <View style={styles.userInfo}>
           <Text style={styles.username}>{username}</Text>
           <View style={styles.ratingContainer}>
-            <StarRatingDisplay rating={rating} starSize={16} />
+            <StarRatingDisplay rating={rating} starSize={16} starStyle={{marginHorizontal: 1}}/>
             <Text style={styles.ratingText}>{rating.toFixed(1)}</Text>
           </View>
         </View>

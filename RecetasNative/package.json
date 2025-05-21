@@ -20,18 +20,20 @@
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-hook-form": "^7.56.3",
     "react-native": "0.79.2",
     "react-native-pager-view": "^6.7.1",
     "react-native-reanimated": "^3.17.5",
     "react-native-star-rating-widget": "^1.9.2",
     "react-native-tab-view": "^4.0.11",
     "react-native-web": "^0.20.0",
-    "recetasnative2": "file:"
+    "recetasnative2": "file:",
+    "@react-native-async-storage/async-storage": "2.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "typescript": "~5.8.3",
-    "@types/react": "~19.0.10"
+    "@types/react": "~19.0.10",
+    "typescript": "~5.8.3"
   },
   "private": true
 }

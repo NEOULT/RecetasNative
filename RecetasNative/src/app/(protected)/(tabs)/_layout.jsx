@@ -2,7 +2,12 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 import {Image, Text, Pressable, Platform} from 'react-native';
 import { useRouter } from 'expo-router';
-
+import { useContext } from 'react';
+import { AuthContext } from '../../../context/authContext.jsx';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Feather from '@expo/vector-icons/Feather';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 const router = useRouter(); 
 // import { HapticTab } from '../../components/HapticTab';
@@ -10,13 +15,9 @@ const router = useRouter();
 // import TabBarBackground from '@/components/ui/TabBarBackground';
 // import { Colors } from '@/constants/Colors';
 
-import Feather from '@expo/vector-icons/Feather';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-
 export default function TabLayout() {
   // const colorScheme = useColorScheme();
-
+  const { logOut } = useContext(AuthContext);
   return (
     <Tabs
       screenOptions={{
@@ -80,7 +81,14 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="heart-outline" size={29} color={color} />,
         }}
       />
-      <Tabs.Screen name="profile" options={{ href: null }} />
+      <Tabs.Screen name="profile" options={{ 
+        href: null,
+        headerRight: () => (
+          <Pressable onPress={() => logOut()} style={{ flexDirection: 'row', alignItems: 'center', marginRight: 20 }}>
+            <MaterialIcons name="logout" size={22} color="gray" />
+          </Pressable>
+        ),
+        }} />
     </Tabs>
   );
 }
