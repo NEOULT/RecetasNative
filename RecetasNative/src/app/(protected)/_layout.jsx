@@ -7,6 +7,17 @@ export default function ProtectedLayout() {
 
   const { isLoggedIn, token } = useContext(AuthContext);
 
+  const authInactive = true;
+
+  if (authInactive){
+    return (
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{headerShown: false}} />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+    );
+  }
+
   if (!isLoggedIn){
     return null;
   }
@@ -14,10 +25,5 @@ export default function ProtectedLayout() {
     return <Redirect href="/login" />;
   }
 
-  return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{headerShown: false}} />
-      <Stack.Screen name="+not-found" />
-    </Stack>
-  );
+  
 }

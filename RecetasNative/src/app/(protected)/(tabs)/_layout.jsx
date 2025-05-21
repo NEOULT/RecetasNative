@@ -8,6 +8,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useTheme } from '../../../styles/theme/ThemeContext.js';
 
 const router = useRouter(); 
 // import { HapticTab } from '../../components/HapticTab';
@@ -18,6 +19,7 @@ const router = useRouter();
 export default function TabLayout() {
   // const colorScheme = useColorScheme();
   const { logOut } = useContext(AuthContext);
+  const { setScheme, isDark } = useTheme();
   return (
     <Tabs
       screenOptions={{
@@ -58,12 +60,17 @@ export default function TabLayout() {
           ),
           headerTitleAlign: 'center',
           headerLeft: () => (
-            <Feather
-              name="menu"
-              size={24}
-              color="black"
-              style={{ marginLeft: 20 }}
-            />
+            <Pressable onPress={() => {
+              setScheme(isDark ? 'light' : 'dark');
+              
+            }}>
+              <Feather
+                name="moon"
+                size={24}
+                color="black"
+                style={{ marginLeft: 20, color: isDark ? '#FF9100' : 'black' }}
+              />
+            </Pressable>
           ),
         }}
       />

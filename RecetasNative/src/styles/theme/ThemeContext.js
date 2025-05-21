@@ -10,18 +10,16 @@ export const ThemeContext = createContext({
   fonts: fonts,
 });
 
-export const ThemeProvider = ({ children }) => {
+export const ThemeProviderCustom = ({ children }) => {
   const [isDark, setIsDark] = useState(false);
-  
+
   const defaultTheme = {
     colors: isDark ? darkTheme : lightTheme,
     isDark,
     setScheme: (scheme) => {setIsDark(scheme === 'dark')},
     fonts: fonts
   };
-  console.log(isDark);
   
-
   return (
     <ThemeContext.Provider value={defaultTheme}>
       {children}
