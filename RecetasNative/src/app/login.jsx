@@ -3,9 +3,11 @@ import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'expo-router';
 import { useContext } from 'react';
 import {AuthContext} from '../context/authContext.jsx';
+import { ApiService } from '../services/ApiService.js';
+
+const apiService = new ApiService();
 
 export default function LoginScreen() {
-
 
   const {logIn} = useContext(AuthContext);
   const {
@@ -18,15 +20,7 @@ export default function LoginScreen() {
   const onSubmit = async(data) => {
     console.log('Datos del formulario:', data);
     try {
-        const response = await fetch('http://10.0.2.2:4000/auth/signin', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data), 
-        });
-
-        const result = await response.json();
+        const result = await apiService.signIn(data);
 
         if (!result.success) throw new Error(result.message);
 
