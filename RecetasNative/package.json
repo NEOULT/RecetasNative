@@ -9,7 +9,10 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/poppins": "^0.3.1",
+    "@expo-google-fonts/roboto": "^0.3.0",
     "@expo/metro-runtime": "~5.0.4",
+    "@react-native-async-storage/async-storage": "2.1.2",
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/material-top-tabs": "^7.2.11",
     "@react-navigation/native": "^7.1.6",
@@ -28,7 +31,7 @@
     "react-native-tab-view": "^4.0.11",
     "react-native-web": "^0.20.0",
     "recetasnative2": "file:",
-    "@react-native-async-storage/async-storage": "2.1.2"
+    "expo-splash-screen": "~0.30.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

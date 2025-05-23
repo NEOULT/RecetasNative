@@ -1,11 +1,23 @@
-import { StyleSheet, Text, View } from 'react-native';
-
+import { StyleSheet, View } from 'react-native';
+import { ThemedText } from '../../../components/common/ThemedText';
 export default function addScreen() {
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 24, fontWeight: 'semibold' }}>
-        Aquí va el modal para agregar recetas o grupos, tambien se puede hacer con expo router
-      </Text>
+      <ThemedText type="title">
+        Hola mundo
+      </ThemedText>
+      <ThemedText type="subtitle1">
+        Hola mundo
+      </ThemedText>
+      <ThemedText type="subtitle2">
+        Hola mundo
+      </ThemedText>
+      <ThemedText type="default">
+        Hola mundo
+      </ThemedText>
+      <ThemedText type="details">
+        Hola mundo
+      </ThemedText>
     </View>
   );
 }
