@@ -44,4 +44,8 @@ async #_request(endpoint, method = 'GET', data) {
     return this.#postData('auth/signin', data);
   }
 
+  signUp(data) {
+    return this.#postData('auth/signup', data);
+  }
+
 }

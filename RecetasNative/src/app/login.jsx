@@ -4,18 +4,20 @@ import { Link } from 'expo-router';
 import { useContext } from 'react';
 import {AuthContext} from '../context/authContext.jsx';
 import { ApiService } from '../services/ApiService.js';
+import {Ionicons} from '@expo/vector-icons';
+import { useState, useEffect } from 'react';
 
 const apiService = new ApiService();
 
 export default function LoginScreen() {
 
+  const [showPassword, setShowPassword] = useState(false);
   const {logIn} = useContext(AuthContext);
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm();
-
 
   const onSubmit = async(data) => {
     console.log('Datos del formulario:', data);
@@ -84,14 +86,31 @@ export default function LoginScreen() {
               }
             }}
             render={({ field: { onChange, value } }) => (
-              <TextInput
-                placeholder="Contraseña"
-                placeholderTextColor={'white'}
-                secureTextEntry
-                style={[styles.input, errors.password && styles.inputError]}
-                onChangeText={onChange}
-                value={value}
-              />
+              <View style={{ position: 'relative', width: 250 }}>
+                <TextInput
+                  placeholder="Contraseña"
+                  placeholderTextColor={'white'}
+                  secureTextEntry={!showPassword}
+                  style={[styles.input, errors.password && styles.inputError, { paddingRight: 40 }]}
+                  onChangeText={onChange}
+                  value={value}
+                />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: 10,
+                    top: 12,
+                    zIndex: 1,
+                  }}
+                >
+                  <Ionicons
+                    name={showPassword ? 'eye-off' : 'eye'}
+                    size={24}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              </View>
             )}
           />
           {errors.password && <Text style={styles.error}>{errors.password.message}</Text>}

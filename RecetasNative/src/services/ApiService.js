@@ -18,4 +18,14 @@ export class ApiService {
         }
     }
 
+    async signUp(data) {
+        try {
+            const response = await this.api.signUp(data);
+            return response;
+        } catch (error) {
+            console.error("Error in register:", error);
+            throw error;
+        }
+    }
+
 }
