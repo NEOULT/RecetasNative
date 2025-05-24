@@ -13,18 +13,22 @@ export default function AuthProvider({ children }) {
 
     useEffect(() => {
         const checkToken = async () => {
-        try {
-            const token = await AsyncStorage.getItem('token');
-            if (token) {
-                setToken(token);
+            try {
+                const token = await AsyncStorage.getItem('token');
+                if (token) {
+                    setToken(token);
+                    setIsLoggedIn(true);
+                } else {
+                    setIsLoggedIn(false);
+                }
+            } catch (e) {
+                console.error('Error retrieving token:', e);
+                setIsLoggedIn(false);
+            } finally {
+                console.log(1);
                 
+                setLoading(false);
             }
-        } catch (e) {
-            console.error('Error retrieving token:', e);
-        } finally {
-            setLoading(false);
-            setIsLoggedIn(true);
-        }
         };
 
         checkToken();
@@ -60,6 +64,7 @@ export default function AuthProvider({ children }) {
     const logIn = async(token) =>{
         await saveToken(token);
         router.replace('/recipes');
+        setIsLoggedIn(true);
     }
 
     const logOut = async() => {

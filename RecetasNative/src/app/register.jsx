@@ -8,27 +8,27 @@ TouchableOpacity,
 } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { Link } from "expo-router";
+import { ApiService } from "../services/ApiService";
+import { Ionicons } from "@expo/vector-icons";
+import { useState,useEffect } from "react";
+
+const apiService = new ApiService();
 
 export default function SignUpScreen() {
+
+  const [showPassword, setShowPassword] = useState(false);
+
 const {
 control,
 handleSubmit,
 formState: { errors, isSubmitting },
 } = useForm();
 
+
 const onSubmit = async (data) => {
 console.log("Datos del formulario:", data);
 try {
-    const response = await fetch("http://10.0.2.2:4000/auth/signup", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-    });
-
-    const resultado = await response.json();
-
+    const resultado = await apiService.signUp(data);
     console.log("Respuesta del servidor:", resultado);
 } catch (error) {
     console.error("Error al registrar:", error);
@@ -117,25 +117,46 @@ return (
 
         {/* Password */}
         <Controller
-        control={control}
-        name="password"
-        rules={{
+          control={control}
+          name="password"
+          rules={{
             required: "La contraseña es obligatoria",
             minLength: {
-            value: 6,
-            message: "Debe tener al menos 6 caracteres",
+              value: 6,
+              message: "Debe tener al menos 6 caracteres",
             },
-        }}
-        render={({ field: { onChange, value } }) => (
-            <TextInput
-            placeholder="Contraseña"
-            placeholderTextColor={"white"}
-            secureTextEntry
-            style={[styles.input, errors.password && styles.inputError]}
-            onChangeText={onChange}
-            value={value}
-            />
-        )}
+          }}
+          render={({ field: { onChange, value } }) => (
+            <View style={{ position: "relative", width: 250 }}>
+              <TextInput
+                placeholder="Contraseña"
+                placeholderTextColor={"white"}
+                secureTextEntry={!showPassword}
+                style={[
+                  styles.input,
+                  errors.password && styles.inputError,
+                  { paddingRight: 40 },
+                ]}
+                onChangeText={onChange}
+                value={value}
+              />
+              <TouchableOpacity
+                onPress={() => setShowPassword((prev) => !prev)}
+                style={{
+                  position: "absolute",
+                  right: 10,
+                  top: 12,
+                  zIndex: 1,
+                }}
+              >
+                <Ionicons
+                  name={showPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </View>
+          )}
         />
         {errors.password && (
         <Text style={styles.error}>{errors.password.message}</Text>
