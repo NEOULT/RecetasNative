@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         paddingVertical: 3,
         paddingHorizontal: 5,
-        placeholderTextColor: "green",
     },
 
     inputsContainer: {

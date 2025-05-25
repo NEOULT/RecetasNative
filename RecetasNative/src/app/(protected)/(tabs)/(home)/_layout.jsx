@@ -10,10 +10,9 @@ export default function HomeLayout() {
   <MaterialTopTabs
     initialRouteName="recipes"
     screenOptions={{
-      tabBarScrollEnabled: true,
+      tabBarScrollEnabled: false,
       tabBarLabelStyle: { fontWeight: 'bold', fontSize: 20 },
       tabBarIndicatorStyle: { backgroundColor: 'orange' },
-      tabBarItemStyle: { width: 130 },
     }}>
       <MaterialTopTabs.Screen name="recipes" options={{ title: 'Recetas' }}/>
       <MaterialTopTabs.Screen name="categories" options={{ title: 'Categorias' }}/>
