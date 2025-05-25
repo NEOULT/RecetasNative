@@ -1,23 +1,15 @@
-import { StyleSheet, View } from 'react-native';
-import { ThemedText } from '../../../components/common/ThemedText';
-export default function addScreen() {
+import { StyleSheet, View, Text, TextInput} from 'react-native';
+import IngredientItem from '../../../components/IngredientItem';
+
+
+export default function AddScreen() {
+
   return (
     <View style={styles.container}>
-      <ThemedText type="title">
-        Hola mundo
-      </ThemedText>
-      <ThemedText type="subtitle1">
-        Hola mundo
-      </ThemedText>
-      <ThemedText type="subtitle2">
-        Hola mundo
-      </ThemedText>
-      <ThemedText type="default">
-        Hola mundo
-      </ThemedText>
-      <ThemedText type="details">
-        Hola mundo
-      </ThemedText>
+        <IngredientItem/>
+        <IngredientItem/>
+        <IngredientItem/>
+        <IngredientItem/>
     </View>
   );
 }
@@ -27,5 +19,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    gap: 20,
   },
+  
 });
