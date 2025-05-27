@@ -6,12 +6,35 @@ import ThemedText from '../../../components/common/ThemedText';
 import InputV1 from '../../../components/common/InputV1';
 import SelectPicker from '../../../components/common/SelectPicker';
 import ThemedButton from '../../../components/common/ThemedButton';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useFieldArray } from 'react-hook-form';
 
 
 export default function AddScreen() {
 
-  const { control, handleSubmit, formState: { errors, isSubmitting }} = useForm();
+  const { control, handleSubmit, } = useForm({
+    defaultValues: {
+      recipeImage: null,
+      title: '',
+      description: '',
+      time: 0,
+      timeUnit: 0,
+      servings: 0,
+      difficulty: '',
+      visibility: '',
+      ingredients:[{ name: '', ingredientQuantity: 0, unit: 0, unitQuantity: 0}],
+      steps: [{ stepImage: null, description: '' }],
+    }
+  });
+
+  const { fields: ingredientFields, append: appendIngredient, remove: removeIngredient } = useFieldArray({
+    control,
+    name: 'ingredients',
+  });
+
+  const { fields: stepFields, append: appendStep, remove: removeStep } = useFieldArray({
+    control,
+    name: 'steps',
+  });
 
   const onSubmit = (data) => {
     console.log('Datos del formulario:', data);
@@ -24,7 +47,7 @@ export default function AddScreen() {
         
         <Controller
           control={control}
-          name="image"
+          name="recipeImage"
           render={({ field: { value, onChange } }) => (
             <ImageSelector
               width={'100%'}
@@ -53,7 +76,7 @@ export default function AddScreen() {
 
         <Controller
           control={control}
-          name="descripcion"
+          name="description"
           render={({ field: { onChange, value } }) => (
             <InputV1
               label="Descripcion:"
@@ -73,20 +96,21 @@ export default function AddScreen() {
             <View style={styles.subRow}>
               <Controller
                 control={control}
-                name="tiempoCantidad"
+                name="time"
                 render={({ field: { onChange, value } }) => (
                   <InputV1
                     placeholder="Cant"
                     width="35%"
                     value={value}
                     onChangeText={onChange}
+                    keyboardType="numeric"
                   />
                 )}
               />
               <ThemedText style={styles.dash}>-</ThemedText>
               <Controller
                 control={control}
-                name="tiempoUnidad"
+                name="timeUnit"
                 render={({ field: { onChange, value } }) => (
                   <SelectPicker
                     width="45%"
@@ -100,7 +124,7 @@ export default function AddScreen() {
           </View>
           <Controller
             control={control}
-            name="porciones"
+            name="servings"
             render={({ field: { onChange, value } }) => (
               <InputV1
                 label="Porciones:"
@@ -108,6 +132,7 @@ export default function AddScreen() {
                 width="35%"
                 value={value}
                 onChangeText={onChange}
+                keyboardType="numeric"
               />
             )}
           />
@@ -116,7 +141,7 @@ export default function AddScreen() {
         <View style={styles.row}>
           <Controller
             control={control}
-            name="dificultad"
+            name="difficulty"
             render={({ field: { onChange, value } }) => (
               <SelectPicker
                 width="45%"
@@ -129,7 +154,7 @@ export default function AddScreen() {
           />
           <Controller
             control={control}
-            name="visibilidad"
+            name="visibility"
             render={({ field: { onChange, value } }) => (
               <SelectPicker
                 width="45%"
@@ -145,13 +170,46 @@ export default function AddScreen() {
 
         <ThemedText type='subtitle1' style={{alignSelf: 'right', padding: 15}}>Ingredientes:</ThemedText>
         <View style={styles.listContainer}>
-          {[...Array(5)].map((_, i) => <IngredientItem key={i} />)}
+          {ingredientFields.map((field, index) => (
+            <Controller
+              key={field.id}
+              control={control}
+              name={`ingredients.${index}`}
+              render={({ field: { value, onChange } }) => (
+                <IngredientItem
+                  value={value}
+                  onChange={onChange}
+                  onPressDelete={() => removeIngredient(index)}
+                />
+              )}
+            />
+          ))}
+          <ThemedButton
+            title="Agregar ingrediente"
+            onPress={() => appendIngredient({ nombre: '', cantidad: '', unidad: '', tipo: '' })}
+          />
         </View>
 
-        {/* <ThemedText type='subtitle1'>Preparación:</ThemedText>
         <View style={styles.listContainer}>
-          {[...Array(5)].map((_, i) => <StepItem key={i} />)}
-        </View> */}
+          {stepFields.map((field, index) => (
+            <Controller
+              key={field.id}
+              control={control}
+              name={`steps.${index}`}
+              render={({ field: { value, onChange } }) => (
+                <StepItem
+                  value={value}
+                  onChange={onChange}
+                  onPressDelete={() => removeStep(index)}
+                />
+              )}
+            />
+          ))}
+          <ThemedButton
+            title="Agregar paso"
+            onPress={() => appendStep({ description: '', stepImage: null })}
+          />
+        </View>
 
       </View>
     </ScrollView>

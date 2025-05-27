@@ -5,11 +5,7 @@ import InputV1 from "./common/InputV1";
 import ThemedText from "./common/ThemedText";
 import SelectPicker from "./common/SelectPicker";
 
-export default function IngredientItem({ ingredient, onPress, value, onChange }) {
-
-    const saludo = () =>{
-        console.log('Hola');
-    }
+export default function IngredientItem({ value = {}, onChange, onPressDelete }) {
 
     return (
         <View style={styles.container}>
@@ -21,43 +17,43 @@ export default function IngredientItem({ ingredient, onPress, value, onChange })
 
             <DeleteButton
                 position={{ position: "absolute", right: -10 }}
-                onPress={saludo}
+                onPress={onPressDelete}
             />
 
             <View style={styles.inputsContainer}>
                 <InputV1
-                    placeholder="Ingrese el ingrediente"
-                    width="100%"
+                placeholder="Ingrediente"
+                width="100%"
+                value={value.name}
+                onChangeText={name => onChange({ ...value, name })}
                 />
                 <View style={styles.row}>
-                    <View style={styles.subRow}>
-            
-                        <InputV1
-                            placeholder="Cant"
-                            width="40%"
-                            value={value}
-                            onChangeText={onChange}
-                        />
-                        
-                        <ThemedText style={styles.dash}>-</ThemedText>
-                
-                        <SelectPicker
-                            width="45%"
-                            placeholder="kg"
-                            value={value}
-                            onChange={onChange}
-                        />
-                    </View>
-
+                <View style={styles.subRow}>
                     <InputV1
-                        placeholder="Unidades"
-                        width="35%"
-                        value={value}
-                        onChangeText={onChange}
+                    placeholder="unidad"
+                    width="40%"
+                    value={value.unitQuantity}
+                    onChangeText={unitQuantity => onChange({ ...value, unitQuantity })}
+                    keyboardType="numeric"
+                    />
+                    <ThemedText style={styles.dash}>-</ThemedText>
+                    <SelectPicker
+                    width="45%"
+                    placeholder="kg"
+                    value={value.unit}
+                    onChange={unit => onChange({ ...value, unit })}
                     />
                 </View>
+                <InputV1
+                    placeholder="unidades"
+                    width="35%"
+                    value={value.ingredientQuantity}
+                    onChangeText={ingredientQuantity => onChange({ ...value, ingredientQuantity })}
+                    keyboardType="numeric"
+                />
             </View>
         </View>
+    </View>
     );
 }
 const styles = StyleSheet.create({

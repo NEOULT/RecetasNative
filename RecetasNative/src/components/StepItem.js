@@ -4,7 +4,7 @@ import ItemTag from './common/ItemTag';
 import DeleteButton from './common/DeleteButton';
 import InputV1 from './common/InputV1';
 
-export default function StepItem({ step = 1, onPress = () => {console.log('Hola');}}) {
+export default function StepItem({ step = 0, onPressDelete = () => {console.log('Hola')}, value ={}, onChange}) {
     return (
         <View style={styles.container}>
             <ItemTag
@@ -18,9 +18,11 @@ export default function StepItem({ step = 1, onPress = () => {console.log('Hola'
                 width="90%"
                 height={100}
                 multiline={true}
+                value={value.description}
+                onChangeText={description => onChange({ ...value, description })}
             />
             <DeleteButton
-                onPress={onPress}
+                onPress={onPressDelete}
             />
         </View>
     );
