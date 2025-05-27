@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Modal,
   View,
@@ -9,10 +9,26 @@ import {
   Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import ThemedText from './ThemedText';
 
-export default function SelectPicker() {
+export default function SelectPicker({
+    width = '100%', 
+    height = 33, 
+    placeholder = 'Selecciona una opción', 
+    label = '',
+    value,
+    onChange,
+  }) 
+  
+  {
   const [visible, setVisible] = useState(false);
-  const [selected, setSelected] = useState(null);
+
+  useEffect(() => {
+    setSelected(value);
+  }, [value]);
+
+  
+  const [selected, setSelected] = useState(value ?? null);
 
   const options = [
     'Opción 1', 'Opción 2', 'Opción 3',
@@ -23,17 +39,21 @@ export default function SelectPicker() {
   const handleSelect = (option) => {
     setSelected(option);
     setVisible(false);
+    if (onChange) onChange(option);
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{width}}>
 
-      <TouchableOpacity style={styles.input} onPress={() => setVisible(true)}>
-        <Text style={[styles.inputText, { color: selected ? 'black' : '#999' }]}>
-          {selected || 'Selecciona una opción'}
-        </Text>
-        <Icon name="arrow-drop-down" size={24} color="#555" />
-      </TouchableOpacity>
+      <View style={{gap: 10}}>
+        {(label && <ThemedText>{label}</ThemedText>)}
+        <TouchableOpacity style={[styles.input, {height}]} onPress={() => setVisible(true)}>
+          <Text style={[styles.inputText, { color: selected ? 'black' : '#999' }]}>
+            {selected || placeholder}
+          </Text>
+          <Icon name="arrow-drop-down" size={24} color="#555" />
+        </TouchableOpacity>
+      </View>
 
       <Modal visible={visible} transparent animationType="fade">
         <Pressable style={styles.overlay} onPress={() => setVisible(false)}>
@@ -53,17 +73,16 @@ export default function SelectPicker() {
 };
 
 const styles = StyleSheet.create({
-  container: { padding: 20 },
   input: {
     borderWidth: 1,
     borderRadius: 10,
     borderColor: "#B3B3B3",
-    height: 33,
     backgroundColor: "white",
     paddingHorizontal: 8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    width: '100%',
   },
   inputText: {
     fontSize: 16,

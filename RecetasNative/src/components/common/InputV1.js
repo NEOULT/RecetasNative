@@ -1,7 +1,17 @@
 import {View, TextInput, StyleSheet} from 'react-native';
 import ThemedText from './ThemedText';
 
-export default function InputV1 ({ label = null, placeholder,width = "300",height = 33, style, ...props }){
+export default function InputV1 ({ 
+    label = null, 
+    placeholder,
+    width = "300",
+    height = 33, 
+    style, 
+    value,
+    onChangeText,
+    ...props 
+    })
+    {
     
     return(
         <View style={[styles.inputContainer, {width}]}>
@@ -9,6 +19,8 @@ export default function InputV1 ({ label = null, placeholder,width = "300",heigh
             <TextInput
             placeholder={placeholder}
             placeholderTextColor="gray"
+            value={value}
+            onChangeText={onChangeText}
             style={[styles.input, style, {height}]}
             {...props}
             />
@@ -32,7 +44,6 @@ input: {
 inputContainer:{
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    paddingHorizontal: 20,
     gap: 10,
 }
 });
