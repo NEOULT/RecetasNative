@@ -62,6 +62,7 @@ export default function AddScreen() {
               height={100}
               value={value}
               onChangeText={onChange}
+              multiline={true}
             />
           )}
         />
@@ -142,12 +143,12 @@ export default function AddScreen() {
         </View>
 
 
-        {/* <ThemedText type='subtitle1' style={{alignSelf: 'right', padding: 15}}>Ingredientes:</ThemedText>
+        <ThemedText type='subtitle1' style={{alignSelf: 'right', padding: 15}}>Ingredientes:</ThemedText>
         <View style={styles.listContainer}>
           {[...Array(5)].map((_, i) => <IngredientItem key={i} />)}
         </View>
 
-        <ThemedText type='subtitle1'>Preparación:</ThemedText>
+        {/* <ThemedText type='subtitle1'>Preparación:</ThemedText>
         <View style={styles.listContainer}>
           {[...Array(5)].map((_, i) => <StepItem key={i} />)}
         </View> */}
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
   },
   subRow: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 5,
   
   },
   dash: {

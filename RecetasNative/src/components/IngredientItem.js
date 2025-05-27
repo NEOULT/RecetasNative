@@ -1,14 +1,15 @@
 import { View, Text, StyleSheet, TextInput } from "react-native";
 import ItemTag from '../components/common/ItemTag';
 import DeleteButton from '../components/common/DeleteButton';
+import InputV1 from "./common/InputV1";
+import ThemedText from "./common/ThemedText";
+import SelectPicker from "./common/SelectPicker";
 
-export default function IngredientItem({ ingredient, onPress }) {
+export default function IngredientItem({ ingredient, onPress, value, onChange }) {
 
     const saludo = () =>{
         console.log('Hola');
     }
-
-    const placeholderTextColor = "gray";
 
     return (
         <View style={styles.container}>
@@ -24,51 +25,35 @@ export default function IngredientItem({ ingredient, onPress }) {
             />
 
             <View style={styles.inputsContainer}>
-                <TextInput
-                    placeholder="Nombre del ingrediente"
-                    placeholderTextColor={placeholderTextColor}                    
-                    style={[styles.input, { width: "100%" }]}
-                    keyboardType="default"
-                    autoCapitalize="none"
+                <InputV1
+                    placeholder="Ingrese el ingrediente"
+                    width="100%"
                 />
-                <View
-                style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    width: "100%",
-                }}
-                >
-                    <View
-                        style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: 13,
-                        width: "60%",
-                        }}
-                    >
-                        <TextInput
+                <View style={styles.row}>
+                    <View style={styles.subRow}>
+            
+                        <InputV1
                             placeholder="Cant"
-                            placeholderTextColor={placeholderTextColor}
-                            style={[styles.input, { flex: 1 }]}
-                            keyboardType="default"
-                            autoCapitalize="none"
+                            width="40%"
+                            value={value}
+                            onChangeText={onChange}
                         />
-                        <Text style={{ fontWeight: "bold", fontSize: 20 }}>-</Text>
-                        <TextInput
-                            placeholder="Select"
-                            placeholderTextColor={placeholderTextColor}
-                            style={[styles.input, { flex: 2 }]}
-                            keyboardType="default"
-                            autoCapitalize="none"
+                        
+                        <ThemedText style={styles.dash}>-</ThemedText>
+                
+                        <SelectPicker
+                            width="45%"
+                            placeholder="kg"
+                            value={value}
+                            onChange={onChange}
                         />
                     </View>
 
-                    <TextInput
+                    <InputV1
                         placeholder="Unidades"
-                        placeholderTextColor={placeholderTextColor}
-                        style={[styles.input, { width: "35%" }]}
-                        keyboardType="default"
-                        autoCapitalize="none"
+                        width="35%"
+                        value={value}
+                        onChangeText={onChange}
                     />
                 </View>
             </View>
@@ -77,35 +62,34 @@ export default function IngredientItem({ ingredient, onPress }) {
 }
 const styles = StyleSheet.create({
 
-    container: {
-        width: '90%',
-        height: 96,
-        borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'right',
-        backgroundColor: '#FFEDDE',
-        paddingHorizontal: 20,
-        borderColor: '#FFB7B7',
-        borderWidth: 1,
-    },
-    input: {
-        borderWidth: 1,
-        borderRadius: 10,
-        borderColor: "#B3B3B3",
-        height: 33,
-        color: "black",
-        backgroundColor:"white",
-        fontSize: 16,
-        paddingVertical: 3,
-        paddingHorizontal: 5,
-    },
-
-    inputsContainer: {
-        flexDirection: 'column', 
-        alignItems: 'center', 
-        justifyContent:'space-between',
-        width: '98%',
-        gap: 8,
-    },
+container: {
+    width: '100%',
+    height: 96,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'right',
+    backgroundColor: '#FFEDDE',
+    paddingHorizontal: 20,
+    borderColor: '#FFB7B7',
+    borderWidth: 1,
+},
+inputsContainer: {
+    flexDirection: 'column',
+    gap: 10,
+},
+dash: {
+    fontWeight: 'bold',
+    fontSize: 20,
+},
+row: {
+    flexDirection: 'row',
+    gap: 5,
+    justifyContent: 'space-between',
+},
+subRow: {
+    flexDirection: 'row',
+    width: '60%',
+    gap: 5
+},
 });
 

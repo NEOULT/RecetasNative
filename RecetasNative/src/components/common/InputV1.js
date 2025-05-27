@@ -4,7 +4,7 @@ import ThemedText from './ThemedText';
 export default function InputV1 ({ 
     label = null, 
     placeholder,
-    width = "300",
+    width = 300,
     height = 33, 
     style, 
     value,
@@ -39,7 +39,6 @@ input: {
     paddingHorizontal: 8,
     paddingTop: 3,
     textAlignVertical: 'top',
-    width: '100%',
 },
 inputContainer:{
     flexDirection: 'column',
