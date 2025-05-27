@@ -17,6 +17,7 @@ export default function StepItem({ step = 1, onPress = () => {console.log('Hola'
                 style={[styles.input, { width: "90%" }]}
                 keyboardType="default"
                 autoCapitalize="none"
+                multiline={true}
             />
             <DeleteButton
                 onPress={onPress}

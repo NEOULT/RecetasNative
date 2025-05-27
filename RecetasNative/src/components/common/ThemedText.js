@@ -1,7 +1,7 @@
 import { StyleSheet, Text } from 'react-native';
 import { useTheme } from '../../styles/theme/ThemeContext.js'
 
-export function ThemedText({
+export default function ThemedText({
   style,
   lightColor,
   darkColor,
