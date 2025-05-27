@@ -1,0 +1,38 @@
+import {View, TextInput, StyleSheet} from 'react-native';
+import ThemedText from './ThemedText';
+
+export default function InputV1 ({ label = null, placeholder,width = "300",height = 33, style, ...props }){
+    
+    return(
+        <View style={[styles.inputContainer, {width}]}>
+            {(label && <ThemedText>{label}</ThemedText>)}
+            <TextInput
+            placeholder={placeholder}
+            placeholderTextColor="gray"
+            style={[styles.input, style, {height}]}
+            {...props}
+            />
+        </View>
+    );
+}
+const styles = StyleSheet.create({
+input: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "#B3B3B3",
+    color: "black",
+    backgroundColor:"white",
+    fontSize: 16,
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    paddingTop: 3,
+    textAlignVertical: 'top',
+    width: '100%',
+},
+inputContainer:{
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 20,
+    gap: 10,
+}
+});

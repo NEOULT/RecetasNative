@@ -9,6 +9,7 @@ export default function StepItem({ step = 1, onPress = () => {console.log('Hola'
             <ItemTag
                 number={step}
                 position={{ position: "absolute", top: -15, left: -13 }}
+                scale={0.9}
             />
             <ImageSelector width={'90%'} height={125}/>
             <TextInput

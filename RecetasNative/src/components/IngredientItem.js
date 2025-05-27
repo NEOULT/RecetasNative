@@ -15,6 +15,7 @@ export default function IngredientItem({ ingredient, onPress }) {
             <ItemTag
                 number={1}
                 position={{ position: "absolute", top: -15, left: -13 }}
+                scale={0.9}
             />
 
             <DeleteButton
