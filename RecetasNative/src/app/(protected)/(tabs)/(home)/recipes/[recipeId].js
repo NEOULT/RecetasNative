@@ -129,7 +129,7 @@ export default function RecipeDetail() {
                 {recipe.rating.toFixed(1)}
               </ThemedText>
             </View>
-           
+
           </View>
                 
           <ThemedText type="subtitle1" style={{ marginTop: 10 }}>

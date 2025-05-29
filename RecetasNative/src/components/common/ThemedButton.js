@@ -2,12 +2,12 @@
 import { useTheme } from '../../styles/theme/ThemeContext';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export const ThemedButton = ({ title, onPress }) => {
+export const ThemedButton = ({ title, onPress, style }) => {
   const { colors } = useTheme();
   
   return (
     <TouchableOpacity 
-      style={[styles.button, {borderWidth: 1, borderColor: colors.primary_color, borderRadius: 8, backgroundColor: colors.background }]}
+      style={[styles.button, style,{borderWidth: 1, borderColor: colors.primary_color, borderRadius: 8, backgroundColor: colors.background }]}
       onPress={onPress}
     >
       <Text style={[styles.text, { color: colors.primary_color }]}>{title}</Text>
