@@ -1,6 +1,5 @@
 import { ApiWrapper } from "./ApiWrapper.js";
-import { API_URL } from "@env"; // Importa la URL de la API desde el archivo .env
-console.log(API_URL);
+import { API_URL } from "@env"; 
 
 export class ApiService {
 

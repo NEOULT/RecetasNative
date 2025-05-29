@@ -1,8 +1,13 @@
 import RecipeCardList from "../../../../../components/RecipeCardList";
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import { useRouter } from 'expo-router';
 
 export default function RecipesScreen() {
+
+  const router = useRouter();
+
+  // Sample data for recipes
   const [recipes, setRecipes] = React.useState([
     {
       id: 1,
@@ -53,6 +58,7 @@ export default function RecipesScreen() {
 
   const handlePressRecipe = (recipe) => {
     console.log('Recipe selected:', recipe.recipeTitle);
+    router.navigate(`/recipes/${recipe.id}`); 
   }
 
   const handlePressAvatar = (avatar) => {
