@@ -12,6 +12,7 @@ export const lightTheme = {
     footer_backgroundcolor: '#E8E8E8', // ⚪
     primary_iconcolor: '#343231', // ⚫
     secondary_iconcolor: '#E2661E', // 🟠
+    card: '#FFFFFF' // ⚪
 };
 
 export const darkTheme = {
@@ -28,4 +29,5 @@ export const darkTheme = {
     footer_backgroundcolor: '#1A1A1A', // ⚫
     primary_iconcolor: '#FFFFFF', // ⚪
     secondary_iconcolor: '#FFB347', // 🟠
+    card: '#222222'
 };

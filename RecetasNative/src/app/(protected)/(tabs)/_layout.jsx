@@ -1,38 +1,32 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
 import {Image, Text, Pressable, Platform} from 'react-native';
 import { useRouter } from 'expo-router';
-import { useContext } from 'react';
+import { useContext, useState} from 'react';
 import { AuthContext } from '../../../context/authContext.jsx';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../styles/theme/ThemeContext.js';
+import AddButton from '../../../components/AddButtonModal.js';
 
 const router = useRouter(); 
-// import { HapticTab } from '../../components/HapticTab';
-
-// import TabBarBackground from '@/components/ui/TabBarBackground';
-// import { Colors } from '@/constants/Colors';
 
 export default function TabLayout() {
-  // const colorScheme = useColorScheme();
+  
   const { logOut } = useContext(AuthContext);
   const { setScheme, isDark } = useTheme();
+  const [modalVisible, setModalVisible] = useState(false);
   return (
+    <>
     <Tabs
       screenOptions={{
-        // tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // headerShown: true,
-        // tabBarButton: HapticTab,
-        // tabBarBackground: TabBarBackground,
+
         tabBarActiveTintColor: '#FF9100',
         tabBarInactiveTintColor: 'gray',
         tabBarShowLabel: false,
         tabBarStyle: Platform.select({
           ios: {    
-            // Use a transparent background on iOS to show the blur effect
             position: 'absolute',
           },
           default: {},
@@ -75,12 +69,21 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="addButton"
-        options={{
-          title: 'Add',
-          tabBarIcon: ({ color }) => <FontAwesome6 name="plus" size={29} color={color} />,
-        }}
-      />
+          name="addButton"
+          options={{
+            title: 'Add',
+            tabBarIcon: ({ color }) => <FontAwesome6 name="plus" size={29} color={color} />,
+            tabBarButton: (props) => (
+              <Pressable
+                {...props}
+                onPress={() => setModalVisible(true)}
+                style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+              >
+                <FontAwesome6 name="plus" size={29} color={props.accessibilityState.selected ? '#FF9100' : 'gray'} />
+              </Pressable>
+            ),
+          }}
+        />
       <Tabs.Screen
         name="favorites"
         options={{
@@ -96,6 +99,11 @@ export default function TabLayout() {
           </Pressable>
         ),
         }} />
+      <Tabs.Screen name="createRecipe" options={{
+        href: null
+      }} />
     </Tabs>
+    <AddButton isVisible={modalVisible} onClose={() => setModalVisible(false)} />
+    </>
   );
 }
