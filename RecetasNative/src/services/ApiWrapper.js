@@ -47,6 +47,8 @@ export class ApiWrapper {
     return this.#_request(endpoint, 'DELETE');
   }
 
+  // Block from auth
+
   signIn(data) {
     return this.#postData('auth/signin', data);
   }
@@ -54,6 +56,14 @@ export class ApiWrapper {
   signUp(data) {
     return this.#postData('auth/signup', data);
   }
+
+  // Block from User
+
+  deleteAccount(user_id){
+    return this.#deleteData(`user/${user_id}`)
+  }
+
+  //Block from Recipes
 
   createRecipe(data) {
     return this.#postData('recipe', data);
@@ -94,6 +104,36 @@ export class ApiWrapper {
   paginateRecipesByGroupUser(currentPage = 1, limit = 10, groupId, userId) {
     data = { currentPage, limit, groupId, userId, isPublic: true };
     return this.#postData(`recipe/paginated`, data);
+  }
+
+  //Block from Categories
+
+  getCategories(){
+    return this.#getData('categories/all');
+  }
+
+  //Block from Groups
+
+  createGroup(data) {
+    return this.#postData('group', data);
+  } 
+
+  updateGroup(id, data) {
+    return this.#putData(`group/${id}`, data);
+  }
+
+  deleteGroup(id) {
+    return this.#deleteData(`group/${id}`);
+  }
+
+  getPaginatedGroups(currentPage = 1, limit = 10) {
+    data = { currentPage, limit };
+    return this.#postData(`group/paginate`, data);
+  }
+
+  addMembersToGroup(groupId, user_id){
+    data = { groupId, user_id };
+    return this.#postData(`group/togglemember`, data);
   }
 
 }

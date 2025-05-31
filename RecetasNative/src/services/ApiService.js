@@ -17,6 +17,8 @@ export class ApiService {
         }
     }
 
+    // Block from auth
+
     signIn(data) {
         return this._callApi("signIn", data);
     }
@@ -24,6 +26,14 @@ export class ApiService {
     signUp(data) {
         return this._callApi("signUp", data);
     }
+
+    // Block from User
+
+    deleteAccount(user_id){
+        return this._callApi("deleteAccount",user_id)
+    }
+
+    // Block from Recipes
 
     createRecipe(data) {
         return this._callApi("createRecipe", data);
@@ -60,6 +70,26 @@ export class ApiService {
 
     paginateRecipesByGroupUser(currentPage = 1, limit = 10, groupId, userId) {
         return this._callApi("paginateRecipesByGroupUser", currentPage, limit, groupId, userId);
+    }
+
+    // Block from Categories
+
+    getCategories(){
+        return this._callApi('getCategories')
+    }
+
+    // Bloack from Groups
+
+    createGroup(data) {
+        return this._callApi('createGroup', data);
+    }
+
+    paginateGroups(currentPage = 1, limit = 10){
+        return this._callApi('getPaginatedGroups',currentPage,limit)
+    }
+
+    addMembersToGroups(groupId, user_id) {
+        return this._callApi('addMembersToGroups', groupId, user_id);
     }
 
 }
