@@ -83,7 +83,7 @@ export class ApiWrapper {
 
   paginateRecipesPublic(currentPage = 1, limit = 10) {
     data = { currentPage, limit, isPublic: true };
-    return this.#postData(`recipe/paginated`, data);
+    return this.#postData(`recipe/paginated`, data); 
   }
 
   paginateRecipesPublicByUser(currentPage = 1, limit = 10, user_id) {

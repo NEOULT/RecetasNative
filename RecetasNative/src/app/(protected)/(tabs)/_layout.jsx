@@ -20,10 +20,6 @@ import { ApiService } from '../../../services/ApiService.js';
 
 const apiService = new ApiService();
 
-apiService.createRecipe({user_id:'682cd4ec1e6f402fed676d06',title:'680a63ef27cdab853813aa75',description:3})
-  .then(data => console.log('Paginated Recipes:', data))
-  
-
 export default function TabLayout() {
   // const colorScheme = useColorScheme();
   const { logOut } = useContext(AuthContext);
