@@ -1,17 +1,142 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
+import ThemedText from '../../../../components/common/ThemedText';
+import ThemedButton from '../../../../components/common/ThemedButton';
+import Feather from '@expo/vector-icons/Feather';
+import { useTheme } from '../../../../styles/theme/ThemeContext'
+import RecipeItemV2 from '../../../../components/RecipeItemV2';
+import { useRouter } from 'expo-router';
 
 export default function ProfileScreen() {
+
+  const { colors } = useTheme();
+
+  const user = {
+    avatar: 'https://i.postimg.cc/J7KRWYkV/chad.jpg',
+    username: 'ChefJohn00',
+    recipes: 10,
+    groups: 5,
+    followers: 20,
+    following: 15,
+  }
+
+  const router = useRouter();
+
+  const handleSeeMoreRecipes = () => {
+    console.log('Ver más recetas');
+    router.push('/profile/recipes');
+  }
+  const handleSeeMoreGroups = () => {
+    console.log('Ver más grupos');
+    router.push('/profile/groups');
+  }
+
+  const ItemBarProfile = ({value, title}) => {
+
+      return(
+        <View style={[styles.column, {gap: 0}]}>
+          <ThemedText type="subtitle3" style={{fontWeight:'bold'}}>{value}</ThemedText>
+          <ThemedText type="details">{title}</ThemedText>
+        </View>
+      )
+  }
+
+  const SeeMoreButton = ({title, onPress}) => {
+    return (
+      <Pressable onPress={onPress} style={[styles.row, styles.seeMoreButton]}>
+        <ThemedText type="subtitle1">{title}</ThemedText>
+        <Feather name="chevron-right" size={30} color="black" />
+      </Pressable>
+    );
+  }
+
   return (
+  <ScrollView>
     <View style={styles.container}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Profile</Text>
+      <View style={styles.column}>
+        <Image
+          source={{ uri: user.avatar }}
+          style={styles.avatar}
+        />
+        <ThemedText type='subtitle3'>{user.username}</ThemedText>
+      </View>
+
+      <ThemedButton title="Seguir"/>
+
+      <View style={[styles.row, styles.barProfile, {backgroundColor: colors.card}]}>
+        <ItemBarProfile value={user.recipes} title="recipes" />
+        <ItemBarProfile value={user.groups} title="groups" />
+        <ItemBarProfile value={user.followers} title="followers" />
+        <ItemBarProfile value={user.following} title="following" />
+      </View>
+
+      <View style={[styles.column, {alignSelf: 'stretch'}]}>
+        <SeeMoreButton title="Recetas publicadas" onPress={handleSeeMoreRecipes} />
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <RecipeItemV2 imageUrl="https://i.postimg.cc/9f3hBvvT/pasta1.jpg" title="Pasta con salsa de tomate" />
+            <RecipeItemV2 imageUrl="https://i.postimg.cc/9f3hBvvT/pasta1.jpg" title="Ensalada César con pollo" />
+            <RecipeItemV2 imageUrl="https://i.postimg.cc/9f3hBvvT/pasta1.jpg" title="Tacos de carne asada" />
+            <RecipeItemV2 imageUrl="https://i.postimg.cc/9f3hBvvT/pasta1.jpg" title="Chuletas con pollo asado y jamon" />
+        </ScrollView>
+      </View>
+
+      <View style={[styles.column]}>
+        <SeeMoreButton title="Grupos de cocina" onPress={handleSeeMoreGroups} />
+          <Image
+            source={{ uri: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
+            style={{ width: 300, height: 150, borderRadius: 10, marginRight: 10 }}
+          />
+          <Image
+            source={{ uri: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
+            style={{ width: 300, height: 150, borderRadius: 10, marginRight: 10 }}
+          />
+          <Image
+            source={{ uri: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
+            style={{ width: 300, height: 150, borderRadius: 10, marginRight: 10 }}
+          />
+          <Image
+            source={{ uri: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
+            style={{ width: 300, height: 150, borderRadius: 10, marginRight: 10 }}
+          />
+      </View>
     </View>
+  </ScrollView>
+  
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    gap: 20
   },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  column: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 10
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20
+  },
+  barProfile:{
+    paddingVertical: 5,
+    paddingHorizontal: 15, 
+    shadowOffset: { width: 0, height: 1 }, 
+    shadowOpacity: 0.2, 
+    shadowRadius: 1.41, 
+    elevation: 5 
+  },
+  seeMoreButton:{
+    justifyContent: 'space-between',
+    width: '100%',
+  }
 });

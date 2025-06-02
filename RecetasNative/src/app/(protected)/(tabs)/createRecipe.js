@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TextInput, ScrollView} from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView, KeyboardAvoidingView} from 'react-native';
 import IngredientItem from '../../../components/IngredientItem';
 import ImageSelector from '../../../components/common/ImagePicker';
 import StepItem from '../../../components/StepItem';
@@ -44,7 +44,7 @@ export default function createRecipeScreen() {
   }
 
   return (
-
+  <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={120}>
     <ScrollView style={[styles.scroll, { backgroundColor: colors.card}]}>
       <View style={styles.container}>
         
@@ -216,6 +216,7 @@ export default function createRecipeScreen() {
 
       </View>
     </ScrollView>
+  </KeyboardAvoidingView>
 
   );
 }

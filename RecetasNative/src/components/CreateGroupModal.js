@@ -1,5 +1,5 @@
 
-import { View, StyleSheet} from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView} from 'react-native';
 import SlideModal from './common/SlideModal.js'; 
 import { useForm, Controller} from 'react-hook-form';
 import ImageSelector from './common/ImagePicker.js';
