@@ -47,6 +47,10 @@ export class ApiService {
         return this._callApi("deleteRecipe", id);
     }
 
+    getRecipeById(id) {
+        return this._callApi("getRecipeById", id);
+    }
+
     rateRecipe(recipeId, user_id, value) {
         data = { recipeId, user_id, value };
         return this._callApi("rateRecipe", data);

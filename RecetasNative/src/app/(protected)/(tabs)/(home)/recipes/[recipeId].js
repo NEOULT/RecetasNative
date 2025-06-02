@@ -1,152 +1,145 @@
 import { useLocalSearchParams } from 'expo-router';
-import { Text, View, Image, StyleSheet, ScrollView} from 'react-native';
+import { useEffect, useState } from 'react';
+import { Text, View, Image, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import ThemedText from '../../../../../components/common/ThemedText';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useTheme } from '../../../../../styles/theme/ThemeContext.js';
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { ApiService } from '../../../../../services/ApiService';
+import { useApiMessage } from '../../../../../hooks/useApiMessage';
 
-
-const recipeDetails = {
-      id: 1,
-      avatar: 'https://i.postimg.cc/J7KRWYkV/chad.jpg',
-      username: 'Chef John',
-      rating: 4.5,
-      servings: 5,
-      preparationTime: '30 min',
-      image: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
-      title: 'Spaghetti Carbonara con Hojas de Romero',
-      description: 'A classic Italian pasta dish made with eggs, cheese, pancetta, and pepper. It is simple yet delicious, perfect for a quick weeknight dinner.',
-      difficulty: 'easy',
-      ingredients:[
-        { name: 'Spaghetti', unitQuantity: 200, unit: 'g', ingredientQuantity: 1 },
-        { name: 'Pancetta', unitQuantity: 100, unit: 'g', ingredientQuantity: 1 },
-        { name: 'Eggs', unitQuantity: 2, unit: 'pcs', ingredientQuantity: 1 },
-        { name: 'Parmesan cheese', unitQuantity: 50, unit: 'g', ingredientQuantity: 1 },
-        { name: 'Black pepper', unitQuantity: 1, unit: 'tsp', ingredientQuantity: 1 },
-        { name: 'Salt', unitQuantity: 20, unit: 'gm', ingredientQuantity: null },
-      ],
-      steps: [
-        { stepImage: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', description: 'Cook the spaghetti in salted boiling water until al dente. Cook the spaghetti in salted boiling water until al dente. Cook the spaghetti in salted boiling water until al dente.' },
-        { stepImage: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', description: 'In a pan, cook the pancetta until crispy. Cook the spaghetti in salted boiling water until al dente. Cook the spaghetti in salted boiling water until al dente.' },
-        { stepImage: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', description: 'Beat the eggs and mi, Cook the spaghetti in salted boiling water until al dente., Cook the spaghetti in salted boiling water until al dente.' },
-        { stepImage: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', description: 'Combine the spaghetti with pancetta and remove from heat.' },
-        { stepImage: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', description: 'Quickly add the egg mixture to the pasta, stirring to create a creamy sauce.' },
-        { stepImage: null, description: 'Season with black pepper and serve immediately.' },
-      ],
-};
+const api = new ApiService();
 
 export default function RecipeDetail() {
-
   const { colors } = useTheme();
-  
   const { recipeId } = useLocalSearchParams();
+  const { info, callApiWithMessage, clearInfo } = useApiMessage();
 
-  console.log(`Recipe ID: ${recipeId}`);
-  
-  const recipe = recipeDetails;
-  
+  const [recipe, setRecipe] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchRecipe() {
+      try {
+        const res = await callApiWithMessage(() => api.getRecipeById(recipeId));
+        // Si tu API devuelve un array de recetas, toma la primera
+        const data = Array.isArray(res.data.data) ? res.data.data[0] : res.data.data;
+        setRecipe(data);
+      } catch (e) {
+        setRecipe(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchRecipe();
+    // Solo depende de recipeId
+  }, [recipeId]);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#FF9100" style={{ flex: 1, justifyContent: 'center' }} />;
+  }
+
   if (!recipe) {
     return <Text>Receta no encontrada</Text>;
   }
 
+  // Adaptar los campos a la estructura real
+  const imageUrl = recipe.images?.[0]?.url;
+  const avatarUrl = recipe.user_id?.profileImage;
+  const username = recipe.user_id ? `${recipe.user_id.name} ${recipe.user_id.lastName}` : '';
+  const rating = recipe.averageRating ?? 0;
+  const servings = recipe.servings;
+  const difficulty = recipe.dificulty; // Ojo: en tu objeto es "dificulty"
+  const preparationTime = recipe.preparation_time;
+  const ingredients = recipe.ingredients ?? [];
+  const steps = recipe.steps ?? [];
+
   return (
-
-    <ScrollView style={{ marginBottom: 20}}>
-
-      <View style={{ gap: 10}}>
-
+    <ScrollView style={{ marginBottom: 20 }}>
+      <View style={{ gap: 10 }}>
         <Image
-          source={{ uri: recipe.image }}
+          source={{ uri: imageUrl }}
           style={styles.recipeImage}
         />
 
         <View style={styles.container}>
-
           <ThemedText type="title" textAlign='left'>{recipe.title}</ThemedText>
           <ThemedText type="subtitle2">{recipe.description}</ThemedText>
 
           <View style={styles.row}>
-
-            <ThemedText 
-              type="details" 
+            <ThemedText
+              type="details"
               icon={
                 <FontAwesome6
-                  name="clock" 
-                  size={20} 
-                  color={colors.regular_textcolor}   
-                />}>
-                {recipe.preparationTime}
+                  name="clock"
+                  size={20}
+                  color={colors.regular_textcolor}
+                />}
+            >
+              {preparationTime}
             </ThemedText>
-            <ThemedText 
+            <ThemedText
               type="details"
               icon={
-                <MaterialIcons 
-                name="whatshot" 
-                size={22} 
-                color={
-                    recipe.difficulty === 'easy' ? 'green' :
-                    recipe.difficulty === 'medium' ? '#ffe806' :
-                    recipe.difficulty === 'hard' ? 'red' :
-                    'gray'
-                  } 
+                <MaterialIcons
+                  name="whatshot"
+                  size={22}
+                  color={
+                    difficulty === 'easy' ? 'green' :
+                      difficulty === 'medium' ? '#ffe806' :
+                        difficulty === 'hard' ? 'red' :
+                          'gray'
+                  }
                 />
-                }   
-              >{recipe.difficulty}</ThemedText>
-            <ThemedText 
+              }
+            >{difficulty}</ThemedText>
+            <ThemedText
               type="details"
               icon={
-                <Feather 
-                  name="user" 
-                  size={20} 
+                <Feather
+                  name="user"
+                  size={20}
                   color={colors.regular_textcolor}
                 />
               }
-              >{recipe.servings} porciones</ThemedText>
-
+            >{servings} porciones</ThemedText>
           </View>
 
           <View style={styles.row}>
-            
             <View style={styles.subrow}>
-
               <Image
-                source={{ uri: recipe.avatar }}
+                source={{ uri: avatarUrl }}
                 style={styles.avatar}
-                onPress={() => console.log('Avatar pressed')}
                 resizeMode="cover"
               />
-              <ThemedText 
-                type="details" 
-                >
-                {recipe.username}
+              <ThemedText type="details">
+                {username}
               </ThemedText>
-              
             </View>
             <View style={styles.subrow}>
-              <StarRatingDisplay rating={recipe.rating} color='#ecc800' starSize={23} starStyle={{marginHorizontal: 1}}/>
+              <StarRatingDisplay rating={rating} color='#ecc800' starSize={23} starStyle={{ marginHorizontal: 1 }} />
               <ThemedText type="details" style={{ marginLeft: 5 }}>
-                {recipe.rating.toFixed(1)}
+                {rating?.toFixed(1)}
               </ThemedText>
             </View>
-
           </View>
-                
+
           <ThemedText type="subtitle1" style={{ marginTop: 10 }}>
-            Ingredientes 
+            Ingredientes
           </ThemedText>
 
           <View>
-            {recipe.ingredients.map((ingredient, index) => (
-              <View key={index} style={[styles.row, {paddingHorizontal: 10}]}>
-                
+            {ingredients.map((ingredient, index) => (
+              <View key={index} style={[styles.row, { paddingHorizontal: 10 }]}>
                 <View style={styles.subrow}>
                   <ThemedText type="default" style={{ fontWeight: 'bold', marginRight: 6 }}>•</ThemedText>
-                  <ThemedText type="default">{ingredient.ingredientQuantity}</ThemedText>
-                  <ThemedText type="default">{ingredient.name}</ThemedText>
+                  {/* Ajusta los campos según tu modelo de ingrediente */}
+                  <ThemedText type="default">{ingredient.ingredientQuantity ?? ''}</ThemedText>
+                  <ThemedText type="default">{ingredient.name ?? ''}</ThemedText>
                 </View>
                 <View style={styles.subrow}>
-                  <ThemedText type="default">{ingredient.unitQuantity} {ingredient.unit}</ThemedText>
+                  <ThemedText type="default">{ingredient.unitQuantity ?? ''} {ingredient.unit ?? ''}</ThemedText>
                 </View>
               </View>
             ))}
@@ -156,43 +149,31 @@ export default function RecipeDetail() {
             Preparación
           </ThemedText>
 
-          <View style={{gap: 35}}>
-            {recipe.steps.map((step, index) => (
+          <View style={{ gap: 35 }}>
+            {steps.map((step, index) => (
               <View key={index} style={[styles.column]}>
-                
                 <View style={[styles.column, styles.cardContainer]}>
-
-                  <View style={[styles.row,styles.cardContent]}>
+                  <View style={[styles.row, styles.cardContent]}>
                     <ThemedText type="subtitle3">
-                      Step {index + 1}
+                      Paso {index + 1}
                     </ThemedText>
                   </View>
-
-                  { step && step.stepImage && (<Image
-                    source={{ uri: step.stepImage }}
-                    style={styles.stepImage}
-                    resizeMode="cover"
-                  />)}
-                  
-                  
+                  {/* Si tus pasos son strings, no hay imagen */}
                 </View>
-
                 <View>
-                    <ThemedText type="subtitle2">
-                    {step.description}
-                    </ThemedText>
-                  </View>
+                  <ThemedText type="subtitle2">
+                    {typeof step === 'string' ? step : step.description}
+                  </ThemedText>
+                </View>
               </View>
             ))}
-
           </View>
-
         </View>
-        
       </View>
     </ScrollView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
@@ -206,7 +187,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
-
   },
   subrow: {
     flexDirection: 'row',
@@ -218,14 +198,14 @@ const styles = StyleSheet.create({
     gap: 10,
     alignItems: 'left'
   },
-  cardContainer:{
+  cardContainer: {
     backgroundColor: '#dadada',
     borderRadius: 10,
   },
-  cardContent:{
+  cardContent: {
     paddingHorizontal: 16
   },
-  stepImage:{
+  stepImage: {
     width: '100%',
     height: 180,
     borderRadius: 10,
@@ -235,7 +215,7 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: 'cover',
   },
-  avatar:{
+  avatar: {
     width: 30,
     height: 30,
     borderRadius: 15,
