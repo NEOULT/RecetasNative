@@ -158,7 +158,14 @@ export default function RecipeDetail() {
                       Paso {index + 1}
                     </ThemedText>
                   </View>
-                  {/* Si tus pasos son strings, no hay imagen */}
+                  {/* Mostrar imagen del paso si existe */}
+                  {recipe.images?.[index + 1]?.url && (
+                    <Image
+                      source={{ uri: recipe.images[index + 1].url }}
+                      style={styles.stepImage}
+                      resizeMode="cover"
+                    />
+                  )}
                 </View>
                 <View>
                   <ThemedText type="subtitle2">
