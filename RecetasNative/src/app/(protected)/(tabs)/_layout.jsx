@@ -10,6 +10,10 @@ import { useState } from 'react';
 
 const router = useRouter(); 
 
+import { ApiService } from '../../../services/ApiService.js';
+
+const apiService = new ApiService();
+
 export default function TabLayout() {
   
   const { setScheme, isDark } = useTheme();

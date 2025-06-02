@@ -1,22 +1,30 @@
-import React from 'react';
+import React, { use } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
 
 const RecipeCard = ({ avatar, username, rating, recipeImage, recipeTitle, isFavorite, onFavoriteToggle, onPressRecipe, onPressAvatar }) => {
+  console.log("trajo esto",avatar,username,rating,recipeImage,recipeTitle,isFavorite);
+  
   return (
     <View style={[styles.cardContainer]}>
       <TouchableOpacity onPress={onPressRecipe}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={onPressAvatar}>
-          <Image source={{ uri: avatar }} style={styles.avatar} />
+          {avatar ? (
+            <Image source={{ uri: avatar }} style={styles.avatar} />
+          ) : (
+            <View style={[styles.avatar, { justifyContent: 'center', alignItems: 'center', backgroundColor: '#eee' }]}>
+              <Icon name="person-circle-outline" size={40} color="#bbb" />
+            </View>
+          )}
         </TouchableOpacity>
         <View style={styles.userInfo}>
           <Text style={styles.username}>{username}</Text>
           <View style={styles.ratingContainer}>
             <StarRatingDisplay rating={rating} starSize={16} starStyle={{marginHorizontal: 1}}/>
-            <Text style={styles.ratingText}>{rating.toFixed(1)}</Text>
+            <Text>{rating}</Text>
           </View>
         </View>
         <TouchableOpacity onPress={onFavoriteToggle} style={styles.favIcon}>

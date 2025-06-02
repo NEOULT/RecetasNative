@@ -4,6 +4,8 @@ import RecipeItem from './RecipeItem'; // Asegúrate de que la ruta sea correcta
 
 const RecipeItemList = ({ data, onPressRecipe }) => {
   const renderItem = ({ item }) => (
+    console.log("Rendering item:", item),
+    
     <RecipeItem
       imageUrl={item.imageUrl}
       title={item.title}

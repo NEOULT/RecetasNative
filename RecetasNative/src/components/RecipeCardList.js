@@ -1,21 +1,28 @@
 import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native';
 import RecipeCard from './RecipeCard';
 
-const RecipeCardList = ({ data, onFavoriteToggle, onPressRecipe, onPressAvatar }) => {
+const RecipeCardList = ({
+  data,
+  onFavoriteToggle,
+  onPressRecipe,
+  onPressAvatar,
+  onEndReached,
+  isFetchingMore,
+}) => {
   const renderItem = ({ item }) => (
-
-    <RecipeCard
-      avatar={item.avatar}
-      username={item.username}
-      rating={item.rating}
-      recipeImage={item.recipeImage}
-      recipeTitle={item.recipeTitle}
+    console.log("Rendering item:", item.id),
+    
+    <RecipeCard  
+      avatar={item.user_id.profileImage}
+      username={item.user_id.name + ' ' + item.user_id.lastName}
+      rating={item.averageRating}
+      recipeImage={item.images[0].url}
+      recipeTitle={item.title}
       isFavorite={item.isFavorite}
-      onFavoriteToggle={() => onFavoriteToggle(item.id)}
+      onFavoriteToggle={() => onFavoriteToggle(item._id)}
       onPressRecipe={() => onPressRecipe(item)}
       onPressAvatar={() => onPressAvatar(item)}
-      
     />
   );
 
@@ -24,13 +31,14 @@ const RecipeCardList = ({ data, onFavoriteToggle, onPressRecipe, onPressAvatar }
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        initialNumToRender={5}
-        maxToRenderPerBatch={5}
-        windowSize={10}
-        removeClippedSubviews={true}
+        keyExtractor={(item) => item._id.toString()}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isFetchingMore ? <ActivityIndicator size="small" color="#FF9100" /> : null
+        }
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.flatListContent} // Centra las tarjetas
+        contentContainerStyle={styles.flatListContent}
       />
     </View>
   );
@@ -39,11 +47,11 @@ const RecipeCardList = ({ data, onFavoriteToggle, onPressRecipe, onPressAvatar }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%', // Asegura que el contenedor ocupe todo el ancho
+    width: '100%',
   },
   flatListContent: {
-    paddingVertical: 10, // Espaciado vertical opcional
+    paddingVertical: 10, 
   },
 });
 
-export default RecipeCardList;
+export default RecipeCardList; 
