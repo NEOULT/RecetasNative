@@ -1,13 +1,17 @@
+import { RFValue } from "react-native-responsive-fontsize";
+
 export const fonts = {
     title: 'Poppins_600SemiBold',
     subtitle1: 'Poppins_500Medium',
     subtitle2: 'Poppins_400Regular',
-    default: 'Roboto_300Light',
+    subtitle3: 'Poppins_600SemiBold',
+    default: 'Roboto_300Regular',
     details: 'Roboto_400Regular',
-    title_size: 28,
-    subtitle1_size: 22,
-    subtitle2_size: 18,
-    default_size: 16,
-    details_size: 14,
-    descriptionsize: 14,
+    title_size: RFValue(22),
+    subtitle1_size: RFValue(20),
+    subtitle2_size: RFValue(14),
+    subtitle3_size: RFValue(17),
+    default_size: RFValue(16),
+    details_size: RFValue(14),
+
 }

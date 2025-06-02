@@ -1,9 +1,19 @@
 import { View, Image, StyleSheet, TouchableOpacity, Alert, Text } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useImagePicker } from "../../hooks/useImagePicker";
+import { useEffect, useState } from "react";
 
-export default function ImageSelector({width = 100, height = 100}) {
+export default function ImageSelector({width = 100, height = 100, value, onChange}) {
     const { imageUri, setImageUri, pickImage, takePhoto } = useImagePicker();
+    const [image, setImage] = useState(value || null);
+
+    useEffect(() => {
+        if(imageUri) {
+            value = imageUri;
+            onChange(value);
+        }
+        value = null;
+    }, [imageUri]);
 
     const handlePress = () => {
         if (imageUri) {
