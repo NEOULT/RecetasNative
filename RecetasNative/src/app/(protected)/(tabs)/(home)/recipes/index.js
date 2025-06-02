@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { ApiService } from "../../../../../services/ApiService";
 import { useApiMessage } from "../../../../../hooks/useApiMessage";
+import { router } from "expo-router";
 
 const api = new ApiService();
 
@@ -50,6 +51,23 @@ export default function RecipesScreen() {
     }
   };
 
+  const toggleFavorite = (id) => {
+    setRecipes((prevRecipes) =>
+      prevRecipes.map((recipe) =>
+        recipe.id === id ? { ...recipe, isFavorite: !recipe.isFavorite } : recipe
+      )
+    );
+  };
+
+  const handlePressRecipe = (recipe) => {
+    console.log('Recipe selected:', recipe.recipeTitle);
+    router.navigate(`/recipes/${recipe.id}`); 
+  }
+
+  const handlePressAvatar = (avatar) => {
+    console.log('Avatar selected:', avatar.username);
+  }
+
   return (
     <View style={styles.screenContainer}>
       <InfoBox 
@@ -66,7 +84,9 @@ export default function RecipesScreen() {
           data={recipes}
           onEndReached={handleLoadMore}
           isFetchingMore={info.loading && pagination.page > 1}
-          // Otras props...
+          onFavoriteToggle={toggleFavorite}
+          onPressAvatar={handlePressAvatar}
+          onPressRecipe={handlePressRecipe}
         />
       )}
     </View>

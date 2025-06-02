@@ -11,7 +11,7 @@ const RecipeCardList = ({
   isFetchingMore,
 }) => {
   const renderItem = ({ item }) => (
-    console.log("Rendering item:", item.images[0].url),
+    console.log("Rendering item:", item.id),
     
     <RecipeCard  
       avatar={item.user_id.profileImage}
