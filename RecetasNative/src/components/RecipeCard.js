@@ -12,13 +12,19 @@ const RecipeCard = ({ avatar, username, rating, recipeImage, recipeTitle, isFavo
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={onPressAvatar}>
-          <Image source={{ uri: avatar }} style={styles.avatar} />
+          {avatar ? (
+            <Image source={{ uri: avatar }} style={styles.avatar} />
+          ) : (
+            <View style={[styles.avatar, { justifyContent: 'center', alignItems: 'center', backgroundColor: '#eee' }]}>
+              <Icon name="person-circle-outline" size={40} color="#bbb" />
+            </View>
+          )}
         </TouchableOpacity>
         <View style={styles.userInfo}>
           <Text style={styles.username}>{username}</Text>
           <View style={styles.ratingContainer}>
             <StarRatingDisplay rating={rating} starSize={16} starStyle={{marginHorizontal: 1}}/>
-            <Text>ra</Text>
+            <Text>{rating}</Text>
           </View>
         </View>
         <TouchableOpacity onPress={onFavoriteToggle} style={styles.favIcon}>

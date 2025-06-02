@@ -9,78 +9,66 @@ const api = new ApiService();
 
 export default function RecipesScreen() {
   const [recipes, setRecipes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
-
+  const [pagination, setPagination] = useState({ page: 1, hasMore: true });
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
 
-    const fetchRecipes = useCallback(async (pageToFetch = 1) => {
-      try {
-        if (pageToFetch === 1) setLoading(true);
-        else setIsFetchingMore(true);
-
-        // Usa callApiWithMessage para que info se setee automáticamente
-        const response = await callApiWithMessage(() => api.paginateRecipesPublic(pageToFetch, 5));
-        const newRecipes = response.data.data; 
-        const totalPages = response.data.totalPages;
-  
-        setRecipes(prev =>
-          pageToFetch === 1 ? newRecipes : [...prev, ...newRecipes]
-        );
-        setHasMore(pageToFetch < totalPages); 
-      } catch (error) { 
-        // El mensaje de error ya se setea en info por callApiWithMessage
-        console.error("Error fetching recipes:", error);
-      } finally { 
-        setLoading(false); 
-        setIsFetchingMore(false); 
-      }
-    }, [api, callApiWithMessage]);
+  const fetchRecipes = useCallback(async (pageToFetch = 1) => {
+    try {
+      const response = await callApiWithMessage(() =>  
+        api.paginateRecipesPublic(pageToFetch, 5)
+      );
+      
+      setRecipes(prev => 
+        pageToFetch === 1 
+          ? response.data.data 
+          : [...prev, ...response.data.data]
+      );
+      
+      setPagination({
+        page: pageToFetch,
+        hasMore: pageToFetch < response.data.totalPages
+      });
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+    }
+  }, [callApiWithMessage]);
 
   useEffect(() => {
-    setPage(1); 
-    fetchRecipes(1); 
+    fetchRecipes(1);
   }, []);
 
   useEffect(() => {
     if (info.message) {
-      const timeout = setTimeout(() => {
-        clearInfo();
-      }, 3000); 
+      const timeout = setTimeout(clearInfo, 3000);
       return () => clearTimeout(timeout);
     }
   }, [info.message, clearInfo]);
 
   const handleLoadMore = () => {
-    if (hasMore && !isFetchingMore && !loading) {
-      const nextPage = page + 1;
-      setPage(nextPage);
-      fetchRecipes(nextPage);
+    if (pagination.hasMore && !info.loading) {
+      fetchRecipes(pagination.page + 1);
     }
   };
 
-  if (loading && page === 1) {
-    return (
-      <View style={styles.screenContainer}>
-        <Text>Cargando recetas...</Text>
-      </View>
-    ); 
-  } 
-
   return (
     <View style={styles.screenContainer}>
-      {/* duration debe siempre ser inferior al valor del setTimOut de Clear Info para evitar Warnings*/} 
-      <InfoBox message={info.message} type={info.type} onHide={clearInfo} duration={2000} />
-      <RecipeCardList
-        data={recipes}
-        onFavoriteToggle={() => {}}
-        onPressAvatar={() => {}}
-        onPressRecipe={() => {}}
-        onEndReached={handleLoadMore} 
-        isFetchingMore={isFetchingMore}
+      <InfoBox 
+        message={info.message} 
+        type={info.type} 
+        onHide={clearInfo} 
+        duration={2000} 
       />
+      
+      {recipes.length === 0 && !info.loading ? (
+        <Text>No se encontraron recetas</Text>
+      ) : (
+        <RecipeCardList
+          data={recipes}
+          onEndReached={handleLoadMore}
+          isFetchingMore={info.loading && pagination.page > 1}
+          // Otras props...
+        />
+      )}
     </View>
   );
 }

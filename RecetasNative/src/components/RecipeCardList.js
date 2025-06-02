@@ -11,11 +11,13 @@ const RecipeCardList = ({
   isFetchingMore,
 }) => {
   const renderItem = ({ item }) => (
+    console.log("Rendering item:", item.images[0].url),
+    
     <RecipeCard  
-      avatar={item.avatar}
-      username={item.username}
+      avatar={item.user_id.profileImage}
+      username={item.user_id.name + ' ' + item.user_id.lastName}
       rating={item.averageRating}
-      recipeImage={item.url}
+      recipeImage={item.images[0].url}
       recipeTitle={item.title}
       isFavorite={item.isFavorite}
       onFavoriteToggle={() => onFavoriteToggle(item._id)}
