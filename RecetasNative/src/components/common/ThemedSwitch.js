@@ -1,17 +1,28 @@
 // components/ThemeSwitch.js
 import { useTheme } from '../../styles/theme/ThemeContext';
 import { Switch, View, Text } from 'react-native';
+import ThemedText from './ThemedText';
 
-export const ThemeSwitch = () => {
-  const { isDark, setScheme, colors } = useTheme();
-
+export default function ThemeSwitch ({value, onValueChange, title = "Titulo", width = 100, scaleX = 1.4, scaleY = 1.3}) {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', padding: 100 }}>
-      <Text style={{ color: colors.primary_color }}>Modo oscuro</Text>
+    <View style={[styles.container, {width}]}>
+      <ThemedText>{title}</ThemedText>
       <Switch
-        value={isDark}
-        onValueChange={() => setScheme(isDark ? 'light' : 'dark')}
+        value={value}
+        onValueChange={() => onValueChange(!value)}
+        trackColor={{false: '#767577', true: '#81b0ff'}}
+        thumbColor={value ? '#2a58a5' : '#f4f3f4'}
+        style={{ transform: [{ scaleX }, { scaleY }] }}
       />
     </View>
   );
+};
+
+const styles = {
+  container: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
 };
