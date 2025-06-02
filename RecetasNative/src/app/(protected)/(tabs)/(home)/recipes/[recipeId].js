@@ -151,7 +151,7 @@ export default function RecipeDetail() {
 
           <View style={{ gap: 35 }}>
             {steps.map((step, index) => (
-              <View key={index} style={[styles.column]}>
+              <View key={index} style={[styles.column, {minWidth: '100%' }]}>
                 <View style={[styles.column, styles.cardContainer]}>
                   <View style={[styles.row, styles.cardContent]}>
                     <ThemedText type="subtitle3">
