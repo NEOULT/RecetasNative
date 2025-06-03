@@ -13,18 +13,38 @@ import { ApiService } from '../../../services/ApiService';
 import { useApiMessage } from '../../../hooks/useApiMessage';
 import { difficultyOptions, unitTimeOptions } from '../../../constants/options';
 import InfoBox from '../../../components/common/InfoBox';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { convertTimeToIso} from '../../../hooks/useTimeIso.js';
+import PlusPicker from '../../../components/PlusPicker';
+import CategoryTag from '../../../components/CategoryTag.js';
 
 
 const api = new ApiService();
 
 export default function createRecipeScreen() {
 
-  const { info, callApiWithMessage, clearInfo } = useApiMessage();      
+  const { info, callApiWithMessage, clearInfo } = useApiMessage();   
+  
+  const [categories, setCategories] = useState([]); 
+
+  const { colors } = useTheme();
 
  //Aca uso useRef para evitar que el efecto se ejecute en el primer renderizado y solo lo haga escuchando al info y los otros componentes
   const didMount = useRef(false);
+
+  useEffect(() => {
+
+    const fetchCategories = async () => {
+      try {
+        const response = await callApiWithMessage(() => api.getCategories());
+        setCategories(response.data.categories || []);
+      } catch (error) {
+        console.error('Error al obtener las categorías:', error);
+      }
+    }
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
       if (didMount.current) {
@@ -37,12 +57,23 @@ export default function createRecipeScreen() {
     }
   }, [info.message, clearInfo]);
 
-  const { colors } = useTheme();
+  const handleAddCategory = (name) => {
+    const cat = categories.find(c => c.name === name);
+    if (!cat) return;
+    const current = getValues('categories') || [];
+    if (!current.includes(cat._id)) {
+      setValue('categories', [...current, cat._id]);
+    }
+  };
 
+  const handleRemoveCategory = (id) => {
+    const current = getValues('categories') || [];
+    setValue('categories', current.filter(cid => cid !== id));
+  };
 
   //Estos son los valores por defecto del formulario, que se pueden modificar y llenarlos en caso de
   //querer editar una receta existente
-  const { control, handleSubmit, } = useForm({
+  const { control, handleSubmit, getValues, setValue } = useForm({
     defaultValues: {
 
       //Falta por implementar el cloudinary
@@ -56,6 +87,7 @@ export default function createRecipeScreen() {
       isPublic: false,
       ingredients:[{ ingredient_name: '', unit: '', unit_quantity: 0}],
       steps: [{ stepImage: '', description: '' }],
+      categories: [],
     }
   });
 
@@ -73,8 +105,6 @@ export default function createRecipeScreen() {
 
     //Faltan por implementar
     data.user_id = "683725505cfb758857da45ab";
-    data.categories= "683e46c8ea58ff7d158b289b"
-
     data.preparation_time =`${convertTimeToIso(data.time, data.timeUnit)}`;
     
 
@@ -95,7 +125,7 @@ export default function createRecipeScreen() {
     }catch(e){
       console.error('Error al enviar el formulario:', e);
     }
-    // console.log('Datos del formulario:', data);
+    console.log('Datos del formulario:', data);
   }
 
 
@@ -241,7 +271,36 @@ export default function createRecipeScreen() {
           />
         </View>
 
-
+        <Controller
+          control={control}
+          name="categories"
+          defaultValue={[]}
+          render={({ field: { value } }) => (
+            <View style={styles.categoryTags}>
+              <PlusPicker
+                label="Categorías:"
+                width="45%"
+                options={categories
+                  .filter(cat => !(value || []).includes(cat._id))
+                  .map(cat => cat.name)}
+                onSelect={handleAddCategory}
+              />
+              {(value || []).map(id => {
+                const cat = categories.find(c => c._id === id);
+                if (!cat) return null;
+                return (
+                  <CategoryTag
+                    key={id}
+                    category={cat.name}
+                    style={{}}
+                    onPressDelete={() => handleRemoveCategory(id)}
+                  />
+                );
+              })}
+            </View>
+          )}
+        />
+        
         <ThemedText type='subtitle1' style={{alignSelf: 'left'}}>Ingredientes:</ThemedText>
         <View style={styles.listContainer}>
           {ingredientFields.map((field, index) => (
@@ -331,5 +390,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  categoryTags:{
+    flexDirection: 'row',
+    gap: 10,
+    width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  }
   
 });

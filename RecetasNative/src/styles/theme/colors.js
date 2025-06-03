@@ -1,3 +1,5 @@
+import CategoryTag from "../../components/CategoryTag";
+
 export const lightTheme = {
     primary_color: '#FF9100', // 🟧
     secondary_color: '#E2661E', // 🟠
@@ -12,11 +14,13 @@ export const lightTheme = {
     footer_backgroundcolor: '#E8E8E8', // ⚪
     primary_iconcolor: '#343231', // ⚫
     secondary_iconcolor: '#E2661E', // 🟠
+    CategoryTag_color: '#FFEDDE', // 🟧
     card: '#FFFFFF' // ⚪
 };
 
 export const darkTheme = {
     primary_color: '#FF9100', // 🟧
+    CategoryTag_color: '#FFEDDE', // 🟧
     secondary_color: '#FFB347', // 🟠
     regular_textcolor: '#FFFFFF', // ⚪
     secundary_textcolor: '#B0B0B0', // ⚪

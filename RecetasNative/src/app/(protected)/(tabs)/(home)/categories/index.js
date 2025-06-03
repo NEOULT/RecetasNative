@@ -19,7 +19,7 @@ export default function CategoriesScreen() {
             try {
                 const res = await callApiWithMessage(() => api.getCategories());
 
-                console.log('Categorías obtenidas:', res.data.categories);
+                // console.log('Categorías obtenidas:', res.data.categories);
                  
                 setCategories(res.data.categories || []);
             } catch (e) {
