@@ -18,6 +18,7 @@ export default function SelectPicker({
     label = '',
     value,
     onChange,
+    options = [],
   }) 
   
   {
@@ -29,12 +30,6 @@ export default function SelectPicker({
 
   
   const [selected, setSelected] = useState(value ?? null);
-
-  const options = [
-    'Opción 1', 'Opción 2', 'Opción 3',
-    'Opción 4', 'Opción 5', 'Opción 6',
-    'Opción 7', 'Opción 8', 'Opción 9',
-  ];
 
   const handleSelect = (option) => {
     setSelected(option);

@@ -4,6 +4,7 @@ import DeleteButton from '../components/common/DeleteButton';
 import InputV1 from "./common/InputV1";
 import ThemedText from "./common/ThemedText";
 import SelectPicker from "./common/SelectPicker";
+import { unitOptions } from "../constants/options";
 
 export default function IngredientItem({ value = {}, onChange, onPressDelete }) {
 
@@ -24,8 +25,8 @@ export default function IngredientItem({ value = {}, onChange, onPressDelete }) 
                 <InputV1
                 placeholder="Ingrediente"
                 width="100%"
-                value={value.name}
-                onChangeText={name => onChange({ ...value, name })}
+                value={value.ingredient_name}
+                onChangeText={ingredient_name => onChange({ ...value, ingredient_name })}
                 />
                 <View style={styles.row}>
                 
@@ -34,13 +35,14 @@ export default function IngredientItem({ value = {}, onChange, onPressDelete }) 
                     placeholder="unidad"
                     value={value.unit}
                     onChange={unit => onChange({ ...value, unit })}
+                    options={unitOptions}
                     />
                     <ThemedText style={styles.dash}>-</ThemedText>
                     <InputV1
                         placeholder="cantidad"
                         width="45%"
-                        value={value.unitQuantity}
-                        onChangeText={unitQuantity => onChange({ ...value, unitQuantity })}
+                        value={value.unit_quantity}
+                        onChangeText={unit_quantity => onChange({ ...value, unit_quantity: Number(unit_quantity) })}
                         keyboardType="numeric"
                     />
             </View>

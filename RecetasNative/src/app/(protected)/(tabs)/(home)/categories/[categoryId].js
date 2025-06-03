@@ -4,6 +4,7 @@ import RecipeItemList from '../../../../../components/RecipeItemList';
 import { useLocalSearchParams } from 'expo-router';
 import { ApiService } from '../../../../../services/ApiService';
 import { useApiMessage } from '../../../../../hooks/useApiMessage';
+import ThemedText from '../../../../../components/common/ThemedText';
 
 const api = new ApiService();
 
@@ -35,7 +36,7 @@ export default function CategoriesIDScreen() {
 
     if (loading) {
         return (
-            <View style={style.screenContainer}>
+            <View style={[style.screenContainer, style.center]}>
                 <ActivityIndicator size="large" color="#FF9100" />
             </View>
         );
@@ -43,8 +44,8 @@ export default function CategoriesIDScreen() {
 
     if (!recipes.length) {
         return (
-            <View style={style.screenContainer}>
-                <Text>No hay recetas en esta categoría</Text>
+            <View style={[style.screenContainer, style.center]}>
+                <ThemedText textAlign='center'>No hay recetas disponibles en esta categoría</ThemedText>
             </View>
         );
     }
@@ -62,4 +63,8 @@ const style = {
         width: '100%',
         flex: 1,
     },
+    center: {
+        alignSelf: 'center',
+        justifyContent: 'center',
+    }
 };

@@ -1,5 +1,5 @@
 // components/ThemeSwitch.js
-import { useTheme } from '../../styles/theme/ThemeContext';
+
 import { Switch, View, Text } from 'react-native';
 import ThemedText from './ThemedText';
 

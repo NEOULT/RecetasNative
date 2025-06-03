@@ -9,24 +9,53 @@ import ThemedButton from '../../../components/common/ThemedButton';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { useTheme } from '../../../styles/theme/ThemeContext';
 import ThemedSwitch from '../../../components/common/ThemedSwitch';
+import { ApiService } from '../../../services/ApiService';
+import { useApiMessage } from '../../../hooks/useApiMessage';
+import { difficultyOptions, unitTimeOptions } from '../../../constants/options';
+import InfoBox from '../../../components/common/InfoBox';
+import { useEffect, useRef } from 'react';
+import { convertTimeToIso} from '../../../hooks/useTimeIso.js';
 
+
+const api = new ApiService();
 
 export default function createRecipeScreen() {
 
+  const { info, callApiWithMessage, clearInfo } = useApiMessage();      
+
+ //Aca uso useRef para evitar que el efecto se ejecute en el primer renderizado y solo lo haga escuchando al info y los otros componentes
+  const didMount = useRef(false);
+
+  useEffect(() => {
+      if (didMount.current) {
+        if (info.message) {
+          const timeout = setTimeout(clearInfo, 3000);
+          return () => clearTimeout(timeout);
+        }
+    } else {
+      didMount.current = true;
+    }
+  }, [info.message, clearInfo]);
+
   const { colors } = useTheme();
 
+
+  //Estos son los valores por defecto del formulario, que se pueden modificar y llenarlos en caso de
+  //querer editar una receta existente
   const { control, handleSubmit, } = useForm({
     defaultValues: {
-      recipeImage: null,
+
+      //Falta por implementar el cloudinary
+      images: [{url: "https://images.pexels.com/photos/724664/pexels-photo-724664.jpeg"}],
       title: '',
       description: '',
       time: 0,
-      timeUnit: 0,
+      timeUnit: '',
       servings: 0,
       difficulty: '',
       isPublic: false,
-      ingredients:[{ name: '', unit: 0, unitQuantity: 0}],
-      steps: [{ stepImage: null, description: '' }],
+      ingredients:[{ ingredient_name: '', unit: '', unit_quantity: 0}],
+      steps: [{ stepImage: '', description: '' }],
     }
   });
 
@@ -40,23 +69,68 @@ export default function createRecipeScreen() {
     name: 'steps',
   });
 
-  const onSubmit = (data) => {
-    console.log('Datos del formulario:', data);
+  const onSubmit = async (data) => {
+
+    //Faltan por implementar
+    data.user_id = "683725505cfb758857da45ab";
+    data.categories= "683e46c8ea58ff7d158b289b"
+
+    data.preparation_time =`${convertTimeToIso(data.time, data.timeUnit)}`;
+    
+
+    //Estos los elimino porque no son necesarios en el backend, solo para construir el preparation_time
+    delete data.time
+    delete data.timeUnit
+
+    //Esta funcion elimina los campos que son null o undefined porque el backend no los acepta
+    const cleanData = removeNullFields(data);
+
+    try{
+      const response = await callApiWithMessage(() => api.createRecipe(cleanData));
+
+      if(response.success){
+        console.log('Receta creada exitosamente:');
+      }
+
+    }catch(e){
+      console.error('Error al enviar el formulario:', e);
+    }
+    // console.log('Datos del formulario:', data);
   }
+
+
+  function removeNullFields(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map(removeNullFields);
+  } else if (obj && typeof obj === 'object') {
+    return Object.fromEntries(
+      Object.entries(obj)
+        .filter(([_, v]) => v !== null && v !== undefined && v !== '')
+        .map(([k, v]) => [k, removeNullFields(v)])
+    );
+  }
+  return obj;
+}
 
   return (
   <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={120}>
+    <InfoBox 
+      message={info.message} 
+      type={info.type} 
+      onHide={clearInfo} 
+      duration={2000} 
+    />
     <ScrollView style={[styles.scroll, { backgroundColor: colors.card}]}>
       <View style={styles.container}>
         
         <Controller
           control={control}
-          name="recipeImage"
+          name="images"
           render={({ field: { value, onChange } }) => (
             <ImageSelector
               width={'100%'}
               height={160}
-              value={value}
+              value={value.url}
               onChange={onChange}
             />
           )}
@@ -121,6 +195,7 @@ export default function createRecipeScreen() {
                     placeholder="Min"
                     value={value}
                     onChange={onChange}
+                    options={unitTimeOptions}
                   />
                 )}
               />
@@ -153,6 +228,7 @@ export default function createRecipeScreen() {
                 label="Dificultad:"
                 value={value}
                 onChange={onChange}
+                options={difficultyOptions}
               />
             )}
           />
@@ -184,7 +260,7 @@ export default function createRecipeScreen() {
           ))}
           <ThemedButton
             title="Agregar ingrediente"
-            onPress={() => appendIngredient({ name: '', ingredientQuantity: 0, unit: 0, unitQuantity: 0})}
+            onPress={() => appendIngredient({ ingredient_name: '', unit: 0, unit_quantity: 0})}
           />
         </View>
 
@@ -206,7 +282,7 @@ export default function createRecipeScreen() {
           ))}
           <ThemedButton
             title="Agregar paso"
-            onPress={() => appendStep({ description: '', stepImage: null })}
+            onPress={() => appendStep({ description: '', stepImage: '' })}
           />
         </View>
 
