@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TextInput, ScrollView} from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView, KeyboardAvoidingView} from 'react-native';
 import IngredientItem from '../../../components/IngredientItem';
 import ImageSelector from '../../../components/common/ImagePicker';
 import StepItem from '../../../components/StepItem';
@@ -8,6 +8,7 @@ import SelectPicker from '../../../components/common/SelectPicker';
 import ThemedButton from '../../../components/common/ThemedButton';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { useTheme } from '../../../styles/theme/ThemeContext';
+import ThemedSwitch from '../../../components/common/ThemedSwitch';
 
 
 export default function createRecipeScreen() {
@@ -23,8 +24,8 @@ export default function createRecipeScreen() {
       timeUnit: 0,
       servings: 0,
       difficulty: '',
-      visibility: '',
-      ingredients:[{ name: '', ingredientQuantity: 0, unit: 0, unitQuantity: 0}],
+      isPublic: false,
+      ingredients:[{ name: '', unit: 0, unitQuantity: 0}],
       steps: [{ stepImage: null, description: '' }],
     }
   });
@@ -44,7 +45,7 @@ export default function createRecipeScreen() {
   }
 
   return (
-
+  <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={120}>
     <ScrollView style={[styles.scroll, { backgroundColor: colors.card}]}>
       <View style={styles.container}>
         
@@ -157,21 +158,15 @@ export default function createRecipeScreen() {
           />
           <Controller
             control={control}
-            name="visibility"
+            name="isPublic"
             render={({ field: { onChange, value } }) => (
-              <SelectPicker
-                width="45%"
-                placeholder="Privado"
-                label="Visibilidad:"
-                value={value}
-                onChange={onChange}
-              />
+              <ThemedSwitch title='Public:' width="40%" value={value} onValueChange={onChange}/>
             )}
           />
         </View>
 
 
-        <ThemedText type='subtitle1' style={{alignSelf: 'right', padding: 15}}>Ingredientes:</ThemedText>
+        <ThemedText type='subtitle1' style={{alignSelf: 'left'}}>Ingredientes:</ThemedText>
         <View style={styles.listContainer}>
           {ingredientFields.map((field, index) => (
             <Controller
@@ -193,6 +188,7 @@ export default function createRecipeScreen() {
           />
         </View>
 
+        <ThemedText type='subtitle1' textAlign='left'>Preparación:</ThemedText>
         <View style={styles.listContainer}>
           {stepFields.map((field, index) => (
             <Controller
@@ -216,6 +212,7 @@ export default function createRecipeScreen() {
 
       </View>
     </ScrollView>
+  </KeyboardAvoidingView>
 
   );
 }

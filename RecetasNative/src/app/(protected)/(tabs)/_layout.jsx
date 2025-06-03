@@ -1,14 +1,12 @@
 import { Tabs } from 'expo-router';
 import {Image, Text, Pressable, Platform} from 'react-native';
 import { useRouter } from 'expo-router';
-import { useContext, useState} from 'react';
-import { AuthContext } from '../../../context/authContext.jsx';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Feather from '@expo/vector-icons/Feather';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../styles/theme/ThemeContext.js';
 import AddButton from '../../../components/AddButtonModal.js';
+import { useState } from 'react';
 
 const router = useRouter(); 
 
@@ -18,9 +16,9 @@ const apiService = new ApiService();
 
 export default function TabLayout() {
   
-  const { logOut } = useContext(AuthContext);
   const { setScheme, isDark } = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <>
     <Tabs
@@ -97,11 +95,7 @@ export default function TabLayout() {
       />
       <Tabs.Screen name="profile" options={{ 
         href: null,
-        headerRight: () => (
-          <Pressable onPress={() => logOut()} style={{ flexDirection: 'row', alignItems: 'center', marginRight: 20 }}>
-            <MaterialIcons name="logout" size={22} color="gray" />
-          </Pressable>
-        ),
+        headerShown: false,
         }} />
       <Tabs.Screen name="createRecipe" options={{
         href: null

@@ -28,29 +28,21 @@ export default function IngredientItem({ value = {}, onChange, onPressDelete }) 
                 onChangeText={name => onChange({ ...value, name })}
                 />
                 <View style={styles.row}>
-                <View style={styles.subRow}>
-                    <InputV1
-                    placeholder="unidad"
-                    width="40%"
-                    value={value.unitQuantity}
-                    onChangeText={unitQuantity => onChange({ ...value, unitQuantity })}
-                    keyboardType="numeric"
-                    />
-                    <ThemedText style={styles.dash}>-</ThemedText>
+                
                     <SelectPicker
-                    width="45%"
-                    placeholder="kg"
+                    width="40%"
+                    placeholder="unidad"
                     value={value.unit}
                     onChange={unit => onChange({ ...value, unit })}
                     />
-                </View>
-                <InputV1
-                    placeholder="unidades"
-                    width="35%"
-                    value={value.ingredientQuantity}
-                    onChangeText={ingredientQuantity => onChange({ ...value, ingredientQuantity })}
-                    keyboardType="numeric"
-                />
+                    <ThemedText style={styles.dash}>-</ThemedText>
+                    <InputV1
+                        placeholder="cantidad"
+                        width="45%"
+                        value={value.unitQuantity}
+                        onChangeText={unitQuantity => onChange({ ...value, unitQuantity })}
+                        keyboardType="numeric"
+                    />
             </View>
         </View>
     </View>
