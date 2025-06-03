@@ -78,8 +78,8 @@ export default function RecipesScreen() {
       />
       
       {recipes.length === 0 && !info.loading ? (
-        <Text>No se encontraron recetas</Text>
-      ) : (
+        <Text>No se encontraron recetas</Text> 
+      ) : ( 
         <RecipeCardList
           data={recipes}
           onEndReached={handleLoadMore}

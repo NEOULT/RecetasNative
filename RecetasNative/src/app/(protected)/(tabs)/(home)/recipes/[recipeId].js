@@ -50,11 +50,12 @@ export default function RecipeDetail() {
   const username = recipe.user_id ? `${recipe.user_id.name} ${recipe.user_id.lastName}` : '';
   const rating = recipe.averageRating ?? 0;
   const servings = recipe.servings;
-  const difficulty = recipe.dificulty; // Ojo: en tu objeto es "dificulty"
+  const difficulty = recipe.difficulty; // Ojo: en tu objeto es "dificulty"
   const preparationTime = recipe.preparation_time;
   const ingredients = recipe.ingredients ?? [];
   const steps = recipe.steps ?? [];
-
+  console.log(steps);
+  
   return (
     <ScrollView style={{ marginBottom: 20 }}>
       <View style={{ gap: 10 }}>
@@ -135,11 +136,11 @@ export default function RecipeDetail() {
                 <View style={styles.subrow}>
                   <ThemedText type="default" style={{ fontWeight: 'bold', marginRight: 6 }}>•</ThemedText>
                   {/* Ajusta los campos según tu modelo de ingrediente */}
-                  <ThemedText type="default">{ingredient.ingredientQuantity ?? ''}</ThemedText>
-                  <ThemedText type="default">{ingredient.name ?? ''}</ThemedText>
+                  <ThemedText type="default">{ingredient.ingredient_quantity ?? ''}</ThemedText>
+                  <ThemedText type="default">{ingredient.ingredient_name ?? ''}</ThemedText>
                 </View>
                 <View style={styles.subrow}>
-                  <ThemedText type="default">{ingredient.unitQuantity ?? ''} {ingredient.unit ?? ''}</ThemedText>
+                  <ThemedText type="default">{ingredient.unit_quantity ?? ''} {ingredient.unit ?? ''}</ThemedText>
                 </View>
               </View>
             ))}
@@ -151,7 +152,7 @@ export default function RecipeDetail() {
 
           <View style={{ gap: 35 }}>
             {steps.map((step, index) => (
-              <View key={index} style={[styles.column, {minWidth: '100%' }]}>
+              <View key={index} style={[styles.column, { minWidth: '100%' }]}>
                 <View style={[styles.column, styles.cardContainer]}>
                   <View style={[styles.row, styles.cardContent]}>
                     <ThemedText type="subtitle3">
@@ -159,9 +160,9 @@ export default function RecipeDetail() {
                     </ThemedText>
                   </View>
                   {/* Mostrar imagen del paso si existe */}
-                  {recipe.images?.[index + 1]?.url && (
+                  {step.stepImage && (
                     <Image
-                      source={{ uri: recipe.images[index + 1].url }}
+                      source={{ uri: step.stepImage }}
                       style={styles.stepImage}
                       resizeMode="cover"
                     />
@@ -169,7 +170,7 @@ export default function RecipeDetail() {
                 </View>
                 <View>
                   <ThemedText type="subtitle2">
-                    {typeof step === 'string' ? step : step.description}
+                    {step.description}
                   </ThemedText>
                 </View>
               </View>

@@ -7,7 +7,7 @@ const RecipeItemList = ({ data, onPressRecipe }) => {
     console.log("Rendering item:", item),
     
     <RecipeItem
-      imageUrl={item.imageUrl}
+      imageUrl={item.images[0].url}
       title={item.title}
       time={item.time}
       difficulty={item.difficulty}

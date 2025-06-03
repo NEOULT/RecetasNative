@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, ImageBackground, StyleSheet, Pressable } from 'react-native';
+import ThemedText from '../components/common/ThemedText'
 
 const CategoryCard = ({ title, imageUrl, onPressCategory }) => {
   return (
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 80, 200, 0.3)', // filtro azulado
+    backgroundColor: 'rgba(0, 0, 0, 0.45)', // Más oscuro para mejor contraste
     borderRadius: 16,
   },
   title: {
@@ -52,6 +53,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     zIndex: 1,
+    textShadowColor: 'rgba(0,0,0,0.8)', // Sombra para el texto
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
   },
 });
 

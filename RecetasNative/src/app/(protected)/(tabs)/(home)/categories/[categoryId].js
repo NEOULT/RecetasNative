@@ -1,39 +1,64 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
 import RecipeItemList from '../../../../../components/RecipeItemList';
 import { useLocalSearchParams } from 'expo-router';
+import { ApiService } from '../../../../../services/ApiService';
+import { useApiMessage } from '../../../../../hooks/useApiMessage';
+
+const api = new ApiService();
 
 export default function CategoriesIDScreen() {
-
     const { categoryId } = useLocalSearchParams();
+    const { info, callApiWithMessage, clearInfo } = useApiMessage();
+    const [recipes, setRecipes] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    console.log('categoryId:', categoryId);
-    
-
-    const sampleData = [
-        { imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', title: 'Receta 1', time: '30 min', difficulty: 'Fácil', servings: 4, rating: 4.5},
-        { imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', title: 'Receta 2', time: '45 min', difficulty: 'Intermedio', servings: 2, rating: 4.0 },
-        { imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', title: 'Receta 3', time: '1 hora', difficulty: 'Difícil', servings: 6, rating: 5.0 },
-        { imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', title: 'Receta 4', time: '20 min', difficulty: 'Fácil', servings: 4, rating: 3.5 },
-        { imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', title: 'Receta 5', time: '15 min', difficulty: 'Fácil', servings: 2, rating: 4.8 },
-      ];
+    useEffect(() => {
+        async function fetchRecipes() {
+            try {
+                const res = await callApiWithMessage(() => api.paginateRecipesByCategory(1,5, categoryId));
+                 
+                setRecipes(res.data.data || []); 
+            } catch (e) {
+                setRecipes([]);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchRecipes();
+    }, [categoryId]);
 
     const handlePressRecipe = (recipe) => {
-        console.log('Categoría seleccionada:', recipe.title);
+        console.log('Receta seleccionada:', recipe.title);
+        // Aquí puedes navegar al detalle si lo deseas
+    };
+
+    if (loading) {
+        return (
+            <View style={style.screenContainer}>
+                <ActivityIndicator size="large" color="#FF9100" />
+            </View>
+        );
+    }
+
+    if (!recipes.length) {
+        return (
+            <View style={style.screenContainer}>
+                <Text>No hay recetas en esta categoría</Text>
+            </View>
+        );
     }
 
     return (
         <View style={style.screenContainer}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', margin: 16 }}>{`Categoria: ${categoryId}`}</Text>
-            <RecipeItemList data={sampleData} onPressRecipe={handlePressRecipe} />
+            <Text style={{ fontSize: 24, fontWeight: 'bold', margin: 16 }}>{`Categoría: ${categoryId}`}</Text>
+            <RecipeItemList data={recipes} onPressRecipe={handlePressRecipe} />
         </View>
     );
-      
 }
 
 const style = {
     screenContainer: {
-        borderwidth: 1000,
         width: '100%',
         flex: 1,
     },

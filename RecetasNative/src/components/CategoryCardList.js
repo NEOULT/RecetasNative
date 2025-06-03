@@ -6,8 +6,8 @@ const CategoryCardList = ({ data, onPressCategory }) => {
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <CategoryCard 
-      title={item.title} 
-      imageUrl={item.imageUrl}
+      title={item.name} 
+      imageUrl={item.image}
       onPressCategory={() => onPressCategory(item)} // Asegúrate de pasar la función correctamente
       />
     </View>
@@ -15,9 +15,9 @@ const CategoryCardList = ({ data, onPressCategory }) => {
 
   return (
     <FlatList
-      data={data}
+      data={data} 
       renderItem={renderItem}
-      keyExtractor={(item, index) => index.toString()}
+      keyExtractor={(item, index) => index.toString()} 
       numColumns={2}
       contentContainerStyle={styles.list}
       
