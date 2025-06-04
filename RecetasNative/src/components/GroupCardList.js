@@ -12,8 +12,8 @@ const GroupCardList = ({
     <GroupCard
       imageUrl={item.image}
       title={item.name}
-      recipesCount={item.recipes.length || 0}
-      membersCount={item.groupMembers.length || 0}
+      recipesCount={item.recipes?.length || 0}
+      membersCount={item.groupMembers?.length || 0}
       onPress={() => onPressGroup(item)}
     />
   );

@@ -36,9 +36,9 @@ export default function ModalCreateGroup({ isVisible, onClose }) {
 
     const { control, handleSubmit, } = useForm({
         defaultValues: {
-            image: 'https://example.com/ensalada.jpg',
+            image: 'https://i.postimg.cc/J7KRWYkV/chad.jpg',
             name: '',
-            description: '',
+            description: '', 
             isPublic: false,
         }
     });

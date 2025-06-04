@@ -65,7 +65,7 @@ export default function GroupScreen() {
         onHide={clearInfo} 
         duration={2000} 
       />
-      {groups.length === 0 && !info.loading ? (
+      {groups?.length === 0 && !info.loading ? (
         <Text>No se encontraron grupos</Text>
       ) : (
         <GroupCardList

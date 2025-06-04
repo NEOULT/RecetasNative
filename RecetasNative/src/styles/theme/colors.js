@@ -1,5 +1,3 @@
-import CategoryTag from "../../components/CategoryTag";
-
 export const lightTheme = {
     primary_color: '#FF9100', // 🟧
     secondary_color: '#E2661E', // 🟠
