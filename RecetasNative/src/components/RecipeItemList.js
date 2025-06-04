@@ -1,15 +1,19 @@
 import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import RecipeItem from './RecipeItem'; // Asegúrate de que la ruta sea correcta
-import { convertIsoToTime } from '../hooks/useTimeIso'
 
-const RecipeItemList = ({ data, onPressRecipe }) => {
+const RecipeItemList = ({ 
+  data,
+  onPressRecipe,
+  onEndReached,
+  isFetchingMore, 
+}) => {
   const renderItem = ({ item }) => (
     
     <RecipeItem
       imageUrl={item.images[0].url}
       title={item.title}
-      time={convertIsoToTime(item.preparation_time).time + ' ' + convertIsoToTime(item.preparation_time).unit}
+      time={item.preparation_time}
       difficulty={item.difficulty}
       servings={item.servings}
       rating={item.rating}
@@ -23,6 +27,12 @@ const RecipeItemList = ({ data, onPressRecipe }) => {
       renderItem={renderItem}
       keyExtractor={(item, index) => index.toString()}
       contentContainerStyle={{ padding: 16 }}
+      onEndReached={onEndReached}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={
+          isFetchingMore ? <ActivityIndicator size="small" color="#FF9100" /> : null
+        }
+      showsVerticalScrollIndicator={false}
     />
   );
 };

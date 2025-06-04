@@ -15,7 +15,7 @@ export default function AuthProvider({ children }) {
         const checkToken = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
-                console.log('Token retrieved:', token);
+                // console.log('Token retrieved:', token);
                 
                 if (token) {
                     setToken(token);

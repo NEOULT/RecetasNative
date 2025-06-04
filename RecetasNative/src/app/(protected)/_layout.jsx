@@ -7,7 +7,6 @@ import { ActivityIndicator,View } from 'react-native';
 export default function ProtectedLayout() {
 
   const { isLoggedIn, token, loading } = useContext(AuthContext);
-  console.log('AuthContext:', isLoggedIn, token);
   
   const authInactive = true;
   console.log('AuthInactive:', (authInactive || isLoggedIn));

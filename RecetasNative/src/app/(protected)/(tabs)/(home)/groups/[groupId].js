@@ -1,121 +1,139 @@
-import { StyleSheet, Text, View, Image , ScrollView} from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { StyleSheet, View, Image, ActivityIndicator, FlatList } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import ThemedText from '../../../../../components/common/ThemedText';
 import ThemedButton from '../../../../../components/common/ThemedButton';
 import RecipeItem from '../../../../../components/RecipeItem';
 import { ApiService } from '../../../../../services/ApiService';
 import { useApiMessage } from '../../../../../hooks/useApiMessage';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 
 const api = new ApiService();
 
 export default function GrupoScreen() {
-
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
+  const { groupId, group } = useLocalSearchParams();
 
-  const groups = {
-      id: 1,
-      image: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
-      title: 'Recetas Mexicanas',
-      description: 'Un grupo para compartir las mejores recetas de la cocina mexicana, desde tacos hasta mole.',
-      recipesCount: 10,
-      membersCount: 8,
-  };
-
-  const sampleData = [
-        { imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', title: 'Receta 1', time: '30 min', difficulty: 'Fácil', servings: 4, rating: 4.5},
-        { imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', title: 'Receta 2', time: '45 min', difficulty: 'Intermedio', servings: 2, rating: 4.0 },
-        { imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', title: 'Receta 3', time: '1 hora', difficulty: 'Difícil', servings: 6, rating: 5.0 },
-        { imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', title: 'Receta 4', time: '20 min', difficulty: 'Fácil', servings: 4, rating: 3.5 },
-        { imageUrl: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg', title: 'Receta 5', time: '15 min', difficulty: 'Fácil', servings: 2, rating: 4.8 },
-      ];
-
+  const router = useRouter();
+  const groupObj = group ? JSON.parse(group) : null;
   
-
-  const { groupId } = useLocalSearchParams();
   const [recipes, setRecipes] = useState([]);
+  const [pagination, setPagination] = useState({ page: 1, hasMore: true });
+  const [loading, setLoading] = useState(true);
 
-  const group = groups
-  console.log(`Grupo ID: ${groupId}`);
+  const fetchRecipes = useCallback(async (pageToFetch = 1) => {
+    setLoading(true);
+    try {
+      const res = await callApiWithMessage(() =>
+        api.paginateRecipesByGroup(pageToFetch, 5, groupId)
+      );
+
+      setRecipes(prev =>
+        pageToFetch === 1
+          ? res.data.data
+          : [...prev, ...res.data.data]
+      );
+      setPagination({
+        page: pageToFetch,
+        hasMore: pageToFetch < res.data.totalPages,
+      });
+    } catch (e) {
+      setRecipes([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [callApiWithMessage, groupId]);
 
   useEffect(() => {
-      async function fetchRecipes() {
-          try {
-              const res = await callApiWithMessage(() => api.paginateRecipesByGroup(1,5, groupId));
-
-              //Verificar porque trae todas las recetas en lugar de traer solo las del grupo
-              console.log('Recetas obtenidassssss:', res.data.data);
-              
-                
-              setRecipes(res.data.data || []); 
-          } catch (e) {
-              setRecipes([]);
-          } finally {
-              setLoading(false);
-          }
-      }
-      fetchRecipes();
+    fetchRecipes(1);
   }, [groupId]);
 
-  const handlePressRecipe = (recipe) => {
-        //console.log('Categoría seleccionada:', recipe.title);
+  const handleLoadMore = () => {
+    if (pagination.hasMore && !loading) {
+      fetchRecipes(pagination.page + 1);
     }
+  };
 
-  return (
-    <ScrollView>
+  const handlePressRecipe = (recipe) => {
+
+    console.log('Receta seleccionada:', recipe.title);
+    router.navigate({
+      pathname: `/groups/${groupId}/${recipe._id}`,
+    })
+  };
+
+  const renderHeader = () => (
+    <>
       <Image
-        source={{ uri: group.image }}
+        source={{
+          uri: groupObj.image
+        }}
         style={styles.groupImage}
       />
       <View style={styles.container}>
-        
         <View style={styles.column}>
           <View style={[styles.row, { marginTop: 10 }]}>
             <View style={{ width: '77%' }}>
-              <ThemedText type="title" textAlign='left'>{group.title}</ThemedText>
+              <ThemedText type="title" textAlign='left'>{groupObj.name}</ThemedText>
             </View>
-            
             <ThemedButton
               type="primary"
               onPress={() => console.log('Unirse al grupo')}
-              style={{ paddingVertical: 2, width: '23%'}}
+              style={{ paddingVertical: 2, width: '23%' }}
               title="Unirse"
             />
           </View>
           <View style={styles.subrow}>
             <ThemedText type="details" textAlign='left'>
-              {group.recipesCount} recetas
+              {recipes?.length || 0} recetas
             </ThemedText>
             <ThemedText type="default" style={{ fontWeight: 'bold', marginRight: 6 }}>•</ThemedText>
             <ThemedText type="details" textAlign='left'>
-              {group.membersCount} miembros
+              {groupObj.groupMembers?.length || 0} miembros
             </ThemedText>
           </View>
         </View>
-        <ThemedText type="subtitle2">{group.description}</ThemedText>
-
-        <View style={styles.row}>
+        <ThemedText type="subtitle2">{groupObj.description}</ThemedText>
+        <View style={[styles.row, { marginVertical: 10 }]}>
           <ThemedText type="subtitle1">Recetas</ThemedText>
         </View>
-        
-        <View style={{ width: '100%' }}>
-        {sampleData.map((recipe, index) => (
-          <RecipeItem
-            key={index}
-            imageUrl={recipe.imageUrl}
-            title={recipe.title}
-            time={recipe.time}
-            difficulty={recipe.difficulty}
-            servings={recipe.servings}
-            rating={recipe.rating}
-            onPressRecipe={() => handlePressRecipe(recipe)}
-          />
-        ))}
-        </View>
       </View>
-      
-    </ScrollView>
+    </>
+  );
+
+  const renderItem = ({ item }) => (
+    <View style={{ paddingHorizontal: 20 }}>
+      <RecipeItem
+        imageUrl={item.images?.[0]?.url || item.imageUrl}
+        title={item.title}
+        time={item.time || item.preparation_time}
+        difficulty={item.difficulty}
+        servings={item.servings}
+        rating={item.rating}
+        onPressRecipe={() => handlePressRecipe(item)}
+      />
+    </View>
+    
+  );
+
+  return (
+    <View style={{ flex: 1 }}>
+      <FlatList
+        data={recipes}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => item._id?.toString() || index.toString()}
+        ListHeaderComponent={renderHeader}
+        onEndReached={handleLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          loading && pagination.page > 1 ? (
+            <ActivityIndicator size="small" color="#FF9100" />
+          ) : null
+        }
+        contentContainerStyle={{ paddingBottom: 20 }}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
   );
 }
 
@@ -145,7 +163,7 @@ const styles = StyleSheet.create({
   column: {
     flexDirection: 'column',
     gap: 1,
-    alignItems: 'left',
+    alignItems: 'flex-start',
     width: '100%',
   },
 });

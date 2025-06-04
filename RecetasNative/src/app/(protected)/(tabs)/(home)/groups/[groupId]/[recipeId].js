@@ -1,17 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
+import RecipeDetail from '../../recipes/[recipeId]';
 
 export default function GroupRecipeScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Receta que se accede desde un grupo</Text>
-    </View>
+      <RecipeDetail/>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

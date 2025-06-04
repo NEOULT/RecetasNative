@@ -104,7 +104,7 @@ export class ApiWrapper {
   }
 
   paginateRecipesByGroup(currentPage = 1, limit = 10, groupId) {
-    data = { currentPage, limit, groupId, isPublic: true };
+    data = { currentPage, limit, groups:groupId, isPublic: true };
     return this.#postData(`recipe/paginated`, data);
   }
 
@@ -134,7 +134,7 @@ export class ApiWrapper {
   }
 
   getPaginatedGroups(currentPage = 1, limit = 10) {
-    data = { currentPage, limit };
+    data = { currentPage, limit, isPublic: true };
     return this.#postData(`group/paginate`, data);
   }
 

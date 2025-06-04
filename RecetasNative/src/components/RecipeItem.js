@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
+import { convertIsoToTime } from '../hooks/useTimeIso.js'; // Asegúrate de tener esta función para convertir el tiempo ISO
 
 const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPressRecipe }) => {
   return (
@@ -14,7 +15,7 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
 
                 <View style={styles.row}>
                 <Feather name="clock" size={14} color="#666" />
-                <Text style={styles.text}>{time}</Text>
+                <Text style={styles.text}>{convertIsoToTime(time).time + ' ' + convertIsoToTime(time).unit}</Text>
 
                 <MaterialIcons name="whatshot" size={14} color="#666" style={styles.iconSpacing} />
                 <Text style={styles.text}>{difficulty}</Text>

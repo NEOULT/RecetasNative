@@ -7,9 +7,11 @@ import { useApiMessage } from '../../../../../hooks/useApiMessage';
 import InfoBox from '../../../../../components/common/InfoBox';
 
 const api = new ApiService();
-const router = useRouter();
 
 export default function GroupScreen() {
+
+
+  const router = useRouter();
   const [groups, setGroups] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, hasMore: true });
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
@@ -54,7 +56,12 @@ export default function GroupScreen() {
 
   const handleGroupPress = (group) => {
     console.log('Grupo seleccionado:', group.name);
-    router.navigate(`/groups/${group._id}`);
+  
+    router.navigate({
+      pathname: `/groups/${group._id}`,
+      params: { group: JSON.stringify(group) }
+    }
+    );
   };
 
   return (
