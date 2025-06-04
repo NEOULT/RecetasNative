@@ -27,8 +27,6 @@ export default function AuthProvider({ children }) {
                 console.error('Error retrieving token:', e);
                 setIsLoggedIn(false);
             } finally {
-                console.log(1);
-                
                 setLoading(false);
             }
         };

@@ -26,7 +26,7 @@ formState: { errors, isSubmitting },
 
 
 const onSubmit = async (data) => {
-console.log("Datos del formulario:", data);
+//console.log("Datos del formulario:", data);
 try {
     const resultado = await apiService.signUp(data);
     console.log("Respuesta del servidor:", resultado);

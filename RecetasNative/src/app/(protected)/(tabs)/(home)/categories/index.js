@@ -32,7 +32,7 @@ export default function CategoriesScreen() {
     }, []); 
 
     const handlePressCategory = (category) => {
-        console.log('Categoría seleccionada:', category._id);
+        //console.log('Categoría seleccionada:', category._id);
         router.navigate(`/categories/${category._id}`);
     };
 

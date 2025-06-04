@@ -28,10 +28,10 @@ export default function GrupoScreen() {
   const { groupId } = useLocalSearchParams();
 
   const group = groups
-  console.log(`Grupo ID: ${group.image}`);
+  //console.log(`Grupo ID: ${group.image}`);
 
   const handlePressRecipe = (recipe) => {
-        console.log('Categoría seleccionada:', recipe.title);
+        //console.log('Categoría seleccionada:', recipe.title);
     }
 
   return (

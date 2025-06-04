@@ -31,7 +31,7 @@ export default function CategoriesIDScreen() {
     }, [categoryId]);
 
     const handlePressRecipe = (recipe) => {
-        console.log('Receta seleccionada:', recipe.title);
+        //console.log('Receta seleccionada:', recipe.title);
         router.navigate(`/recipes/${recipe._id}`);
         // Aquí puedes navegar al detalle si lo deseas
     };

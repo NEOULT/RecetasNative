@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons'; // o 'react-native-vector-icons/Feather'
 
 const GroupCard = ({ imageUrl, title, recipesCount, membersCount, onPress }) => {
-  console.log(imageUrl);
+  //console.log(imageUrl);
   
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>

@@ -44,7 +44,7 @@ export default function ModalCreateGroup({ isVisible, onClose }) {
     });
 
     const onSubmit = async (data) => {
-        console.log('Datos del formulario:', data);
+        //console.log('Datos del formulario:', data);
 
 
         //Falta implementar la subida de imagenes y el userId
