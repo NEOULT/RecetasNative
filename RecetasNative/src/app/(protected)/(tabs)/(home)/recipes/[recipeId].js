@@ -8,6 +8,7 @@ import { useTheme } from '../../../../../styles/theme/ThemeContext.js';
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
 import { ApiService } from '../../../../../services/ApiService';
 import { useApiMessage } from '../../../../../hooks/useApiMessage';
+import { convertIsoToTime } from '../../../../../hooks/useTimeIso.js';
 
 const api = new ApiService();
 
@@ -51,7 +52,7 @@ export default function RecipeDetail() {
   const rating = recipe.averageRating ?? 0;
   const servings = recipe.servings;
   const difficulty = recipe.difficulty; // Ojo: en tu objeto es "dificulty"
-  const preparationTime = recipe.preparation_time;
+  const {time, unit} = convertIsoToTime(recipe.preparation_time) || 'No especificado';
   const ingredients = recipe.ingredients ?? [];
   const steps = recipe.steps ?? [];
   console.log(steps);
@@ -78,7 +79,7 @@ export default function RecipeDetail() {
                   color={colors.regular_textcolor}
                 />}
             >
-              {preparationTime}
+              {time} {unit}
             </ThemedText>
             <ThemedText
               type="details"

@@ -4,6 +4,7 @@ import CategoryCardList from '../../../../../components/CategoryCardList';
 import { useRouter } from 'expo-router';
 import { ApiService } from '../../../../../services/ApiService';
 import { useApiMessage } from '../../../../../hooks/useApiMessage';
+import ThemedText from '../../../../../components/common/ThemedText';
 
 const api = new ApiService();
 
@@ -17,8 +18,8 @@ export default function CategoriesScreen() {
         async function fetchCategories() {
             try {
                 const res = await callApiWithMessage(() => api.getCategories());
-                // Ajusta según la estructura de tu respuesta
-                console.log('Categorías obtenidas:', res.data.categories);
+
+                // console.log('Categorías obtenidas:', res.data.categories);
                  
                 setCategories(res.data.categories || []);
             } catch (e) {
@@ -45,8 +46,8 @@ export default function CategoriesScreen() {
 
     if (!categories.length) {
         return (
-            <View style={style.screenContainer}>
-                <Text>No hay categorías disponibles</Text>
+            <View style={[style.screenContainer, style.center]}>
+                <ThemedText textAlign='center'>No hay categorias disponibles</ThemedText>
             </View>
         );
     }
@@ -63,4 +64,8 @@ const style = {
         width: '100%',
         flex: 1,
     },
+    center: {
+        alignSelf: 'center',
+        justifyContent: 'center',
+    }
 };

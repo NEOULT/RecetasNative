@@ -1,4 +1,4 @@
-import React, { use } from 'react';
+
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { StarRatingDisplay } from 'react-native-star-rating-widget';

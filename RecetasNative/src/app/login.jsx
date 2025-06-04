@@ -26,9 +26,8 @@ export default function LoginScreen() {
         console.log(result);
       
         if (!result.success) throw new Error(result.message);
-        console.log('Inicio de sesión exitoso:', result.data);
-        
-        await logIn(result.data.token);
+
+        await logIn(result.data);
 
     }catch (error) {
         console.error('Error al iniciar sesion:', error);

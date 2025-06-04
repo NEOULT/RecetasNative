@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Modal,
   View,
@@ -9,46 +9,33 @@ import {
   Pressable,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ThemedText from './ThemedText';
+import ThemedText from '../components/common/ThemedText';
+import { useTheme } from '../styles/theme/ThemeContext';
 
-export default function SelectPicker({
-    width = '100%', 
-    height = 33, 
-    placeholder = 'Selecciona una opción', 
-    label = '',
-    value,
-    onChange,
-    options = [],
-  }) 
-  
-  {
+export default function PlusPicker({
+  label = '',
+  options = [],
+  onSelect,
+  width = '100%',
+  buttonHeight = 36,
+}) {
   const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    setSelected(value);
-  }, [value]);
-
-  
-  const [selected, setSelected] = useState(value ?? null);
+    const { colors } = useTheme();
 
   const handleSelect = (option) => {
-    setSelected(option);
     setVisible(false);
-    if (onChange) onChange(option);
+    if (onSelect) onSelect(option);
   };
 
   return (
-    <View style={{width}}>
-
-      <View style={{gap: 10}}>
-        {(label && <ThemedText>{label}</ThemedText>)}
-        <TouchableOpacity style={[styles.input, {height}]} onPress={() => setVisible(true)}>
-          <Text style={[styles.inputText, { color: selected ? 'black' : '#999' }]}>
-            {selected || placeholder}
-          </Text>
-          <Icon name="arrow-drop-down" size={24} color="#555" />
-        </TouchableOpacity>
-      </View>
+    <View style={{ flexDirection: 'row', alignItems: 'center', width }}>
+      {label ? <ThemedText>{label}</ThemedText> : null}
+      <TouchableOpacity
+        style={[styles.plusButton, { height: buttonHeight, backgroundColor: colors.primary_color }]}
+        onPress={() => setVisible(true)}
+      >
+        <Icon name="add" size={25} color="#fff" />
+      </TouchableOpacity>
 
       <Modal visible={visible} transparent animationType="fade">
         <Pressable style={styles.overlay} onPress={() => setVisible(false)}>
@@ -65,23 +52,16 @@ export default function SelectPicker({
       </Modal>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  input: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "#B3B3B3",
-    backgroundColor: "white",
-    paddingHorizontal: 8,
-    flexDirection: 'row',
+  plusButton: {
+    borderRadius: 50,
+    width: 35,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  inputText: {
-    fontSize: 16,
-    paddingVertical: 3,
+    marginLeft: 5,
+    justifyContent: 'center',
+    transform: [{ scale: 0.7 }],
   },
   overlay: {
     flex: 1,
@@ -106,4 +86,3 @@ const styles = StyleSheet.create({
     color: '#34495e',
   },
 });
-
