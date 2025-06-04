@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import RecipeItem from './RecipeItem'; // Asegúrate de que la ruta sea correcta
+import { convertIsoToTime } from '../hooks/useTimeIso'
 
 const RecipeItemList = ({ data, onPressRecipe }) => {
   const renderItem = ({ item }) => (
@@ -9,7 +10,7 @@ const RecipeItemList = ({ data, onPressRecipe }) => {
     <RecipeItem
       imageUrl={item.images[0].url}
       title={item.title}
-      time={item.time}
+      time={convertIsoToTime(item.preparation_time).time + ' ' + convertIsoToTime(item.preparation_time).unit}
       difficulty={item.difficulty}
       servings={item.servings}
       rating={item.rating}

@@ -5,11 +5,15 @@ import { useLocalSearchParams } from 'expo-router';
 import { ApiService } from '../../../../../services/ApiService';
 import { useApiMessage } from '../../../../../hooks/useApiMessage';
 import ThemedText from '../../../../../components/common/ThemedText';
+import { useRouter } from 'expo-router';
 
 const api = new ApiService();
 
+
 export default function CategoriesIDScreen() {
-    const { categoryId } = useLocalSearchParams();
+
+    const router = useRouter();
+    const { categoryId, categoryName} = useLocalSearchParams();
     const { info, callApiWithMessage, clearInfo } = useApiMessage();
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,8 +34,8 @@ export default function CategoriesIDScreen() {
     }, [categoryId]);
 
     const handlePressRecipe = (recipe) => {
-        console.log('Receta seleccionada:', recipe.title);
-        // Aquí puedes navegar al detalle si lo deseas
+        console.log('Recipe selected:', recipe.recipeTitle);
+        router.navigate(`/categories/${categoryId}/${recipe.id}`); 
     };
 
     if (loading) {
@@ -52,7 +56,7 @@ export default function CategoriesIDScreen() {
 
     return (
         <View style={style.screenContainer}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold', margin: 16 }}>{`Categoría: ${categoryId}`}</Text>
+            <ThemedText style={{marginLeft: 20, marginTop: 20}} type="title">{`${categoryName}`}</ThemedText>
             <RecipeItemList data={recipes} onPressRecipe={handlePressRecipe} />
         </View>
     );
