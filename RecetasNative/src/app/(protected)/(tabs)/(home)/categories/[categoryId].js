@@ -4,6 +4,7 @@ import RecipeItemList from '../../../../../components/RecipeItemList';
 import { useLocalSearchParams } from 'expo-router';
 import { ApiService } from '../../../../../services/ApiService';
 import { useApiMessage } from '../../../../../hooks/useApiMessage';
+import { router } from 'expo-router';
 
 const api = new ApiService();
 
@@ -30,6 +31,7 @@ export default function CategoriesIDScreen() {
 
     const handlePressRecipe = (recipe) => {
         console.log('Receta seleccionada:', recipe.title);
+        router.navigate(`/recipes/${recipe._id}`);
         // Aquí puedes navegar al detalle si lo deseas
     };
 

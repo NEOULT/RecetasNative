@@ -23,9 +23,11 @@ export default function LoginScreen() {
     console.log('Datos del formulario:', data);
     try {
         const result = await apiService.signIn(data);
-
+        console.log(result);
+      
         if (!result.success) throw new Error(result.message);
-
+        console.log('Inicio de sesión exitoso:', result.data);
+        
         await logIn(result.data.token);
 
     }catch (error) {
