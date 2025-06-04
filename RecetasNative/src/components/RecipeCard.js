@@ -4,7 +4,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { StarRatingDisplay } from 'react-native-star-rating-widget';
 
 const RecipeCard = ({ avatar, username, rating, recipeImage, recipeTitle, isFavorite, onFavoriteToggle, onPressRecipe, onPressAvatar }) => {
-  console.log("trajo esto",avatar,username,rating,recipeImage,recipeTitle,isFavorite);
   
   return (
     <View style={[styles.cardContainer]}>

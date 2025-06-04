@@ -55,7 +55,6 @@ export default function RecipeDetail() {
   const {time, unit} = convertIsoToTime(recipe.preparation_time) || 'No especificado';
   const ingredients = recipe.ingredients ?? [];
   const steps = recipe.steps ?? [];
-  console.log(steps);
   
   return (
     <ScrollView style={{ marginBottom: 20 }}>

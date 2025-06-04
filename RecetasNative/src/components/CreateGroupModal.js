@@ -45,7 +45,7 @@ export default function ModalCreateGroup({ isVisible, onClose }) {
     });
 
     const onSubmit = async (data) => {
-        console.log('Datos del formulario:', data);
+        //console.log('Datos del formulario:', data);
 
         data.user_id = await getUserId();
 

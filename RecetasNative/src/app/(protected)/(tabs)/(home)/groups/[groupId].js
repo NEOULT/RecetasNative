@@ -39,7 +39,6 @@ export default function GrupoScreen() {
   const group = groups
   console.log(`Grupo ID: ${groupId}`);
 
-
   useEffect(() => {
       async function fetchRecipes() {
           try {
@@ -60,7 +59,7 @@ export default function GrupoScreen() {
   }, [groupId]);
 
   const handlePressRecipe = (recipe) => {
-        console.log('Categoría seleccionada:', recipe.title);
+        //console.log('Categoría seleccionada:', recipe.title);
     }
 
   return (

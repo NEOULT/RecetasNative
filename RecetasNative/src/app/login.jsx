@@ -20,10 +20,10 @@ export default function LoginScreen() {
   } = useForm();
 
   const onSubmit = async(data) => {
-    console.log('Datos del formulario:', data);
+    //console.log('Datos del formulario:', data);
     try {
         const result = await apiService.signIn(data);
-        console.log(result);
+        //console.log(result);
       
         if (!result.success) throw new Error(result.message);
 

@@ -5,7 +5,6 @@ import { convertIsoToTime } from '../hooks/useTimeIso'
 
 const RecipeItemList = ({ data, onPressRecipe }) => {
   const renderItem = ({ item }) => (
-    console.log("Rendering item:", item),
     
     <RecipeItem
       imageUrl={item.images[0].url}
