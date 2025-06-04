@@ -17,6 +17,7 @@ import { useEffect, useRef, useState } from 'react';
 import { convertTimeToIso} from '../../../hooks/useTimeIso.js';
 import PlusPicker from '../../../components/PlusPicker';
 import CategoryTag from '../../../components/CategoryTag.js'
+import { getUserId } from '../../../hooks/useGetUserId.js';
 const api = new ApiService();
 
 export default function createRecipeScreen() {
@@ -105,7 +106,7 @@ export default function createRecipeScreen() {
   const onSubmit = async (data) => {
 
     //Faltan por implementar
-    data.user_id = "683725505cfb758857da45ab";
+    data.user_id = await getUserId();
     data.preparation_time =`${convertTimeToIso(data.time, data.timeUnit)}`;
     
 

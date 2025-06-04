@@ -11,6 +11,7 @@ import { ApiService } from '../services/ApiService.js';
 import { useApiMessage } from '../hooks/useApiMessage.js';
 import { useEffect, useRef} from 'react';
 import InfoBox from './common/InfoBox.js';
+import { getUserId } from '../hooks/useGetUserId.js';
 
 
 const api = new ApiService();
@@ -46,9 +47,7 @@ export default function ModalCreateGroup({ isVisible, onClose }) {
     const onSubmit = async (data) => {
         console.log('Datos del formulario:', data);
 
-
-        //Falta implementar la subida de imagenes y el userId
-        data.user_id = "683725505cfb758857da45ab"; 
+        data.user_id = await getUserId();
 
         try{
             const response = await callApiWithMessage(() => api.createGroup(data))

@@ -73,7 +73,7 @@ export default function AuthProvider({ children }) {
 
         console.log('Logging in with data:', data);
         
-        // await saveItem('userId', data.userId);
+        await saveItem('userId', data.userId);
         await saveItem('token', data.token);
         router.replace('/recipes');
         setIsLoggedIn(true);
