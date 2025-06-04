@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
+import RecipeDetail from '../../recipes/[recipeId]';
 
-export default function GroupRecipeScreen() {
+export default function CategoryRecipeScreen() {
+
   return (
-    <View style={styles.container}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Receta que se accede desde una categoria</Text>
-    </View>
+    <RecipeDetail/>
   );
 }
 

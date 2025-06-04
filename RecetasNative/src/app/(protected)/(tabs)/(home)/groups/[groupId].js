@@ -3,8 +3,16 @@ import { useLocalSearchParams } from 'expo-router';
 import ThemedText from '../../../../../components/common/ThemedText';
 import ThemedButton from '../../../../../components/common/ThemedButton';
 import RecipeItem from '../../../../../components/RecipeItem';
+import { ApiService } from '../../../../../services/ApiService';
+import { useApiMessage } from '../../../../../hooks/useApiMessage';
+import { useEffect, useState } from 'react';
+
+
+const api = new ApiService();
 
 export default function GrupoScreen() {
+
+  const { info, callApiWithMessage, clearInfo } = useApiMessage();
 
   const groups = {
       id: 1,
@@ -26,9 +34,29 @@ export default function GrupoScreen() {
   
 
   const { groupId } = useLocalSearchParams();
+  const [recipes, setRecipes] = useState([]);
 
   const group = groups
-  //console.log(`Grupo ID: ${group.image}`);
+  console.log(`Grupo ID: ${groupId}`);
+
+  useEffect(() => {
+      async function fetchRecipes() {
+          try {
+              const res = await callApiWithMessage(() => api.paginateRecipesByGroup(1,5, groupId));
+
+              //Verificar porque trae todas las recetas en lugar de traer solo las del grupo
+              console.log('Recetas obtenidassssss:', res.data.data);
+              
+                
+              setRecipes(res.data.data || []); 
+          } catch (e) {
+              setRecipes([]);
+          } finally {
+              setLoading(false);
+          }
+      }
+      fetchRecipes();
+  }, [groupId]);
 
   const handlePressRecipe = (recipe) => {
         //console.log('Categoría seleccionada:', recipe.title);

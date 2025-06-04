@@ -53,8 +53,8 @@ export default function GroupScreen() {
   };
 
   const handleGroupPress = (group) => {
-    console.log('Grupo seleccionado:', group.title);
-    router.navigate(`/groups/${group.id}`);
+    console.log('Grupo seleccionado:', group.name);
+    router.navigate(`/groups/${group._id}`);
   };
 
   return (
