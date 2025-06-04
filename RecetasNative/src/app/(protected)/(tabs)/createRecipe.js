@@ -30,13 +30,14 @@ export default function createRecipeScreen() {
   const { colors } = useTheme();
 
  //Aca uso useRef para evitar que el efecto se ejecute en el primer renderizado y solo lo haga escuchando al info y los otros componentes
-  const didMount = useRef(false);
+  
 
   useEffect(() => {
 
     const fetchCategories = async () => {
       try {
         const response = await callApiWithMessage(() => api.getCategories());
+        clearInfo();
         setCategories(response.data.categories || []);
       } catch (error) {
         console.error('Error al obtener las categorías:', error);
@@ -46,6 +47,8 @@ export default function createRecipeScreen() {
     fetchCategories();
   }, []);
 
+  const didMount = useRef(false);
+  
   useEffect(() => {
       if (didMount.current) {
         if (info.message) {

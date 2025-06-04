@@ -3,10 +3,10 @@
 import { Switch, View, Text } from 'react-native';
 import ThemedText from './ThemedText';
 
-export default function ThemeSwitch ({value, onValueChange, title = "Titulo", width = 100, scaleX = 1.4, scaleY = 1.3}) {
+export default function ThemeSwitch ({value, onValueChange, title, width = 100, scaleX = 1.4, scaleY = 1.3}) {
   return (
     <View style={[styles.container, {width}]}>
-      <ThemedText>{title}</ThemedText>
+      { title && <ThemedText>{title}</ThemedText>}
       <Switch
         value={value}
         onValueChange={() => onValueChange(!value)}

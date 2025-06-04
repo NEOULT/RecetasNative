@@ -4,28 +4,71 @@ import SlideModal from './common/SlideModal.js';
 import { useForm, Controller} from 'react-hook-form';
 import ImageSelector from './common/ImagePicker.js';
 import InputV1 from './common/InputV1.js';
-import SelectPicker from './common/SelectPicker.js';
+import ThemedSwitch from './common/ThemedSwitch.js';
 import ThemedButton from './common/ThemedButton.js';
+import ThemedText from './common/ThemedText.js';
+import { ApiService } from '../services/ApiService.js';
+import { useApiMessage } from '../hooks/useApiMessage.js';
+import { useEffect, useRef} from 'react';
+import InfoBox from './common/InfoBox.js';
 
+
+const api = new ApiService();
 
 export default function ModalCreateGroup({ isVisible, onClose }) {
 
+    const { info, callApiWithMessage, clearInfo } = useApiMessage(); 
+
+    const didMount = useRef(false);
+
+    useEffect(() => {
+        if (didMount.current) {
+            if (info.message) {
+            const timeout = setTimeout(clearInfo, 3000);
+            return () => clearTimeout(timeout);
+            }
+        } else {
+        didMount.current = true;
+        }
+    }, [info.message, clearInfo]);
+
+    
+
     const { control, handleSubmit, } = useForm({
         defaultValues: {
-            image: null,
+            image: 'https://example.com/ensalada.jpg',
             name: '',
             description: '',
-            visibility: false,
+            isPublic: false,
         }
     });
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         console.log('Datos del formulario:', data);
+
+
+        //Falta implementar la subida de imagenes y el userId
+        data.user_id = "683725505cfb758857da45ab"; 
+
+        try{
+            const response = await callApiWithMessage(() => api.createGroup(data))
+            if(response.success){
+                console.log('Receta creada exitosamente:');
+            }
+        }catch(e){
+            console.error('Error al enviar el formulario:', e);
+        }
     }
 
     return (
         
         <SlideModal isVisible={isVisible} onClose={onClose} title="Crea un nuevo grupo">
+            <InfoBox 
+                message={info.message} 
+                type={info.type} 
+                onHide={clearInfo} 
+                duration={2000} 
+            />
             <View style={styles.container}>
                 <Controller
                     control={control}
@@ -42,7 +85,7 @@ export default function ModalCreateGroup({ isVisible, onClose }) {
         
                 <Controller
                     control={control}
-                    name="title"
+                    name="name"
                     render={({ field: { onChange, value } }) => (
                     <InputV1
                         label="Titulo:"
@@ -69,21 +112,18 @@ export default function ModalCreateGroup({ isVisible, onClose }) {
                     />
                     )}
                 />
-
-                <Controller
-                    control={control}
-                    name="visibility"
-                    render={({ field: { onChange, value } }) => (
-                        <SelectPicker
-                        width="99%"
-                        placeholder="Privado"
-                        label="Visibilidad:"
-                        value={value}
-                        onChange={onChange}
-                        />
-                )}
-                />
-
+                <View style={styles.row}>
+                    <ThemedText>
+                        Grupo público:
+                    </ThemedText>
+                    <Controller
+                        control={control}
+                        name="isPublic"
+                        render={({ field: { onChange, value } }) => (
+                            <ThemedSwitch value={value} onValueChange={onChange}/>
+                        )}
+                    />
+                </View>
                 <ThemedButton title="Guardar" onPress={handleSubmit(onSubmit)}/>
             </View>
         </SlideModal>
@@ -96,6 +136,12 @@ container: {
     alignItems: 'center',
     gap: 20,
     width: '100%',
+},
+row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+
 },
 
 });
