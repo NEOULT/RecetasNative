@@ -5,9 +5,11 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import { useContext } from 'react';
 import { AuthContext } from '../../../../context/authContext.jsx';
+import { useTheme } from '../../../../styles/theme/ThemeContext.js'
 
 export default function PerfilLayout() {
 
+  const { colors } = useTheme();
   
   const { logOut } = useContext(AuthContext);
   const router = useRouter();
@@ -19,8 +21,9 @@ export default function PerfilLayout() {
       screenOptions={{
         title: 'Perfil',
         headerTitleAlign: 'center',
+        // headerShown: false,
         headerStyle: {
-          backgroundColor: '#f8f8f8',
+          backgroundColor: colors.card,
         },
         headerTintColor: '#333',
       }}
@@ -39,6 +42,10 @@ export default function PerfilLayout() {
             </Pressable>
           ),
           }} /> 
+        <Stack.Screen name="recipes/index" options={{ title: 'Mis Recetas' }} />
+        <Stack.Screen name="groups/index" options={{ title: 'Mis Grupos' }} />
+        <Stack.Screen name="settings" options={{ title: 'Configuración' }} />
+        <Stack.Screen name="recipes/[recipeId]" options={{ title: 'Receta'  }} />
     </Stack>
   )
 }
