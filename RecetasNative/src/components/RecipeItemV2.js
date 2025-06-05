@@ -7,7 +7,7 @@ export default function RecipeItemV2({ imageUrl, title }) {
     const {isDark } = useTheme();
 
     return (
-        <View style={[styles.container, {backgroundColor: isDark ? '#2c2c2c' : 'white', borderColor: isDark ? 'transparent' : 'gray'}]}>
+        <View style={[styles.container, {backgroundColor: isDark ? '#2c2c2c' : 'white', borderColor: isDark ? 'transparent' : '#d2d2d2'}]}>
             <Image 
                 source= {{
                     uri: imageUrl || 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
@@ -18,6 +18,7 @@ export default function RecipeItemV2({ imageUrl, title }) {
                 ellipsizeMode="tail"
                 textAlign='left'
                 style={styles.title}
+                
             >
                 {title}
             </ThemedText>
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 1,
         borderRadius: 20,
-        width: 140,
+        width: 150,
         marginRight: 10,
     },
     image: {
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
     },
     title: {
-        fontWeight: 'bold',
+        fontWeight: 600,
         maxWidth: 130,
         paddingVertical: 8,
         paddingHorizontal: 5,

@@ -22,11 +22,9 @@ export default function ProfileScreen() {
   const router = useRouter();
 
   const handleSeeMoreRecipes = () => {
-    console.log('Ver más recetas');
     router.push('/profile/recipes');
   }
   const handleSeeMoreGroups = () => {
-    console.log('Ver más grupos');
     router.push('/profile/groups');
   }
 

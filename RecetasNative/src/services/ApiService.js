@@ -65,8 +65,8 @@ export class ApiService {
         return this._callApi("paginateRecipesPublic", currentPage, limit,viewer_id);
     }
 
-    paginateRecipesPublicByUser(currentPage = 1, limit = 10, userId) {
-        return this._callApi("paginateRecipesPublicByUser", currentPage, limit, userId);
+    paginateRecipesPublicByUser(currentPage = 1, limit = 10, userId, isPublic) {
+        return this._callApi("paginateRecipesPublicByUser", currentPage, limit, userId, isPublic);
     }
 
     paginateRecipesByCategory(currentPage = 1, limit = 10, categoryId) {
