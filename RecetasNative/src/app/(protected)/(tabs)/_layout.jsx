@@ -81,7 +81,7 @@ export default function TabLayout() {
                 onPress={() => setModalVisible(true)}
                 style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
               >
-                <FontAwesome6 name="plus" size={29} color={props.accessibilityState.selected ? '#FF9100' : 'gray'} />
+                <FontAwesome6 name="plus" size={29} color={props.accessibilityState?.selected ? '#FF9100' : 'gray'} />
               </Pressable>
             ),
           }}
@@ -100,6 +100,10 @@ export default function TabLayout() {
       <Tabs.Screen name="createRecipe" options={{
         href: null
       }} />
+      <Tabs.Screen name="index" options={{ 
+        href: null,
+        headerShown: false,
+        }} />
     </Tabs>
     <AddButton isVisible={modalVisible} onClose={() => setModalVisible(false)} />
     </>
