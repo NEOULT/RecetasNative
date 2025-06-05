@@ -88,32 +88,32 @@ export class ApiWrapper {
   }
 
   getRecipeById(id) {
-    data = { currentPage: 1, limit: 10, _id: id };
+    const data = { currentPage: 1, limit: 10, _id: id };
     return this.#postData(`recipe/paginated`, data);
   }
 
   paginateRecipesPublic(currentPage = 1, limit = 10, viewer_id = null) {
-    data = { currentPage, limit, isPublic: true, viewer_id };
+    const data = { currentPage, limit, isPublic: true, viewer_id };
     return this.#postData(`recipe/paginated`, data); 
   }
 
   paginateRecipesPublicByUser(currentPage = 1, limit = 10, user_id, isPublic = true) {
-    data = { currentPage, limit, user_id, isPublic};
+    const data = { currentPage, limit, user_id, isPublic};
     return this.#postData(`recipe/paginated`, data);
   }
 
   paginateRecipesByCategory(currentPage = 1, limit = 10, categories) {
-    data = { currentPage, limit, categories, isPublic: true };
+    const data = { currentPage, limit, categories, isPublic: true };
     return this.#postData(`recipe/paginated`, data);
   }
 
   paginateRecipesByGroup(currentPage = 1, limit = 10, groupId) {
-    data = { currentPage, limit, groups:groupId, isPublic: true };
+    const data = { currentPage, limit, groups:groupId, isPublic: true };
     return this.#postData(`recipe/paginated`, data);
   }
 
   paginateRecipesByGroupUser(currentPage = 1, limit = 10, groupId, userId) {
-    data = { currentPage, limit, groupId, userId, isPublic: true };
+    const data = { currentPage, limit, groupId, userId, isPublic: true };
     return this.#postData(`recipe/paginated`, data);
   }
 
@@ -138,12 +138,12 @@ export class ApiWrapper {
   }
 
   getPaginatedGroups(currentPage = 1, limit = 10) {
-    data = { currentPage, limit, isPublic: true };
+    const data = { currentPage, limit, isPublic: true };
     return this.#postData(`group/paginate`, data);
   }
 
   addMembersToGroup(groupId, user_id){
-    data = { groupId, user_id };
+    const data = { groupId, user_id };
     return this.#postData(`group/togglemember`, data);
   }
 

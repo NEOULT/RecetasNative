@@ -8,6 +8,8 @@ export default function ThemedText({
   lightColor,
   darkColor,
   type = 'default',
+  maxLength,
+  children,
   ...rest
 }) {
   const { colors, fonts } = useTheme();
@@ -48,6 +50,10 @@ export default function ThemedText({
     fontSize: fonts.details_size,
   };
 
+  let displayText = children;
+  if (typeof children === 'string' && maxLength && children.length > maxLength) {
+    displayText = children.slice(0, maxLength) + '...';
+  }
 
   return (
     <View style={[icon ? { flexDirection: 'row', alignItems: 'center', gap: 5 } : null,]}>
@@ -66,7 +72,9 @@ export default function ThemedText({
         {textAlign: textAlign}
       ]}
       {...rest}
-      />
+      >
+      {displayText}
+    </Text>
     </View>
     
   );

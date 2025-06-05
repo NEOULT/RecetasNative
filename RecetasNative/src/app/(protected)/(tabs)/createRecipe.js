@@ -30,7 +30,6 @@ export default function createRecipeScreen() {
 
  //Aca uso useRef para evitar que el efecto se ejecute en el primer renderizado y solo lo haga escuchando al info y los otros componentes
   
-
   useEffect(() => {
 
     const fetchCategories = async () => {

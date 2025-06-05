@@ -114,7 +114,7 @@ export default function RecipeDetail() {
                 style={styles.avatar}
                 resizeMode="cover"
               />
-              <ThemedText type="details">
+              <ThemedText type="details" maxLength={15}>
                 {username}
               </ThemedText>
             </View>

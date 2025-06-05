@@ -1,7 +1,7 @@
 import { ApiWrapper } from "./ApiWrapper.js";
-import { API_URL } from "@env";
-console.log(API_URL);
+const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000/api";
 
+console.log(API_URL);
 export class ApiService {
     constructor() {
         this.api = new ApiWrapper(API_URL);
@@ -52,12 +52,12 @@ export class ApiService {
     }
 
     rateRecipe(recipeId, user_id, value) {
-        data = { recipeId, user_id, value };
+        const data = { recipeId, user_id, value };
         return this._callApi("rateRecipe", data);
     }
 
     toggleFavorite(recipeId, user_id) {
-        data = { recipeId, user_id };
+        const data = { recipeId, user_id };
         return this._callApi("toggleFavorite", data);
     }
 
