@@ -4,57 +4,56 @@ import { Feather } from '@expo/vector-icons';
 import ThemedText from './ThemedText';
 import { useTheme } from '../../styles/theme/ThemeContext';
 
-export default function AddButton({ isVisible, onClose, children, title }) {
+export default function AddButton({ isVisible, onClose, children, title, showBackdrop = true }) {
 
-const {colors} = useTheme();
-const backdropOpacity = useRef(new Animated.Value(0)).current;
+  const {colors} = useTheme();
+  const backdropOpacity = useRef(new Animated.Value(0)).current;
 
-useEffect(() => {
+  useEffect(() => {
     if (isVisible) {
-    Animated.timing(backdropOpacity, {
+      Animated.timing(backdropOpacity, {
         toValue: 1,
         duration: 350,
         useNativeDriver: true,
-    }).start();
+      }).start();
     } else {
-    Animated.timing(backdropOpacity, {
+      Animated.timing(backdropOpacity, {
         toValue: 0,
         duration: 150,
         useNativeDriver: true,
-    }).start();
+      }).start();
     }
-}, [isVisible]);
+  }, [isVisible]);
 
-return (
+  return (
     <>
-    {isVisible && (
+      {isVisible && showBackdrop && (
         <Animated.View style={[styles.backdrop, { opacity: backdropOpacity }]}>
-        <Pressable style={{ flex: 1 }} onPress={onClose} />
+          <Pressable style={{ flex: 1 }} onPress={onClose} />
         </Animated.View>
-    )}
+      )}
 
-    <Modal
+      <Modal
         visible={isVisible}
         animationType="slide"
         transparent
         onRequestClose={onClose}
-    >
+      >
         <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-            <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
-                <View style={[styles.row, { alignSelf: 'flex-start' }]}>
-                    <Pressable onPress={onClose}>
-                        <Feather name="x" size={28} color={colors.primary_iconcolor} />
-                    </Pressable>
-                    {title && <ThemedText>{title}</ThemedText>}
-                </View>
-                {children}
+          <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
+            <View style={[styles.row, { alignSelf: 'flex-start' }]}>
+              <Pressable onPress={onClose}>
+                <Feather name="x" size={28} color={colors.primary_iconcolor} />
+              </Pressable>
+              {title && <ThemedText>{title}</ThemedText>}
             </View>
+            {children}
+          </View>
         </View>
-    </Modal>
+      </Modal>
     </>
-);
+  );
 }
-
 const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,

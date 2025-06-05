@@ -148,7 +148,7 @@ export default function RecipesProfileScreen() {
         isFetchingMore={info.loading && pagination.page > 1}
         onPressRecipe={(recipe) => router.navigate({
           pathname: `/profile/recipes/${recipe.id}`,
-          params: { recipeId: recipe.id, userId: recipe.user_id._id}
+          params: { userId: recipe.user_id._id}
         })}
       />
     </View>

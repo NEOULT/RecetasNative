@@ -11,6 +11,7 @@ const RecipeItemList = ({
   const renderItem = ({ item }) => (
     
     <RecipeItem
+      recipeId={item.id} 
       imageUrl={item.images[0].url}
       title={item.title}
       time={item.preparation_time}
