@@ -1,7 +1,7 @@
 import { ApiWrapper } from "./ApiWrapper.js";
-import { API_URL } from "@env";
-console.log(API_URL);
+const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000/api";
 
+console.log(API_URL);
 export class ApiService {
     constructor() {
         this.api = new ApiWrapper(API_URL);
@@ -52,8 +52,13 @@ export class ApiService {
     }
 
     rateRecipe(recipeId, user_id, value) {
-        data = { recipeId, user_id, value };
+        const data = { recipeId, user_id, value };
         return this._callApi("rateRecipe", data);
+    }
+
+    toggleFavorite(recipeId, user_id) {
+        const data = { recipeId, user_id };
+        return this._callApi("toggleFavorite", data);
     }
 
     paginateRecipesPublic(currentPage = 1, limit = 10, viewer_id = null) {
@@ -73,7 +78,7 @@ export class ApiService {
     }
 
     paginateRecipesByGroupUser(currentPage = 1, limit = 10, groupId, userId) {
-        return this._callApi("paginateRecipesByGroupUser", currentPage, limit, groupId, userId);
+        return this._callApi("paginateRecipesByGroupUser", currentPage, limit, groupId, userId); 
     }
 
     // Block from Categories

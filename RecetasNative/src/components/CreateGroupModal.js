@@ -35,7 +35,7 @@ export default function ModalCreateGroup({ isVisible, onClose }) {
 
     
 
-    const { control, handleSubmit, } = useForm({
+    const { control, handleSubmit } = useForm({
         defaultValues: {
             image: 'https://i.postimg.cc/J7KRWYkV/chad.jpg',
             name: '',
@@ -85,30 +85,46 @@ export default function ModalCreateGroup({ isVisible, onClose }) {
                 <Controller
                     control={control}
                     name="name"
-                    render={({ field: { onChange, value } }) => (
-                    <InputV1
-                        label="Titulo:"
-                        placeholder="Ingrese el titulo"
-                        width="99%"
-                        value={value}
-                        onChangeText={onChange}
-                    />
+                    rules={{ 
+                        required: 'El nombre es obligatorio',
+                        maxLength: { value: 50, message: 'El nombre no puede exceder los 50 caracteres' }
+                    }}
+                    render={({ field: { onChange, value },fieldState: {error} }) => (
+                    <>
+                        <InputV1
+                            label="Titulo:"
+                            placeholder="Ingrese el titulo"
+                            width="99%"
+                            value={value}
+                            onChangeText={onChange}
+                        />
+                        {error && <ThemedText type='subtitle1' style={{color: 'red'}}>{error.message}</ThemedText>}
+                    </>
+                    
                     )}
                 />
         
                 <Controller
                     control={control}
                     name="description"
-                    render={({ field: { onChange, value } }) => (
-                    <InputV1
-                        label="Descripcion:"
-                        placeholder="Ingrese la descripcion"
-                        width="99%"
-                        height={100}
-                        value={value}
-                        onChangeText={onChange}
-                        multiline={true}
-                    />
+                    rules={{ 
+                        required: 'La descripcion es obligatoria',
+                        maxLength: { value: 500, message: 'La descripcion no puede exceder los 500 caracteres' }
+                    }}
+                    render={({ field: { onChange, value }, fieldState: {error} }) => (
+                    <> 
+                        <InputV1
+                            label="Descripcion:"
+                            placeholder="Ingrese la descripcion"
+                            width="99%"
+                            height={100}
+                            value={value}
+                            onChangeText={onChange}
+                            multiline={true}
+                        />
+                        {error && <ThemedText type='subtitle1' style={{color: 'red'}}>{error.message}</ThemedText>}
+                    </>
+                    
                     )}
                 />
                 <View style={styles.row}>

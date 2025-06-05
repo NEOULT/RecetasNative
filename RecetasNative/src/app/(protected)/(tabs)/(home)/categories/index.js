@@ -41,7 +41,7 @@ export default function CategoriesScreen() {
 
     if (loading) {
         return (
-            <View style={style.screenContainer}>
+            <View style={[style.screenContainer, style.center]}>
                 <ActivityIndicator size="large" color="#FF9100" />
             </View>
         );
@@ -50,7 +50,7 @@ export default function CategoriesScreen() {
     if (!categories.length) {
         return (
             <View style={[style.screenContainer, style.center]}>
-                <ThemedText textAlign='center'>No hay categorias disponibles</ThemedText>
+                <ThemedText type='title' textAlign='center'>No hay categorias disponibles</ThemedText>
             </View>
         );
     }
@@ -68,7 +68,8 @@ const style = {
         flex: 1,
     },
     center: {
-        alignSelf: 'center',
+        alignItems: 'center',
         justifyContent: 'center',
+        flex: 1,
     }
 };

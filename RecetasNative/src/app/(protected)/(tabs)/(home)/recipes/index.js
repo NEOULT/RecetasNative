@@ -5,19 +5,27 @@ import { View, StyleSheet, Text } from "react-native";
 import { ApiService } from "../../../../../services/ApiService";
 import { useApiMessage } from "../../../../../hooks/useApiMessage";
 import { router } from "expo-router";
+import ThemedText from "../../../../../components/common/ThemedText";
+import { getUserId } from "../../../../../hooks/useGetUserId";
+import { ActivityIndicator } from "react-native-paper";
 
 const api = new ApiService();
 
 export default function RecipesScreen() {
   const [recipes, setRecipes] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, hasMore: true });
-  const { info, callApiWithMessage, clearInfo } = useApiMessage();
+  const { info, callApiWithMessage, clearInfo, setInfo } = useApiMessage();
+  const [loading, setLoading] = useState(true);
 
   const fetchRecipes = useCallback(async (pageToFetch = 1) => {
     try {
+      const viewer_id = await getUserId();
+      console.log("Fetching recipes for viewer_id:", viewer_id);
+      
       const response = await callApiWithMessage(() =>  
-        api.paginateRecipesPublic(pageToFetch, 5)
+        api.paginateRecipesPublic(pageToFetch, 5, viewer_id)  
       );
+      console.log("Fetched recipes:", response.data.data);
       
       setRecipes(prev => 
         pageToFetch === 1 
@@ -31,6 +39,12 @@ export default function RecipesScreen() {
       });
     } catch (error) {
       console.error("Error fetching recipes:", error);
+    } finally {
+      setLoading(false);
+      setInfo({
+        message: "Recetas cargadas",
+        type: "success"
+      });
     }
   }, [callApiWithMessage]);
 
@@ -51,12 +65,32 @@ export default function RecipesScreen() {
     }
   };
 
-  const toggleFavorite = (id) => {
-    setRecipes((prevRecipes) =>
-      prevRecipes.map((recipe) =>
-        recipe.id === id ? { ...recipe, isFavorite: !recipe.isFavorite } : recipe
-      )
-    );
+  const toggleFavorite = async (id) => {
+    try {
+      const user_id = await getUserId();
+      // Busca el estado actual de la receta
+      const recipe = recipes.find(r => r.id === id);
+      const wasFavorite = recipe?.isFavorite;
+
+      await callApiWithMessage(() => api.toggleFavorite(id, user_id));
+      setRecipes((prevRecipes) =>
+        prevRecipes.map((recipe) =>
+          recipe.id === id ? { ...recipe, isFavorite: !recipe.isFavorite } : recipe
+        )
+      );
+      setInfo({
+        message: wasFavorite
+          ? "Receta eliminada de favoritos"
+          : "¡Receta agregada a favoritos!",
+        type: "success"
+      });
+    } catch (error) {
+      console.error("Error al cambiar favorito:", error);
+      setInfo({
+        message: "No se pudo actualizar favorito",
+        type: "error"
+      });
+    } 
   };
 
   const handlePressRecipe = (recipe) => {
@@ -66,6 +100,14 @@ export default function RecipesScreen() {
 
   const handlePressAvatar = (avatar) => {
     console.log('Avatar selected:', avatar.username);
+  }
+
+  if (loading) {
+    return (
+      <View style={[styles.screenContainer, styles.center]}>
+        <ActivityIndicator size="large" color="#FF9100" />
+      </View>
+    );
   }
 
   return (
@@ -78,7 +120,9 @@ export default function RecipesScreen() {
       />
       
       {recipes.length === 0 && !info.loading ? (
-        <Text>No se encontraron recetas</Text> 
+        <ThemedText type="title" textAlign='center'>
+          No hay recetas disponibles
+        </ThemedText>
       ) : ( 
         <RecipeCardList
           data={recipes}
@@ -100,4 +144,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
+  center: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });

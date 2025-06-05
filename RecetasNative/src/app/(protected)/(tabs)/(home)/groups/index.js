@@ -5,6 +5,9 @@ import { useRouter } from 'expo-router';
 import { ApiService } from '../../../../../services/ApiService';
 import { useApiMessage } from '../../../../../hooks/useApiMessage';
 import InfoBox from '../../../../../components/common/InfoBox';
+import ThemedText from '../../../../../components/common/ThemedText';
+import { useFocusEffect } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native-paper';
 
 const api = new ApiService();
 
@@ -15,18 +18,19 @@ export default function GroupScreen() {
   const [groups, setGroups] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, hasMore: true });
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
+  const [loading, setLoading] = useState(true);
 
   const fetchGroups = useCallback(async (pageToFetch = 1) => {
     try {
       const response = await callApiWithMessage(() =>
         api.paginateGroups(pageToFetch, 5)
       );
-      //console.log("Fetched groups:", response.data.data);
+      console.log("Fetched groups:", response.data.data);
       
       setGroups(prev =>
         pageToFetch === 1
-          ? response.data.data
-          : [...prev, ...response.data.data]
+          ? response?.data?.data
+          : [...prev, ...response?.data?.data]
       );
       setPagination({
         page: pageToFetch,
@@ -34,12 +38,16 @@ export default function GroupScreen() {
       });
     } catch (error) {
       console.error("Error fetching groups:", error);
+    } finally {
+      setLoading(false);
     }
   }, [callApiWithMessage]);
 
-  useEffect(() => {
-    fetchGroups(1);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchGroups(1);
+    }, [])
+  );
 
   useEffect(() => {
     if (info.message) {
@@ -64,6 +72,14 @@ export default function GroupScreen() {
     );
   };
 
+  if (loading) {
+    return (
+        <View style={[styles.screenContainer, styles.center]}>
+            <ActivityIndicator size="large" color="#FF9100" />
+        </View>
+    );
+  }
+
   return (
     <View style={styles.screenContainer}>
       <InfoBox 
@@ -73,7 +89,7 @@ export default function GroupScreen() {
         duration={2000} 
       />
       {groups?.length === 0 && !info.loading ? (
-        <Text>No se encontraron grupos</Text>
+        <ThemedText type='title' textAlign='center'>No hay grupos disponibles</ThemedText>
       ) : (
         <GroupCardList
           groups={groups}
@@ -93,4 +109,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
+  center: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
 });
