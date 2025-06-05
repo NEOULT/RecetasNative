@@ -31,5 +31,5 @@ export function useApiMessage() {
 
   const clearInfo = () => setInfo({ message: "", type: "" });
 
-  return { info, callApiWithMessage, clearInfo };
+  return { info, callApiWithMessage, clearInfo, setInfo };
 }

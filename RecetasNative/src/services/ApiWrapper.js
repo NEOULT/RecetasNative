@@ -83,6 +83,10 @@ export class ApiWrapper {
     return this.#postData(`recipe/rate`, data);
   }
 
+  toggleFavorite(data) {
+    return this.#postData(`user/favorite`, data);
+  }
+
   getRecipeById(id) {
     data = { currentPage: 1, limit: 10, _id: id };
     return this.#postData(`recipe/paginated`, data);

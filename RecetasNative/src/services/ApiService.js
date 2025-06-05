@@ -56,6 +56,11 @@ export class ApiService {
         return this._callApi("rateRecipe", data);
     }
 
+    toggleFavorite(recipeId, user_id) {
+        data = { recipeId, user_id };
+        return this._callApi("toggleFavorite", data);
+    }
+
     paginateRecipesPublic(currentPage = 1, limit = 10, viewer_id = null) {
         return this._callApi("paginateRecipesPublic", currentPage, limit,viewer_id);
     }
@@ -73,7 +78,7 @@ export class ApiService {
     }
 
     paginateRecipesByGroupUser(currentPage = 1, limit = 10, groupId, userId) {
-        return this._callApi("paginateRecipesByGroupUser", currentPage, limit, groupId, userId);
+        return this._callApi("paginateRecipesByGroupUser", currentPage, limit, groupId, userId); 
     }
 
     // Block from Categories
