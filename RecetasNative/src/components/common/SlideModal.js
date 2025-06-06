@@ -4,7 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import ThemedText from './ThemedText';
 import { useTheme } from '../../styles/theme/ThemeContext';
 
-export default function AddButton({ isVisible, onClose, children, title, showBackdrop = true , height = "98%"}) {
+export default function AddButton({ isVisible, onClose, children, title, showBackdrop = true , height}) {
 
   const {colors} = useTheme();
   const backdropOpacity = useRef(new Animated.Value(0)).current;

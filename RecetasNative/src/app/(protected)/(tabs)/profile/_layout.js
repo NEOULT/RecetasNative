@@ -45,6 +45,8 @@ export default function PerfilLayout() {
         <Stack.Screen name="recipes/index" options={{ title: 'Mis Recetas' }} />
         <Stack.Screen name="groups/index" options={{ title: 'Mis Grupos' }} />
         <Stack.Screen name="settings" options={{ title: 'Configuración' }} />
+        <Stack.Screen name="recipes/editRecipe" options={{ title: 'Editar Receta' }} />
+
     
     </Stack>
   )

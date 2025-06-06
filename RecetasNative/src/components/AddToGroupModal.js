@@ -77,12 +77,12 @@ export default function AddToGroupModal({isVisible, onClose, data}) {
     return (
 
         <>
-        <InfoBox 
+        {/* <InfoBox 
             message={info.message} 
             type={info.type} 
             onHide={clearInfo} 
             duration={2000} 
-        />
+        /> */}
         <SlideModal height={"70%"} isVisible={isVisible} onClose={onClose} title="       Añadir a un grupo">
 
             <View style={{flex: 1}}>

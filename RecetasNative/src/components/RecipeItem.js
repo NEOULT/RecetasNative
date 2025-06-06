@@ -2,14 +2,14 @@ import React, { useState, useRef } from 'react';
 import { View, Text, Image, Animated, StyleSheet, TouchableOpacity, Modal, Pressable, Dimensions } from 'react-native';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { convertIsoToTime } from '../hooks/useTimeIso.js';
-import { usePathname } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import { useTheme } from '../styles/theme/ThemeContext.js';
 import ThemedText from './common/ThemedText.js';
 import { useAddToGroup } from '../context/AddToGroupContext';
 
 
 
-const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPressRecipe, recipeId }) => {
+const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPressRecipe, recipeId, recipe }) => {
 
 
   const [pressed, setPressed] = useState(false);
@@ -20,6 +20,7 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
 
   const { colors } = useTheme();
   const pathname = usePathname();
+  const router = useRouter();
   const showMoreButton = pathname === '/profile/recipes';
 
   
@@ -112,7 +113,15 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
                     <Feather name="plus" size={21} color={colors.regular_textcolor} />
                     <ThemedText>Añadir</ThemedText>
                   </Pressable>
-                  <Pressable style={styles.menuItem} onPress={() => { setShowOptions(false);  }}>
+                  <Pressable style={styles.menuItem} onPress={() => { 
+                      setShowOptions(false);
+                      
+                      recipe = JSON.stringify(recipe);
+                      router.navigate({
+                        pathname: `/profile/recipes/editRecipe`,
+                        params: { recipe, recipeId },
+                      });
+                      }}>
                     <Feather name="edit-2" size={17} color={colors.regular_textcolor} />
                     <ThemedText>Editar</ThemedText>
                   </Pressable>
