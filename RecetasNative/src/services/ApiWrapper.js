@@ -65,6 +65,10 @@ export class ApiWrapper {
     return this.#deleteData(`user/${user_id}`)
   }
 
+  getProfile(user_id) {
+    return this.#getData(`user/me/${user_id}`);
+  }
+
   //Block from Recipes
 
   createRecipe(data) {
