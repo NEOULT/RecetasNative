@@ -12,8 +12,6 @@ import { useAddToGroup } from '../context/AddToGroupContext';
 const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPressRecipe, recipeId }) => {
 
 
-  let openModal = null;
-
   const [pressed, setPressed] = useState(false);
   const animatedValue = useRef(new Animated.Value(1)).current;
   const [ShowOptions, setShowOptions] = useState(false);
@@ -24,10 +22,9 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
   const pathname = usePathname();
   const showMoreButton = pathname === '/profile/recipes';
 
-  if (pathname === '/groups/recipes' ) {
-    const { openModal  } = useAddToGroup();
-    openModal = openModal;
-  }
+  
+  const { openModal } = useAddToGroup();
+
 
   const handleMorePress = (e) => {
     e.stopPropagation();
@@ -109,7 +106,9 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
                   styles.menuContainer,
                   { top: menuPos.top, right: menuPos.right }, { backgroundColor: colors.card}
                 ]}>
-                  <Pressable style={styles.menuItem} onPress={() => { setShowOptions(false); if (recipeId) openModal(recipeId); }}>
+                  <Pressable style={styles.menuItem} onPress={() => {
+                        setShowOptions(false); 
+                        if (recipeId) openModal(recipeId); }}>
                     <Feather name="plus" size={21} color={colors.regular_textcolor} />
                     <ThemedText>Añadir</ThemedText>
                   </Pressable>
