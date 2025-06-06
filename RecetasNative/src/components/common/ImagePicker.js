@@ -9,14 +9,17 @@ export default function ImageSelector({width = 100, height = 100, value, onChang
 
     useEffect(() => {
         if(imageUri) {
-            value = imageUri;
-            onChange(value);
+            onChange(imageUri);
+            setImage(imageUri);
         }
-        value = null;
     }, [imageUri]);
 
+    useEffect(() => {
+        setImage(value || null);
+    }, [value]);
+
     const handlePress = () => {
-        if (imageUri) {
+        if (image) {
         Alert.alert("Imagen seleccionada", "¿Qué deseas hacer?", [
             { text: "Eliminar", onPress: () => setImageUri(null), style: "destructive" },
             { text: "Cambiar imagen", onPress: showPickerOptions },
@@ -37,8 +40,8 @@ export default function ImageSelector({width = 100, height = 100, value, onChang
 
     return (
         <TouchableOpacity style={[styles.square, {width, height}]} onPress={handlePress}>
-        {imageUri ? (
-            <Image source={{ uri: imageUri }} style={styles.image} />
+        {image ? (
+            <Image source={{ uri: image }} style={styles.image} />
         ) : (
             <View style={styles.placeholder}>
             <MaterialIcons name="photo-camera" size={40} color="#999" />

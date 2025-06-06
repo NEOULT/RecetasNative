@@ -16,7 +16,7 @@ import { getUserId } from '../hooks/useGetUserId.js';
 
 const api = new ApiService();
 
-export default function ModalCreateGroup({ isVisible, onClose }) {
+export default function ModalCreateGroup({ isVisible, onClose, title = "Crear un nuevo grupo", defaultValues = null }) {
 
     const { info, callApiWithMessage, clearInfo } = useApiMessage(); 
 
@@ -33,9 +33,20 @@ export default function ModalCreateGroup({ isVisible, onClose }) {
         }
     }, [info.message, clearInfo]);
 
-    
 
-    const { control, handleSubmit } = useForm({
+    let groupValues = null;
+
+    if (defaultValues) {
+        
+        groupValues = {
+            image: defaultValues.image ,
+            name: defaultValues.name,
+            description: defaultValues.description, 
+            isPublic: defaultValues.isPublic,
+        };
+    }
+
+    const { control, handleSubmit, reset } = useForm({
         defaultValues: {
             image: 'https://i.postimg.cc/J7KRWYkV/chad.jpg',
             name: '',
@@ -44,16 +55,39 @@ export default function ModalCreateGroup({ isVisible, onClose }) {
         }
     });
 
+    useEffect(() => {
+        if (groupValues) {
+            reset(groupValues);
+        }else{
+            reset();
+        }
+    }, [defaultValues]);
+
     const onSubmit = async (data) => {
         //console.log('Datos del formulario:', data);
 
         data.user_id = await getUserId();
 
+        let response = null;
+
         try{
-            const response = await callApiWithMessage(() => api.createGroup(data))
-            if(response.success){
-                console.log('Receta creada exitosamente:');
+
+            if(defaultValues){
+            
+                response = await callApiWithMessage(() => api.updateGroup(defaultValues._id, data))
+
+                if(response.success){
+                    console.log('Receta actualizada exitosamente', response.data);
+                }
+            }else{
+
+                response = await callApiWithMessage(() => api.createGroup(data))
+
+                if(response.success){
+                    console.log('Receta creada exitosamente', response.data);
+                }
             }
+            
         }catch(e){
             console.error('Error al enviar el formulario:', e);
         }
@@ -61,7 +95,7 @@ export default function ModalCreateGroup({ isVisible, onClose }) {
 
     return (
         
-        <SlideModal isVisible={isVisible} onClose={onClose} title="Crea un nuevo grupo">
+        <SlideModal isVisible={isVisible} onClose={onClose} title={title}>
             <InfoBox 
                 message={info.message} 
                 type={info.type} 

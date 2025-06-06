@@ -61,6 +61,10 @@ export class ApiService {
         return this._callApi("toggleFavorite", data);
     }
 
+    paginateRecipesByUser(currentPage = 1, limit = 10, userId) {
+        return this._callApi("paginateRecipesByUser", currentPage, limit, userId);
+    }
+
     paginateRecipesPublic(currentPage = 1, limit = 10, viewer_id = null) {
         return this._callApi("paginateRecipesPublic", currentPage, limit,viewer_id);
     }
@@ -89,12 +93,32 @@ export class ApiService {
 
     // Bloack from Groups
 
+    deleteGroup(groupId) {
+        return this._callApi('deleteGroup', groupId);
+    }
+
+    softDeleteGroup(groupId) {
+        return this._callApi('softDeleteGroup', groupId);
+    }
+
+    updateGroup(groupId, data) {
+        return this._callApi('updateGroup', groupId, data);
+    }
+
     createGroup(data) {
         return this._callApi('createGroup', data);
     }
 
     paginateGroups(currentPage = 1, limit = 10){
         return this._callApi('getPaginatedGroups',currentPage,limit)
+    }
+
+    getPaginateGroupsByUser(currentPage = 1, limit = 10, userId) {
+        return this._callApi('getPaginateGroupsByUser', currentPage, limit, userId);
+    }
+
+    getPaginatePublicGroupsByUser(currentPage = 1, limit = 10, userId, isPublic) {
+        return this._callApi('getPaginatePublicGroupsByUser', currentPage, limit, userId, isPublic);
     }
 
     addMembersToGroups(groupId, user_id) {

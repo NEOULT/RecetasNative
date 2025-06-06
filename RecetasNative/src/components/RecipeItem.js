@@ -13,7 +13,7 @@ import InfoBox from './common/InfoBox.js';
 
 const api = new ApiService();
 
-const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPressRecipe, recipeId, recipe }) => {
+const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPressRecipe, recipeId, recipe, onRecipeDelete }) => {
 
   const { info, callApiWithMessage, clearInfo } = useApiMessage();  
 
@@ -153,13 +153,14 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
                     <Feather name="edit-2" size={17} color={colors.regular_textcolor} />
                     <ThemedText>Editar</ThemedText>
                   </Pressable>
-                  <Pressable style={styles.menuItem} onPress={() => { 
+                  <Pressable style={styles.menuItem} onPress={async () => { 
                       setShowOptions(false); 
 
                       try{
                       
-                        const response = callApiWithMessage(() => api.deleteRecipe(recipeId));
-                        console.log("Respuesta de eliminar receta:", response);
+                        const response =  await callApiWithMessage(() => api.deleteRecipe(recipeId));
+                        
+                        if(response.success) onRecipeDelete();
                         
                       }catch (error) {
                         console.error("Error al eliminar la receta:", error);

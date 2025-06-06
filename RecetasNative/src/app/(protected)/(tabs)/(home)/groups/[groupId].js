@@ -12,7 +12,7 @@ const api = new ApiService();
 
 export default function GrupoScreen() {
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
-  const { groupId, group } = useLocalSearchParams();
+  const { groupId, group, userId = null } = useLocalSearchParams();
 
   const router = useRouter();
   const groupObj = group ? JSON.parse(group) : null;
@@ -56,10 +56,17 @@ export default function GrupoScreen() {
 
   const handlePressRecipe = (recipe) => {
 
-    console.log('Receta seleccionada:', recipe.title);
-    router.navigate({
+    if (userId){
+      router.navigate({
+        pathname: `/profile/groups/${groupId}/${recipe._id}`,
+        params: { userId }
+      });
+      return;
+    }else{
+      router.navigate({
       pathname: `/groups/${groupId}/${recipe._id}`,
-    })
+      })
+    }
   };
 
   const renderHeader = () => (
