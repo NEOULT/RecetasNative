@@ -18,6 +18,7 @@ export default function ProfileScreen() {
 
   const { colors } = useTheme();
   const [user, setUser] = useState(null);
+  const [authUserId, setAuthUserId] = useState(null);
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
 
   const user2 = {
@@ -35,15 +36,14 @@ export default function ProfileScreen() {
   async function fetchUser() {
     try {
       const userId = await getUserId();
-      console.log('ID del usuario:', userId);
+      setAuthUserId(userId);
       
       const res = await callApiWithMessage(() => api.getProfile(userId));
       const userData = res.data.user.user;
       const recipes = res.data.user.recipes;
 
-      console.log('Datos del usuario:', userData);
-
       const mappedUser = {
+        _id: userData._id,
         username: `${userData.name} ${userData.lastName}`,
         avatar:
           (recipes[0]?.images[0]?.url) ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
@@ -107,7 +107,10 @@ export default function ProfileScreen() {
         <ThemedText type='subtitle3'>{user.username}</ThemedText>
       </View>
 
-      <ThemedButton title="Seguir"/>
+      {/* Solo muestra el botón si el perfil NO es el del usuario autenticado */}
+      {user._id !== authUserId && (
+        <ThemedButton title="Seguir" />
+      )}
 
       <View style={[styles.row, styles.barProfile, {backgroundColor: colors.card}]}>
         <ItemBarProfile value={user.recipes} title="recipes" />
