@@ -1,7 +1,6 @@
 
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { StarRatingDisplay } from 'react-native-star-rating-widget';
 import ThemedText from './common/ThemedText';
 
 const RecipeCard = ({ avatar, username, rating, recipeImage, recipeTitle, isFavorite, onFavoriteToggle, onPressRecipe, onPressAvatar }) => {
@@ -25,7 +24,6 @@ const RecipeCard = ({ avatar, username, rating, recipeImage, recipeTitle, isFavo
             {username}
           </ThemedText>
           <View style={styles.ratingContainer}>
-            <StarRatingDisplay rating={rating} starSize={16} starStyle={{marginHorizontal: 1}}/>
             <Text>{rating}</Text>
           </View>
         </View>

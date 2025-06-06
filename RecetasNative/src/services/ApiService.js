@@ -1,5 +1,5 @@
 import { ApiWrapper } from "./ApiWrapper.js";
-const API_URL = process.env.EXPO_PUBLIC_API_URL || "http://localhost:3000/api";
+import { API_URL } from "@env";
 
 console.log(API_URL);
 export class ApiService {

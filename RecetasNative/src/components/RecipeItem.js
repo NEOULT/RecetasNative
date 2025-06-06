@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Image, Animated, StyleSheet, TouchableOpacity, Modal, Pressable, Dimensions } from 'react-native';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
-import { StarRatingDisplay } from 'react-native-star-rating-widget';
 import { convertIsoToTime } from '../hooks/useTimeIso.js';
 import { usePathname } from 'expo-router';
 import { useTheme } from '../styles/theme/ThemeContext.js';
@@ -13,7 +12,8 @@ import { useAddToGroup } from '../context/AddToGroupContext';
 const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPressRecipe, recipeId }) => {
 
 
-  const { openModal } = useAddToGroup();
+  let openModal = null;
+
   const [pressed, setPressed] = useState(false);
   const animatedValue = useRef(new Animated.Value(1)).current;
   const [ShowOptions, setShowOptions] = useState(false);
@@ -23,6 +23,11 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
   const { colors } = useTheme();
   const pathname = usePathname();
   const showMoreButton = pathname === '/profile/recipes';
+
+  if (pathname === '/groups/recipes' ) {
+    const { openModal  } = useAddToGroup();
+    openModal = openModal;
+  }
 
   const handleMorePress = (e) => {
     e.stopPropagation();
@@ -79,9 +84,7 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
                 <Feather name="user" size={14} color="#666" />
                 <Text style={styles.text}>{servings}</Text>
               </View>
-              <View style={[styles.iconSpacing, styles.starContainer]}>
-                <StarRatingDisplay rating={rating} starSize={14} starStyle={{ marginHorizontal: 1 }} />
-              </View>
+              
             </View>
           </View>
         </View>

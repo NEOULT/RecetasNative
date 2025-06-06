@@ -5,7 +5,6 @@ import ThemedText from '../../../../../components/common/ThemedText';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useTheme } from '../../../../../styles/theme/ThemeContext.js';
-import { StarRatingDisplay } from 'react-native-star-rating-widget';
 import { ApiService } from '../../../../../services/ApiService';
 import { useApiMessage } from '../../../../../hooks/useApiMessage';
 import { convertIsoToTime } from '../../../../../hooks/useTimeIso.js';
@@ -119,7 +118,7 @@ export default function RecipeDetail() {
               </ThemedText>
             </View>
             <View style={styles.subrow}>
-              <StarRatingDisplay rating={rating} color='#ecc800' starSize={23} starStyle={{ marginHorizontal: 1 }} />
+              
               <ThemedText type="details" style={{ marginLeft: 5 }}>
                 {rating?.toFixed(1)}
               </ThemedText>
