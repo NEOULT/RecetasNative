@@ -32,7 +32,7 @@ export default function IngredientItem({ value = {}, onChange, onPressDelete }) 
                     <InputV1
                         placeholder="cantidad"
                         width="45%"
-                        value={value.unit_quantity}
+                        value={String(value.unit_quantity)}
                         onChangeText={unit_quantity => onChange({ ...value, unit_quantity: Number(unit_quantity) })}
                         keyboardType="numeric"
                     />

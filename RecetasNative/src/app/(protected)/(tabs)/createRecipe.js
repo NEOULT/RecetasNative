@@ -14,13 +14,14 @@ import { useApiMessage } from '../../../hooks/useApiMessage';
 import { difficultyOptions, unitTimeOptions } from '../../../constants/options';
 import InfoBox from '../../../components/common/InfoBox';
 import { useEffect, useRef, useState } from 'react';
-import { convertTimeToIso} from '../../../hooks/useTimeIso.js';
+import { convertTimeToIso, convertIsoToTime} from '../../../hooks/useTimeIso.js';
 import PlusPicker from '../../../components/PlusPicker';
 import CategoryTag from '../../../components/CategoryTag.js'
 import { getUserId } from '../../../hooks/useGetUserId.js';
+import { useLocalSearchParams } from 'expo-router';
 const api = new ApiService();
 
-export default function createRecipeScreen() {
+export default function CreateRecipeScreen({}) {
 
   const { info, callApiWithMessage, clearInfo } = useApiMessage();   
   
@@ -28,6 +29,51 @@ export default function createRecipeScreen() {
 
   const { colors } = useTheme();
 
+  const { recipeId , recipe} = useLocalSearchParams();
+
+  let recipeValues = null;
+
+  if (recipe){
+
+    const recipe2 = JSON.parse(recipe);
+
+    const {time, unit} = convertIsoToTime(recipe2.preparation_time);
+    
+
+    console.log('recipe2:', recipe2);
+
+    console.log(recipe2.ingredients);
+    
+    
+    recipeValues = {
+
+      //Falta arreglar la imagen
+        images: [{ url: recipe2.images[0]?.url }],
+        title: recipe2.title,
+        description: recipe2.description,
+        time: Number(time),
+        timeUnit: unit,
+        servings: Number(recipe2.servings),
+        difficulty: recipe2.difficulty,
+        isPublic: recipe2.isPublic,
+        ingredients: Array.isArray(recipe2.ingredients)
+        ? recipe2.ingredients.map(ing => ({
+            ingredient_name: ing.ingredient_name,
+            unit: ing.unit,
+            unit_quantity: Number(ing.unit_quantity)
+          }))
+        : [],
+        steps: Array.isArray(recipe2.steps)
+          ? recipe2.steps.map(step => ({
+              stepImage: step.stepImage,
+              description: step.description
+            }))
+          : [],
+        categories: Array.isArray(recipe2.categories)
+          ? recipe2.categories.map(cat => cat._id || cat)
+          : [],
+        }
+  }
  //Aca uso useRef para evitar que el efecto se ejecute en el primer renderizado y solo lo haga escuchando al info y los otros componentes
   
   useEffect(() => {
@@ -74,8 +120,8 @@ export default function createRecipeScreen() {
 
   //Estos son los valores por defecto del formulario, que se pueden modificar y llenarlos en caso de
   //querer editar una receta existente
-  const { control, handleSubmit, getValues, setValue } = useForm({
-    defaultValues: {
+  const { control, handleSubmit, getValues, setValue, reset } = useForm({
+    defaultValues: (recipeValues) ? recipeValues : {
 
       //Falta por implementar el cloudinary
       images: [{url: "https://images.pexels.com/photos/724664/pexels-photo-724664.jpeg"}],
@@ -91,6 +137,14 @@ export default function createRecipeScreen() {
       categories: [],
     }
   });
+
+  useEffect(() => {
+    if (recipeValues) {
+      reset(recipeValues);
+    }else{
+      reset();
+    }
+  }, [recipe]);
 
   const { fields: ingredientFields, append: appendIngredient, remove: removeIngredient } = useFieldArray({
     control,
@@ -117,11 +171,21 @@ export default function createRecipeScreen() {
     const cleanData = removeNullFields(data);
 
     try{
-      const response = await callApiWithMessage(() => api.createRecipe(cleanData));
 
-      if(response.success){
+      let response = null;
+      
+      if (recipeValues) {
+        response = await callApiWithMessage(() => api.updateRecipe(recipeId, cleanData));
+      }else{
+        response = await callApiWithMessage(() => api.createRecipe(cleanData));
+      }
+
+      if(response.success && recipeValues){
+        console.log('Receta actualizada exitosamente:');
+      }else{
         console.log('Receta creada exitosamente:');
       }
+
 
     }catch(e){
       console.error('Error al enviar el formulario:', e);
@@ -161,7 +225,7 @@ export default function createRecipeScreen() {
             <ImageSelector
               width={'100%'}
               height={160}
-              value={value.url}
+              value={value[0]?.url}
               onChange={onChange}
             />
           )}
@@ -210,7 +274,7 @@ export default function createRecipeScreen() {
                   <InputV1
                     placeholder="Cant"
                     width="35%"
-                    value={value}
+                    value={String(value)}
                     onChangeText={onChange}
                     keyboardType="numeric"
                   />
@@ -240,7 +304,7 @@ export default function createRecipeScreen() {
                 label="Porciones:"
                 placeholder="Unidades"
                 width="35%"
-                value={value}
+                value={String(value)}
                 onChangeText={onChange}
                 keyboardType="numeric"
               />

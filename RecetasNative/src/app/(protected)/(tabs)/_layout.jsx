@@ -7,17 +7,25 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../styles/theme/ThemeContext.js';
 import AddButton from '../../../components/AddButtonModal.js';
 import { useState } from 'react';
+import AddToGroupModal from '../../../components/AddToGroupModal';
+import { useAddToGroup, AddToGroupProvider } from '../../../context/AddToGroupContext';
 
 const router = useRouter(); 
 
-import { ApiService } from '../../../services/ApiService.js';
+export default function Layout() {
+  return (
+    <AddToGroupProvider>
+      <TabLayout />
+    </AddToGroupProvider>
+  );
+}
 
-const apiService = new ApiService();
 
-export default function TabLayout() {
+function TabLayout() {
   
   const { setScheme, isDark } = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
+  const { isVisible, closeModal, recipeId } = useAddToGroup();
 
   return (
     <>
@@ -107,6 +115,7 @@ export default function TabLayout() {
         }} />
     </Tabs>
     <AddButton isVisible={modalVisible} onClose={() => setModalVisible(false)} />
+    <AddToGroupModal isVisible={isVisible} onClose={closeModal} data={recipeId}/>
     </>
   );
 }

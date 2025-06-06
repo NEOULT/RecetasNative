@@ -1,18 +1,21 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef , useEffect} from 'react';
 import { View, Text, Image, Animated, StyleSheet, TouchableOpacity, Modal, Pressable, Dimensions } from 'react-native';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { convertIsoToTime } from '../hooks/useTimeIso.js';
-import { usePathname } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import { useTheme } from '../styles/theme/ThemeContext.js';
 import ThemedText from './common/ThemedText.js';
 import { useAddToGroup } from '../context/AddToGroupContext';
+import { ApiService } from '../services/ApiService';
+import { useApiMessage } from '../hooks/useApiMessage';
+import InfoBox from './common/InfoBox.js';
 
 
+const api = new ApiService();
 
-const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPressRecipe, recipeId }) => {
+const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPressRecipe, recipeId, recipe }) => {
 
-
-  let openModal = null;
+  const { info, callApiWithMessage, clearInfo } = useApiMessage();  
 
   const [pressed, setPressed] = useState(false);
   const animatedValue = useRef(new Animated.Value(1)).current;
@@ -22,12 +25,26 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
 
   const { colors } = useTheme();
   const pathname = usePathname();
+  const router = useRouter();
   const showMoreButton = pathname === '/profile/recipes';
 
-  if (pathname === '/groups/recipes' ) {
-    const { openModal  } = useAddToGroup();
-    openModal = openModal;
-  }
+  
+  const { openModal } = useAddToGroup();
+
+
+  const didMount = useRef(false);
+    
+    useEffect(() => {
+        if (didMount.current) {
+          if (info.message) {
+            const timeout = setTimeout(clearInfo, 3000);
+            return () => clearTimeout(timeout);
+          }
+      } else {
+        didMount.current = true;
+      }
+    }, [info.message, clearInfo]);
+
 
   const handleMorePress = (e) => {
     e.stopPropagation();
@@ -47,12 +64,21 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
   };
 
   return (
+    <>
+      {/* <InfoBox 
+        message={info.message} 
+        type={info.type} 
+        onHide={clearInfo} 
+        duration={2000} 
+        style={{ position: 'absolute', top: -10, left: 10, zIndex: 1000 }}
+      /> */}
     <TouchableOpacity
       activeOpacity={1}
       onPressIn={() => setPressed(true)}
       onPressOut={() => setPressed(false)}
       onPress={onPressRecipe}
     >
+
       <Animated.View
         style={[
           styles.container,
@@ -109,15 +135,39 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
                   styles.menuContainer,
                   { top: menuPos.top, right: menuPos.right }, { backgroundColor: colors.card}
                 ]}>
-                  <Pressable style={styles.menuItem} onPress={() => { setShowOptions(false); if (recipeId) openModal(recipeId); }}>
+                  <Pressable style={styles.menuItem} onPress={() => {
+                        setShowOptions(false); 
+                        if (recipeId) openModal(recipeId); }}>
                     <Feather name="plus" size={21} color={colors.regular_textcolor} />
                     <ThemedText>Añadir</ThemedText>
                   </Pressable>
-                  <Pressable style={styles.menuItem} onPress={() => { setShowOptions(false);  }}>
+                  <Pressable style={styles.menuItem} onPress={() => { 
+                      setShowOptions(false);
+                      
+                      recipe = JSON.stringify(recipe);
+                      router.navigate({
+                        pathname: `/profile/recipes/editRecipe`,
+                        params: { recipe, recipeId },
+                      });
+                      }}>
                     <Feather name="edit-2" size={17} color={colors.regular_textcolor} />
                     <ThemedText>Editar</ThemedText>
                   </Pressable>
-                  <Pressable style={styles.menuItem} onPress={() => { setShowOptions(false);  }}>
+                  <Pressable style={styles.menuItem} onPress={() => { 
+                      setShowOptions(false); 
+
+                      try{
+                      
+                        const response = callApiWithMessage(() => api.deleteRecipe(recipeId));
+                        console.log("Respuesta de eliminar receta:", response);
+                        
+                      }catch (error) {
+                        console.error("Error al eliminar la receta:", error);
+                      }
+
+                      
+                      
+                      }}>
                     <Feather name="trash-2" size={18} color={colors.regular_textcolor} />
                     <ThemedText>Eliminar</ThemedText>
                   </Pressable>
@@ -129,6 +179,7 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
         )}
       </Animated.View>
     </TouchableOpacity>
+    </>
   );
 };
 

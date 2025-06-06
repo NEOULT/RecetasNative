@@ -12,6 +12,7 @@ const RecipeItemList = ({
     
     <RecipeItem
       recipeId={item.id} 
+      recipe={item}
       imageUrl={item.images[0].url}
       title={item.title}
       time={item.preparation_time}

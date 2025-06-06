@@ -152,4 +152,14 @@ export class ApiWrapper {
     return this.#postData(`group/togglemember`, data);
   }
 
+  addRecipeToGroup(groupId, recipeId) {
+    const data = { groupId, recipeId };
+    return this.#putData(`group/addRecipe/${groupId}`, data);
+  }
+
+  removeRecipeFromGroup(groupId, recipeId) {
+    const data = { groupId, recipeId };
+    return this.#putData(`group/removeRecipe/${groupId}`, data);
+  }
+
 }

@@ -4,7 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import ThemedText from './ThemedText';
 import { useTheme } from '../../styles/theme/ThemeContext';
 
-export default function AddButton({ isVisible, onClose, children, title, showBackdrop = true }) {
+export default function AddButton({ isVisible, onClose, children, title, showBackdrop = true , height}) {
 
   const {colors} = useTheme();
   const backdropOpacity = useRef(new Animated.Value(0)).current;
@@ -40,7 +40,7 @@ export default function AddButton({ isVisible, onClose, children, title, showBac
         onRequestClose={onClose}
       >
         <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-          <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
+          <View style={[styles.modalContent, { backgroundColor: colors.card, height: height }]}>
             <View style={[styles.row, { alignSelf: 'flex-start' }]}>
               <Pressable onPress={onClose}>
                 <Feather name="x" size={28} color={colors.primary_iconcolor} />

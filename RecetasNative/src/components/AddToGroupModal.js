@@ -1,9 +1,10 @@
-import {View ,Text, FlatList, StyleSheet, Image} from 'react-native';
+import {View ,Text, FlatList, StyleSheet,Pressable, Image} from 'react-native';
 import SlideModal from './common/SlideModal.js';
 import {ApiService} from '../services/ApiService.js';
 import { useEffect, useState, useCallback} from 'react';
 import { useApiMessage } from '../hooks/useApiMessage.js';
 import ThemedText from './common/ThemedText.js';
+import InfoBox from './common/InfoBox.js';
 
 const api = new ApiService();
 
@@ -50,17 +51,39 @@ export default function AddToGroupModal({isVisible, onClose, data}) {
             }
         };
 
+    const fetchAddToGroup = async (groupId) => {
+        try {
+            const response = await callApiWithMessage(() =>
+                api.addRecipeToGroup(groupId, data)
+            );
+
+            if (response.success) {
+                onClose();
+            }
+        } catch (error) {
+            console.error("Error adding to group:", error);
+        }
+    }
+
     function renderGroupItem({ item }) { 
         return (
-            <View style={styles.groupItem}>
+            <Pressable style={styles.groupItem} onPress={() => fetchAddToGroup(item._id)}>
                 <Image source ={{ uri: item.image}} style={styles.image}/>
                 <ThemedText style={styles.text}>{item.description}</ThemedText>
-            </View>
+            </Pressable>
         );
     }
 
     return (
-        <SlideModal isVisible={isVisible} onClose={onClose} title="       Añadir a un grupo">
+
+        <>
+        {/* <InfoBox 
+            message={info.message} 
+            type={info.type} 
+            onHide={clearInfo} 
+            duration={2000} 
+        /> */}
+        <SlideModal height={"70%"} isVisible={isVisible} onClose={onClose} title="       Añadir a un grupo">
 
             <View style={{flex: 1}}>
                 <FlatList
@@ -72,10 +95,11 @@ export default function AddToGroupModal({isVisible, onClose, data}) {
                     ListFooterComponent={ info.loading && pagination.page > 1 ? (
                         <ActivityIndicator size="small" color="#FF9100" />
                     ) : null}
-          
                 />
             </View>
         </SlideModal>
+
+        </>
     );
 }
 

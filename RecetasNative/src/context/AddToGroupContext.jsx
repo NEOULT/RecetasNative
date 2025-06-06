@@ -6,6 +6,9 @@ export function AddToGroupProvider({ children }) {
   const [isVisible, setIsVisible] = useState(false);
   const [recipeId, setRecipeId] = useState(null);
 
+  console.log('AddToGroupProvider rendered with isVisible:', isVisible, 'and recipeId:', recipeId);
+  
+
   const openModal = (id) => {
     setRecipeId(id);
     setIsVisible(true);
