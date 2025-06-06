@@ -123,8 +123,7 @@ export default function CreateRecipeScreen({}) {
   const { control, handleSubmit, getValues, setValue, reset } = useForm({
     defaultValues: (recipeValues) ? recipeValues : {
 
-      //Falta por implementar el cloudinary
-      images: [{url: "https://images.pexels.com/photos/724664/pexels-photo-724664.jpeg"}],
+      images: [{url: ""}],
       title: '',
       description: '',
       time: 0,
@@ -226,7 +225,11 @@ export default function CreateRecipeScreen({}) {
               width={'100%'}
               height={160}
               value={value[0]?.url}
-              onChange={onChange}
+              onChange={(newUri) => {
+                onChange([{ url: newUri }]);
+              }}
+              uploadType="recipe_cover"
+              uploadMetadata={{ userId: 123 }}
             />
           )}
         />
@@ -397,6 +400,8 @@ export default function CreateRecipeScreen({}) {
               name={`steps.${index}`}
               render={({ field: { value, onChange } }) => (
                 <StepItem
+                  step={field.id}
+                  recipe={recipeId}
                   value={value}
                   onChange={onChange}
                   onPressDelete={() => removeStep(index)}

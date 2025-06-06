@@ -48,7 +48,7 @@ export default function ModalCreateGroup({ isVisible, onClose, title = "Crear un
 
     const { control, handleSubmit, reset } = useForm({
         defaultValues: {
-            image: 'https://i.postimg.cc/J7KRWYkV/chad.jpg',
+            image: '',
             name: '',
             description: '', 
             isPublic: false,
@@ -111,7 +111,11 @@ export default function ModalCreateGroup({ isVisible, onClose, title = "Crear un
                         width={'100%'}
                         height={160}
                         value={value}
-                        onChange={onChange}
+                        onChange={(newUri) => {
+                        onChange(newUri);  // sólo la URL
+                        }}
+                        uploadType="group"
+                        uploadMetadata={{ gropuId: 123}} 
                     />
                     )}
                 />
