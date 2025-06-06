@@ -92,6 +92,11 @@ export class ApiWrapper {
     return this.#postData(`recipe/paginated`, data);
   }
 
+  paginateRecipeFavorites(user_id, currentPage = 1, limit = 10) {
+    const data = { currentPage, limit, user_id };
+    return this.#postData(`recipe/favoritesUser`, data);
+  }
+
   paginateRecipesPublic(currentPage = 1, limit = 10, viewer_id = null) {
     const data = { currentPage, limit, isPublic: true, viewer_id };
     return this.#postData(`recipe/paginated`, data); 

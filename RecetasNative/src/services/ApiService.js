@@ -61,6 +61,10 @@ export class ApiService {
         return this._callApi("toggleFavorite", data);
     }
 
+    paginateFavorites(user_id, currentPage = 1, limit = 10) {
+        return this._callApi("paginateRecipeFavorites", user_id, currentPage, limit);
+    }
+
     paginateRecipesPublic(currentPage = 1, limit = 10, viewer_id = null) {
         return this._callApi("paginateRecipesPublic", currentPage, limit,viewer_id);
     }

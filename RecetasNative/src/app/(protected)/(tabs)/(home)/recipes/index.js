@@ -37,14 +37,15 @@ export default function RecipesScreen() {
         page: pageToFetch,
         hasMore: pageToFetch < response.data.totalPages
       });
-    } catch (error) {
-      console.error("Error fetching recipes:", error);
-    } finally {
-      setLoading(false);
+      
       setInfo({
         message: "Recetas cargadas",
         type: "success"
       });
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+    } finally {
+      setLoading(false);
     }
   }, [callApiWithMessage]);
 
@@ -69,13 +70,15 @@ export default function RecipesScreen() {
     try {
       const user_id = await getUserId();
       // Busca el estado actual de la receta
-      const recipe = recipes.find(r => r.id === id);
+      const recipe = recipes.find(r => r._id === id);
       const wasFavorite = recipe?.isFavorite;
+      console.log("Toggle favorite for recipe ID:", id, "User ID:", user_id, "Was favorite:", wasFavorite);
+      
 
       await callApiWithMessage(() => api.toggleFavorite(id, user_id));
       setRecipes((prevRecipes) =>
         prevRecipes.map((recipe) =>
-          recipe.id === id ? { ...recipe, isFavorite: !recipe.isFavorite } : recipe
+          recipe._id === id ? { ...recipe, isFavorite: !recipe.isFavorite } : recipe
         )
       );
       setInfo({
@@ -99,7 +102,7 @@ export default function RecipesScreen() {
   }
 
   const handlePressAvatar = (avatar) => {
-    console.log('Avatar selected:', avatar.username);
+    console.log('Avatar selected:', avatar._id);
   }
 
   if (loading) {
