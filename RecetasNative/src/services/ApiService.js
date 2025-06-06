@@ -33,6 +33,10 @@ export class ApiService {
         return this._callApi("deleteAccount",user_id)
     }
 
+    getProfile(user_id) {
+        return this._callApi("getProfile", user_id);
+    }
+
     // Block from Recipes
 
     createRecipe(data) {
@@ -61,6 +65,10 @@ export class ApiService {
         return this._callApi("toggleFavorite", data);
     }
 
+    paginateFavorites(user_id, currentPage = 1, limit = 10) {
+        return this._callApi("paginateRecipeFavorites", user_id, currentPage, limit);
+    }
+    
     paginateRecipesByUser(currentPage = 1, limit = 10, userId) {
         return this._callApi("paginateRecipesByUser", currentPage, limit, userId);
     }

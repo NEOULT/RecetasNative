@@ -1,10 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
+import RecipeDetail from '../(home)/recipes/[recipeId]';
 
 export default function FavoriteRecetaScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Aca se va a usar un componente de receta</Text>
-    </View>
+    <RecipeDetail/>
   );
 }
 

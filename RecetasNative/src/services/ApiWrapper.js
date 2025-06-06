@@ -65,6 +65,10 @@ export class ApiWrapper {
     return this.#deleteData(`user/${user_id}`)
   }
 
+  getProfile(user_id) {
+    return this.#getData(`user/me/${user_id}`);
+  }
+
   //Block from Recipes
 
   createRecipe(data) {
@@ -90,6 +94,11 @@ export class ApiWrapper {
   getRecipeById(id) {
     const data = { currentPage: 1, limit: 10, _id: id };
     return this.#postData(`recipe/paginated`, data);
+  }
+
+  paginateRecipeFavorites(user_id, currentPage = 1, limit = 10) {
+    const data = { currentPage, limit, user_id };
+    return this.#postData(`recipe/favoritesUser`, data);
   }
 
   paginateRecipesPublic(currentPage = 1, limit = 10, viewer_id = null) {

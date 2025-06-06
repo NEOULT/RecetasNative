@@ -5,21 +5,62 @@ import Feather from '@expo/vector-icons/Feather';
 import { useTheme } from '../../../../styles/theme/ThemeContext'
 import RecipeItemV2 from '../../../../components/RecipeItemV2';
 import { useRouter } from 'expo-router';
+import { useState, useEffect } from 'react';
+import { ApiService } from '../../../../services/ApiService';
+import InfoBox from '../../../../components/common/InfoBox';
+import { useApiMessage } from '../../../../hooks/useApiMessage';
+import { getUserId } from '../../../../hooks/useGetUserId';
+
+const api = new ApiService();
+
 
 export default function ProfileScreen() {
 
   const { colors } = useTheme();
+  const [user, setUser] = useState(null);
+  const [authUserId, setAuthUserId] = useState(null);
+  const { info, callApiWithMessage, clearInfo } = useApiMessage();
 
-  const user = {
-    avatar: 'https://i.postimg.cc/J7KRWYkV/chad.jpg',
-    username: 'ChefJohn00',
-    recipes: 10,
+  const user2 = {
+    username: 'ChefMaster',
+    avatar: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
+    recipes: 120,
     groups: 5,
-    followers: 20,
-    following: 15,
+    followers: 300,
+    following: 150
   }
 
   const router = useRouter();
+
+  useEffect(() => {
+  async function fetchUser() {
+    try {
+      const userId = await getUserId();
+      setAuthUserId(userId);
+      
+      const res = await callApiWithMessage(() => api.getProfile(userId));
+      const userData = res.data.user.user;
+      const recipes = res.data.user.recipes;
+
+      const mappedUser = {
+        _id: userData._id,
+        username: `${userData.name} ${userData.lastName}`,
+        avatar:
+          (recipes[0]?.images[0]?.url) ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
+        recipes: recipes.length,
+        groups: userData.createdGroups?.length || 0,
+        followers: userData.followers?.length || 0,   // <-- No existe, será 0
+        following: userData.following?.length || 0,   // <-- No existe, será 0
+        recipesList: recipes,
+        groupsList: userData.createdGroups || []
+      };
+      setUser(mappedUser);
+    } catch (e) {
+      setUser(null);
+    }
+  }
+  fetchUser();
+}, []);
 
   const handleSeeMoreRecipes = () => {
     router.push('/profile/recipes');
@@ -47,6 +88,14 @@ export default function ProfileScreen() {
     );
   }
 
+  if (!user) {
+    return (
+      <View style={[styles.container, {justifyContent: 'center', alignItems: 'center'}]}>
+        <ThemedText type="title" textAlign='center'>No hay datos de usuario disponibles</ThemedText>
+      </View>
+    );
+  }
+
   return (
   <ScrollView>
     <View style={styles.container}>
@@ -58,7 +107,10 @@ export default function ProfileScreen() {
         <ThemedText type='subtitle3'>{user.username}</ThemedText>
       </View>
 
-      <ThemedButton title="Seguir"/>
+      {/* Solo muestra el botón si el perfil NO es el del usuario autenticado */}
+      {user._id !== authUserId && (
+        <ThemedButton title="Seguir" />
+      )}
 
       <View style={[styles.row, styles.barProfile, {backgroundColor: colors.card}]}>
         <ItemBarProfile value={user.recipes} title="recipes" />
@@ -70,31 +122,27 @@ export default function ProfileScreen() {
       <View style={[styles.column, {alignSelf: 'stretch'}]}>
         <SeeMoreButton title="Recetas publicadas" onPress={handleSeeMoreRecipes} />
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <RecipeItemV2 imageUrl="https://i.postimg.cc/9f3hBvvT/pasta1.jpg" title="Pasta con salsa de tomate" />
-            <RecipeItemV2 imageUrl="https://i.postimg.cc/9f3hBvvT/pasta1.jpg" title="Ensalada César con pollo" />
-            <RecipeItemV2 imageUrl="https://i.postimg.cc/9f3hBvvT/pasta1.jpg" title="Tacos de carne asada" />
-            <RecipeItemV2 imageUrl="https://i.postimg.cc/9f3hBvvT/pasta1.jpg" title="Chuletas con pollo asado y jamon" />
+            {user.recipesList.map(recipe => (
+              <RecipeItemV2
+                key={recipe._id}
+                imageUrl={recipe.images[0]?.url ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg'}
+                title={recipe.title}
+              />
+            ))}
         </ScrollView>
       </View>
 
-      <View style={[styles.column]}>
+      <View style={[styles.column, {alignSelf: 'stretch', gap: 10}]}>
         <SeeMoreButton title="Grupos de cocina" onPress={handleSeeMoreGroups} />
-          <Image
-            source={{ uri: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
-            style={{ width: 300, height: 150, borderRadius: 10, marginRight: 10 }}
-          />
-          <Image
-            source={{ uri: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
-            style={{ width: 300, height: 150, borderRadius: 10, marginRight: 10 }}
-          />
-          <Image
-            source={{ uri: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
-            style={{ width: 300, height: 150, borderRadius: 10, marginRight: 10 }}
-          />
-          <Image
-            source={{ uri: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
-            style={{ width: 300, height: 150, borderRadius: 10, marginRight: 10 }}
-          />
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {user.groupsList.map(group => (
+              <Image
+                key={group._id}
+                source={{ uri: group.image ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
+                style={{ width: 300, height: 150, borderRadius: 10, marginRight: 10 }}
+              />
+            ))}
+          </ScrollView>
       </View>
     </View>
   </ScrollView>
