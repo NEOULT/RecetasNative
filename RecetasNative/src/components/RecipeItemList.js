@@ -7,6 +7,7 @@ const RecipeItemList = ({
   onPressRecipe,
   onEndReached,
   isFetchingMore, 
+  onRecipeDelete,
 }) => {
   const renderItem = ({ item }) => (
     
@@ -19,6 +20,7 @@ const RecipeItemList = ({
       difficulty={item.difficulty}
       servings={item.servings}
       rating={item.rating}
+      onRecipeDelete={onRecipeDelete} 
       onPressRecipe={() => onPressRecipe(item)} // Asegúrate de pasar la función correctamente
     />
   );

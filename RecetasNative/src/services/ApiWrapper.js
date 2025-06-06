@@ -126,6 +126,11 @@ export class ApiWrapper {
     return this.#postData(`recipe/paginated`, data);
   }
 
+  paginateRecipesByUser (currentPage = 1, limit = 10, userId) {
+    const data = { currentPage, limit, user_id: userId};
+    return this.#postData(`recipe/paginated`, data);
+  }
+
   //Block from Categories
 
   getCategories(){
@@ -141,6 +146,10 @@ export class ApiWrapper {
   updateGroup(id, data) {
     return this.#putData(`group/${id}`, data);
   }
+  
+  softDeleteGroup(id) {
+    return this.#deleteData(`group/softDelete/${id}`);
+  }
 
   deleteGroup(id) {
     return this.#deleteData(`group/${id}`);
@@ -148,6 +157,16 @@ export class ApiWrapper {
 
   getPaginatedGroups(currentPage = 1, limit = 10) {
     const data = { currentPage, limit, isPublic: true };
+    return this.#postData(`group/paginate`, data);
+  }
+
+  getPaginateGroupsByUser(currentPage = 1, limit = 10, userId) {
+    const data = { currentPage, limit, userId};
+    return this.#postData(`group/paginate`, data);
+  }
+
+  getPaginatePublicGroupsByUser(currentPage = 1, limit = 10, userId, isPublic = true) {
+    const data = { currentPage, limit, userId, isPublic };
     return this.#postData(`group/paginate`, data);
   }
 

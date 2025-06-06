@@ -7,6 +7,9 @@ const GroupCardList = ({
   onPressGroup,
   onEndReached,
   isFetchingMore,
+  onDeleteGroup,
+  onEditGroup,
+
 }) => {
   const renderItem = ({ item }) => (
     <GroupCard
@@ -15,6 +18,9 @@ const GroupCardList = ({
       recipesCount={item.recipes?.length || 0}
       membersCount={item.groupMembers?.length || 0}
       onPress={() => onPressGroup(item)}
+      onDelete={onDeleteGroup}
+      group={item}
+      onEdit={onEditGroup}
     />
   );
 

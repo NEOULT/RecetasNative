@@ -35,7 +35,7 @@ export default function RecipesProfileScreen() {
     } else {
       response = await callApiWithMessage(() =>
         //Falta el fetch para los recipes de usuario
-        api.paginateRecipesPublic(pageToFetch, 5)
+        api.paginateRecipesByUser(pageToFetch, 5, userId)
       );
     }
 
@@ -150,6 +150,7 @@ export default function RecipesProfileScreen() {
           pathname: `/profile/recipes/${recipe.id}`,
           params: { userId: recipe.user_id._id}
         })}
+        onRecipeDelete={() => fetchRecipes(1) }
       />
     </View>
   );
