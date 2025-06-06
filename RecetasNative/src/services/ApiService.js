@@ -101,4 +101,15 @@ export class ApiService {
         return this._callApi('addMembersToGroups', groupId, user_id);
     }
 
+    updateGroup(groupId, data) {
+        return this._callApi('updateGroup', groupId, data);
+    }
+
+    addRecipeToGroup(groupId, recipeId) {
+        return this._callApi('addRecipeToGroup', groupId, recipeId);
+    }
+    removeRecipeFromGroup(groupId, recipeId) {
+        return this._callApi('removeRecipeFromGroup', groupId, recipeId);
+    }
+
 }

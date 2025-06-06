@@ -25,7 +25,7 @@ function TabLayout() {
   
   const { setScheme, isDark } = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
-  const { isVisible, closeModal } = useAddToGroup();
+  const { isVisible, closeModal, recipeId } = useAddToGroup();
 
   return (
     <>
@@ -115,7 +115,7 @@ function TabLayout() {
         }} />
     </Tabs>
     <AddButton isVisible={modalVisible} onClose={() => setModalVisible(false)} />
-    <AddToGroupModal isVisible={isVisible} onClose={closeModal} />
+    <AddToGroupModal isVisible={isVisible} onClose={closeModal} data={recipeId}/>
     </>
   );
 }
