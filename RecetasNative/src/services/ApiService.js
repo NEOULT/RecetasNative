@@ -37,6 +37,11 @@ export class ApiService {
         return this._callApi("getProfile", user_id);
     }
 
+    toggleFollowUser(current_user_id, target_user_id) {
+        const data = { current_user_id, target_user_id };
+        return this._callApi("toggleFollowUser", data);
+    }
+
     // Block from Recipes
 
     createRecipe(data) {

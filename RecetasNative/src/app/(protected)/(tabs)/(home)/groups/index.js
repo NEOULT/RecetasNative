@@ -25,7 +25,7 @@ export default function GroupScreen() {
       const response = await callApiWithMessage(() =>
         api.paginateGroups(pageToFetch, 5)
       );
-      console.log("Fetched groups:", response.data.data);
+      console.log("Fetched groups:", JSON.stringify(response?.data?.data, null, 2));
       
       setGroups(prev =>
         pageToFetch === 1

@@ -69,6 +69,10 @@ export class ApiWrapper {
     return this.#getData(`user/me/${user_id}`);
   }
 
+  toggleFollowUser(data) {
+    return this.#postData(`user/follow`, data);
+  }
+
   //Block from Recipes
 
   createRecipe(data) {
