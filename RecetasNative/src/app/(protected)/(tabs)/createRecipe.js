@@ -40,10 +40,6 @@ export default function CreateRecipeScreen({}) {
 
     const {time, unit} = convertIsoToTime(recipe2.preparation_time);
     
-
-    console.log('recipe2:', recipe2);
-
-    console.log(recipe2.ingredients);
     
     
     recipeValues = {

@@ -1,11 +1,12 @@
 import { StyleSheet, View, Image, ActivityIndicator, FlatList } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, usePathname } from 'expo-router';
 import ThemedText from '../../../../../components/common/ThemedText';
 import ThemedButton from '../../../../../components/common/ThemedButton';
 import RecipeItem from '../../../../../components/RecipeItem';
 import { ApiService } from '../../../../../services/ApiService';
 import { useApiMessage } from '../../../../../hooks/useApiMessage';
 import { useEffect, useState, useCallback } from 'react';
+import { getUserId } from '../../../../../hooks/useGetUserId';
 
 
 const api = new ApiService();
@@ -13,8 +14,10 @@ const api = new ApiService();
 export default function GrupoScreen() {
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
   const { groupId, group, userId = null } = useLocalSearchParams();
+  const user = getUserId();
 
   const router = useRouter();
+  const pathname = usePathname();
   const groupObj = group ? JSON.parse(group) : null;
   
   const [recipes, setRecipes] = useState([]);
@@ -23,15 +26,34 @@ export default function GrupoScreen() {
 
   console.log('GrupoScreen', groupId, groupObj, userId);
   
-
   const fetchRecipes = useCallback(async (pageToFetch = 1) => {
+
     setLoading(true);
     try {
-      const res = await callApiWithMessage(() =>
-        api.paginateRecipesByGroup(pageToFetch, 5, groupId)
-      );
 
-      console.log('fetchRecipes', res);
+      let res;
+
+
+      if (pathname.startsWith('/profile/groups')  && userId === groupObj.user_id){
+
+        console.log("Estoy en mi perfil");
+        
+          res = await callApiWithMessage(() =>
+          api.paginateRecipesByGroup(pageToFetch, 5, groupId, true)
+          
+        );
+
+        console.log(" respuesta"+ res);
+        
+      }else{
+
+        console.log("No estoy en mi perfil");
+        
+          res = await callApiWithMessage(() =>
+          api.paginateRecipesByGroup(pageToFetch, 5, groupId)
+        );
+      }
+      console.log('fetchRecipes', JSON.stringify(res, null, 2));
       
 
       setRecipes(prev =>

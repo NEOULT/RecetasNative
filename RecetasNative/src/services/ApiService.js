@@ -98,8 +98,8 @@ export class ApiService {
         return this._callApi("paginateRecipesByCategory", currentPage, limit, categoryId);
     }
 
-    paginateRecipesByGroup(currentPage = 1, limit = 10, groupId) {
-        return this._callApi("paginateRecipesByGroup", currentPage, limit, groupId);
+    paginateRecipesByGroup(currentPage = 1, limit = 10, groupId, isOwner) {
+        return this._callApi("paginateRecipesByGroup", currentPage, limit, groupId, isOwner);
     }
 
     paginateRecipesByGroupUser(currentPage = 1, limit = 10, groupId, userId) {

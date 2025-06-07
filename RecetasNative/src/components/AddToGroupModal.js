@@ -36,7 +36,7 @@ export default function AddToGroupModal({isVisible, onClose, data}) {
 
         useEffect(() => {
         fetchGroups(1);
-        }, []);
+        }, [isVisible]);
 
         useEffect(() => {
         if (info.message) {
