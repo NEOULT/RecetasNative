@@ -33,6 +33,11 @@ export class ApiService {
         return this._callApi("deleteAccount",user_id)
     }
 
+    softDeleteUser(user_id) {
+        return this._callApi("softDeleteUser", user_id);
+    }
+    
+
     getProfile(user_id) {
         return this._callApi("getProfile", user_id);
     }

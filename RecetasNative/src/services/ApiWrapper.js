@@ -77,6 +77,10 @@ export class ApiWrapper {
     return this.#putData(`user/profile/${user_id}`, data);
   }
 
+  softDeleteUser(user_id) {
+    return this.#putData(`user/softDelete/${user_id}`);
+  }
+
   //Block from Recipes
 
   createRecipe(data) {

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View , Pressable} from 'react-native';
 import ImageSelector from '../../../../components/common/ImagePicker';
 import ThemedText from '../../../../components/common/ThemedText';
 import InputV1 from '../../../../components/common/InputV1';
@@ -11,6 +11,9 @@ import InfoBox from '../../../../components/common/InfoBox';
 import { use, useEffect , useState} from 'react';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import DeleteAccountModal from '../../../../components/DeleteAccountModal';
+
 
 
   const api = new ApiService();
@@ -19,6 +22,9 @@ export default function ConfigScreen() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
+  const [deleteInput, setDeleteInput] = useState('');
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
 
@@ -50,6 +56,39 @@ export default function ConfigScreen() {
     }
   }
   , [info.message, clearInfo]);
+
+
+  const deleteMessage = "¿Estás seguro de que quieres eliminar tu cuenta? Perderás todos tus grupos y recetas Escribe tu nombre en MAYÚSCULAS para confirmar.";
+
+  const handleSoftDelete = () => {
+    setDeleteInput('');
+    setModalVisible(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!userValue?.name) return;
+    if (deleteInput === userValue.name.toUpperCase()) {
+      setDeleteLoading(true);
+      try {
+        
+        const response = await callApiWithMessage(() => api.softDeleteUser(userValue._id));
+
+        if(response.success) {
+          setUserValue(null);
+          router.navigate('/login');
+          setModalVisible(false);
+        }
+        
+        Alert.alert("Cuenta eliminada", "Tu cuenta ha sido eliminada correctamente.");
+        
+      } catch (e) {
+        Alert.alert("Error", "No se pudo eliminar la cuenta.");
+      }
+      setDeleteLoading(false);
+    } else {
+      Alert.alert("Error", "El nombre no coincide. Intenta de nuevo.");
+    }
+  };
 
 
   const onSubmit = async (data) => {
@@ -102,6 +141,20 @@ export default function ConfigScreen() {
 
   return (
     <View style={styles.container}>
+
+      <Pressable style={{ position: 'absolute', right: 25, top: 20}} onPress={handleSoftDelete}>
+        <Feather name="trash-2" size={30} color="black" />
+      </Pressable>
+
+      <DeleteAccountModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onConfirm={confirmDelete}
+        loading={deleteLoading}
+        value={deleteInput}
+        onChangeText={setDeleteInput}
+        message={deleteMessage}
+      />
 
       <InfoBox
         type={info.type}

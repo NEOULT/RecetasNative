@@ -69,7 +69,7 @@ export default function AddToGroupModal({isVisible, onClose, data}) {
         return (
             <Pressable style={styles.groupItem} onPress={() => fetchAddToGroup(item._id)}>
                 <Image source ={{ uri: item.image}} style={styles.image}/>
-                <ThemedText style={styles.text}>{item.description}</ThemedText>
+                <ThemedText style={styles.text}>{item.name}</ThemedText>
             </Pressable>
         );
     }

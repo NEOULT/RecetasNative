@@ -21,12 +21,18 @@ export default function GrupoScreen() {
   const [pagination, setPagination] = useState({ page: 1, hasMore: true });
   const [loading, setLoading] = useState(true);
 
+  console.log('GrupoScreen', groupId, groupObj, userId);
+  
+
   const fetchRecipes = useCallback(async (pageToFetch = 1) => {
     setLoading(true);
     try {
       const res = await callApiWithMessage(() =>
         api.paginateRecipesByGroup(pageToFetch, 5, groupId)
       );
+
+      console.log('fetchRecipes', res);
+      
 
       setRecipes(prev =>
         pageToFetch === 1
@@ -92,7 +98,7 @@ export default function GrupoScreen() {
           </View>
           <View style={styles.subrow}>
             <ThemedText type="details" textAlign='left'>
-              {recipes?.length || 0} recetas
+              {groupObj.recipes?.length || 0} recetas
             </ThemedText>
             <ThemedText type="default" style={{ fontWeight: 'bold', marginRight: 6 }}>•</ThemedText>
             <ThemedText type="details" textAlign='left'>
@@ -118,6 +124,9 @@ export default function GrupoScreen() {
         servings={item.servings}
         rating={item.rating}
         onPressRecipe={() => handlePressRecipe(item)}
+        recipe = {item}
+        recipeId = {item._id}
+        onRecipeDelete={() => fetchRecipes(1) }
       />
     </View>
     
