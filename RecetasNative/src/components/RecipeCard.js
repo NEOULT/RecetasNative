@@ -20,9 +20,7 @@ const RecipeCard = ({ avatar, username, rating, recipeImage, recipeTitle, isFavo
           )}
         </TouchableOpacity>
         <View style={styles.userInfo}>
-          <ThemedText maxLength={25} type="subtitle2" style={styles.username}>
-            {username}
-          </ThemedText>
+          <Text style={styles.username}>{username}</Text>
           <View style={styles.ratingContainer}>
             <Text>{rating}</Text>
           </View>

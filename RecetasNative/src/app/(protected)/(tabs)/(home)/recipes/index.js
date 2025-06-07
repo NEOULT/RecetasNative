@@ -25,7 +25,7 @@ export default function RecipesScreen() {
       const response = await callApiWithMessage(() =>  
         api.paginateRecipesPublic(pageToFetch, 5, viewer_id)  
       );
-      // console.log("Fetched recipes:", response.data.data);
+      //console.log("Fetched recipes:", JSON.stringify(response.data.data, null, 2));
       
       setRecipes(prev => 
         pageToFetch === 1 

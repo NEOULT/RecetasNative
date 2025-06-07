@@ -12,6 +12,7 @@ import { useApiMessage } from '../../../../hooks/useApiMessage';
 import { getUserId } from '../../../../hooks/useGetUserId';
 import { useFocusEffect } from '@react-navigation/native';
 
+
 const api = new ApiService();
 
 
@@ -23,6 +24,8 @@ export default function ProfileScreen({ userId : propUserId }) {
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
   
   const router = useRouter();
+  console.log(propUserId);
+  
 
   useFocusEffect(
     useCallback(() => {
@@ -30,15 +33,14 @@ export default function ProfileScreen({ userId : propUserId }) {
         try {
           const userId = propUserId || await getUserId();
           setAuthUserId(await getUserId());
-          console.log("UserId:", userId, "AuthUserId:", authUserId, "PropUserId:", propUserId);
-          
-          console.log("Respuetsa",userId !== authUserId);
-          
 
           const res = await callApiWithMessage(() => api.getProfile(userId));
           const userData = res.data.user.user;
           const recipes = res.data.user.recipes;
 
+          console.log("asd",userData); 
+          
+ 
           const mappedUser = {
             _id: userData._id,
             username: `${userData.name} ${userData.lastName}`,
@@ -50,6 +52,7 @@ export default function ProfileScreen({ userId : propUserId }) {
             recipesList: recipes,
             groupsList: userData.createdGroups || [],
             followingList: userData.following || [],
+            followersList: userData.followers || [],
           };
           setUser(mappedUser);
 
@@ -68,14 +71,35 @@ export default function ProfileScreen({ userId : propUserId }) {
     router.push('/profile/groups');
   }
 
-  const handlerPressProfile = (profile) => {
-    console.log('Pressed profile:', profile._id);
-    
-    router.navigate({
-      pathname: `/profile/[userId]/${profile._id}`,
-      params: { userId: profile._id }
-    });
+  const handlerPressFollowButton = async () => {
+  await callApiWithMessage(() => api.toggleFollowUser(authUserId, user._id));
+  // Vuelve a cargar el perfil actualizado
+  try {
+    const res = await callApiWithMessage(() => api.getProfile(user._id));
+    const userData = res.data.user.user;
+    const recipes = res.data.user.recipes;
+
+    const followersArr = Array.isArray(userData.followers) ? userData.followers : [];
+    const followingArr = Array.isArray(userData.following) ? userData.following : [];
+
+    const mappedUser = {
+      _id: userData._id,
+      username: `${userData.name} ${userData.lastName}`,
+      avatar: (recipes[0]?.images[0]?.url) ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
+      recipes: recipes.length,
+      groups: userData.createdGroups?.length || 0,
+      followersList: followersArr,
+      followingList: followingArr,
+      followers: followersArr.length,
+      following: followingArr.length,
+      recipesList: recipes,
+      groupsList: userData.createdGroups || [],
+    };
+    setUser(mappedUser);
+  } catch (e) {
+    // Maneja el error si lo deseas
   }
+};
 
   const ItemBarProfile = ({value, title}) => {
 
@@ -117,7 +141,10 @@ export default function ProfileScreen({ userId : propUserId }) {
 
       {/* Solo muestra el botón si el perfil NO es el del usuario autenticado */}
       {user._id !== authUserId && (
-        <ThemedButton title="Seguir" />
+        user?.followersList?.includes(authUserId) ? 
+        <ThemedButton onPress={() => handlerPressFollowButton(user._id)} title="Dejar de Seguir" /> :
+        <ThemedButton onPress={() => handlerPressFollowButton(user._id)} title="Seguir" />
+  
       )}
 
       <View style={[styles.row, styles.barProfile, {backgroundColor: colors.card}]}>
@@ -153,28 +180,6 @@ export default function ProfileScreen({ userId : propUserId }) {
           </ScrollView>
       </View>
 
-      <View style={[styles.column, {alignSelf: 'stretch'}]}>
-        <SeeMoreButton title="Seguidores" />
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {user.followers > 0 ? (
-              user.followingList.map(follower => (
-                console.log(follower._id),
-                
-                <Pressable
-                  key={follower._id || idx}
-                  onPress={() => handlerPressProfile(follower)} 
-                >
-                  <Image
-                    source={{ uri: follower.profileImage ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
-                    style={{ width: 100, height: 100, borderRadius: 50, marginRight: 10 }}
-                  />
-                </Pressable>
-              ))
-            ) : (
-              <InfoBox type="succes" message="No tienes seguidores aún." />
-            )}
-          </ScrollView>
-      </View>
     </View>
   </ScrollView>
   

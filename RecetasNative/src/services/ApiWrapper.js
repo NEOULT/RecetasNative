@@ -71,7 +71,6 @@ export class ApiWrapper {
 
   toggleFollowUser(data) {
     return this.#postData(`user/follow`, data);
-
   }
   
   getUserProfile(user_id) {
