@@ -9,6 +9,7 @@ import ThemedText from "../../../../components/common/ThemedText";
 import { getUserId } from "../../../../hooks/useGetUserId";
 import { ActivityIndicator } from "react-native-paper";
 import { useFocusEffect } from '@react-navigation/native';
+import { Pressable } from 'react-native';
 
 const api = new ApiService();
 
@@ -18,7 +19,10 @@ export default function FavoritesScreen() {
   const { info, callApiWithMessage, clearInfo, setInfo } = useApiMessage();
   const [loading, setLoading] = useState(true);
 
-  const favoriteId = "favorites"; // ID ficticio para la navegación
+  const [showFavoriteRecipes, setShowFavoriteRecipes] = useState(true);
+  const [showFavoriteGroups, setShowFavoriteGroups] = useState(false);
+
+  const favoriteGroups = []
 
   const fetchFavorites = useCallback(async (pageToFetch = 1) => {
     try {
@@ -121,19 +125,55 @@ export default function FavoritesScreen() {
         duration={2000}
       />
 
-      {recipes.length === 0 && !info.loading ? (
-        <ThemedText type="title" textAlign='center'>
-          No tienes recetas favoritas
+      {/* Recetas favoritas */}
+      <Pressable 
+      style={styles.pressableDropdown}
+      onPress={() => setShowFavoriteRecipes((prev) => !prev)}>
+        <ThemedText type="title" style={{marginTop: 10, marginBottom: 5}}>
+          {showFavoriteRecipes ? "Ocultar recetas favoritas ▲" : "Mostrar recetas favoritas ▼"}
         </ThemedText>
-      ) : (
-        <RecipeCardList
-          data={recipes}
-          onEndReached={handleLoadMore}
-          isFetchingMore={info.loading && pagination.page > 1}
-          onFavoriteToggle={toggleFavorite}
-          onPressAvatar={handlePressAvatar}
-          onPressRecipe={handlePressRecipe}
-        />
+      </Pressable>
+      {showFavoriteRecipes && (
+        recipes.length === 0 && !info.loading ? (
+          <ThemedText type="title" textAlign='center'>
+            No tienes recetas favoritas
+          </ThemedText>
+        ) : (
+          <RecipeCardList
+            data={recipes}
+            onEndReached={handleLoadMore}
+            isFetchingMore={info.loading && pagination.page > 1}
+            onFavoriteToggle={toggleFavorite}
+            onPressAvatar={handlePressAvatar}
+            onPressRecipe={handlePressRecipe}
+          />
+        )
+      )}
+
+      {/* Grupos favoritos */}
+      <Pressable 
+      style={styles.pressableDropdown}
+      onPress={() => setShowFavoriteGroups((prev) => !prev)}>
+        <ThemedText type="title" style={{marginTop: 20, marginBottom: 5}}>
+          {showFavoriteGroups ? "Ocultar grupos Seguidos ▲" : "Mostrar grupos Seguidos ▼"}
+        </ThemedText>
+      </Pressable>
+      {showFavoriteGroups && (
+        favoriteGroups.length === 0 ? (
+          <ThemedText type="title" textAlign='center'>
+            Aún no sigues ningún grupo
+          </ThemedText>
+        ) : (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {favoriteGroups.map(group => (
+              <Image
+                key={group._id}
+                source={{ uri: group.image ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
+                style={{ width: 200, height: 100, borderRadius: 10, marginRight: 10 }}
+              />
+            ))}
+          </ScrollView>
+        )
       )}
     </View>
   );
@@ -143,12 +183,26 @@ const styles = StyleSheet.create({
   screenContainer: {
     width: "100%",
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
 
   center: {
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
+
+  pressableDropdown: {
+    backgroundColor: '#fff',
+    marginVertical: 10,
+    marginHorizontal: 0,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 2, // sombra para Android
+    shadowColor: '#000', // sombra para iOS
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+
 });
