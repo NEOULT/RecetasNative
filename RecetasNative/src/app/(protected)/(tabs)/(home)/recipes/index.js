@@ -20,12 +20,12 @@ export default function RecipesScreen() {
   const fetchRecipes = useCallback(async (pageToFetch = 1) => {
     try {
       const viewer_id = await getUserId();
-      console.log("Fetching recipes for viewer_id:", viewer_id);
+      // console.log("Fetching recipes for viewer_id:", viewer_id);
       
       const response = await callApiWithMessage(() =>  
         api.paginateRecipesPublic(pageToFetch, 5, viewer_id)  
       );
-      console.log("Fetched recipes:", response.data.data);
+      // console.log("Fetched recipes:", response.data.data);
       
       setRecipes(prev => 
         pageToFetch === 1 
@@ -103,8 +103,8 @@ export default function RecipesScreen() {
 
   const handlePressAvatar = (user) => {
     console.log('user pressed:', user);
-    router.navigate({
-      pathname: '/profile/[userId]',
+    router.push({
+      pathname: `/recipes/[userId]/${user}`,
       params: { userId: user }
     });
   }

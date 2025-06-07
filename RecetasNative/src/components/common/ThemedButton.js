@@ -2,15 +2,27 @@
 import { useTheme } from '../../styles/theme/ThemeContext';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export const ThemedButton = ({ title, onPress, style }) => {
+export const ThemedButton = ({ title, onPress, style , disabled}) => {
   const { colors } = useTheme();
   
   return (
     <TouchableOpacity 
-      style={[styles.button, style,{borderWidth: 1, borderColor: colors.primary_color, borderRadius: 8, backgroundColor: colors.background }]}
+      style={[
+        styles.button, 
+        style,
+        {
+          borderWidth: 1,
+          borderColor: disabled ? 'gray' : colors.primary_color,
+          borderRadius: 8,
+          backgroundColor: disabled ? '#ccc' : colors.background, 
+          opacity: disabled ? 0.5 : 1, 
+        }
+        
+      ]}
       onPress={onPress}
+      disabled={disabled}
     >
-      <Text style={[styles.text, { color: colors.primary_color }]}>{title}</Text>
+      <Text style={[styles.text, { color: disabled ?  'gray' : colors.primary_color  }]}>{title}</Text>
     </TouchableOpacity>
   );
 };

@@ -1,11 +1,12 @@
 import { StyleSheet, View, Image, ActivityIndicator, FlatList } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, usePathname } from 'expo-router';
 import ThemedText from '../../../../../components/common/ThemedText';
 import ThemedButton from '../../../../../components/common/ThemedButton';
 import RecipeItem from '../../../../../components/RecipeItem';
 import { ApiService } from '../../../../../services/ApiService';
 import { useApiMessage } from '../../../../../hooks/useApiMessage';
 import { useEffect, useState, useCallback } from 'react';
+import { getUserId } from '../../../../../hooks/useGetUserId';
 
 
 const api = new ApiService();
@@ -13,20 +14,47 @@ const api = new ApiService();
 export default function GrupoScreen() {
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
   const { groupId, group, userId = null } = useLocalSearchParams();
+  const user = getUserId();
 
   const router = useRouter();
+  const pathname = usePathname();
   const groupObj = group ? JSON.parse(group) : null;
   
   const [recipes, setRecipes] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, hasMore: true });
   const [loading, setLoading] = useState(true);
 
+  console.log('GrupoScreen', groupId, groupObj, userId);
+  
   const fetchRecipes = useCallback(async (pageToFetch = 1) => {
+
     setLoading(true);
     try {
-      const res = await callApiWithMessage(() =>
-        api.paginateRecipesByGroup(pageToFetch, 5, groupId)
-      );
+
+      let res;
+
+
+      if (pathname.startsWith('/profile/groups')  && userId === groupObj.user_id){
+
+        console.log("Estoy en mi perfil");
+        
+          res = await callApiWithMessage(() =>
+          api.paginateRecipesByGroup(pageToFetch, 5, groupId, true)
+          
+        );
+
+        console.log(" respuesta"+ res);
+        
+      }else{
+
+        console.log("No estoy en mi perfil");
+        
+          res = await callApiWithMessage(() =>
+          api.paginateRecipesByGroup(pageToFetch, 5, groupId)
+        );
+      }
+      console.log('fetchRecipes', JSON.stringify(res, null, 2));
+      
 
       setRecipes(prev =>
         pageToFetch === 1
@@ -92,7 +120,7 @@ export default function GrupoScreen() {
           </View>
           <View style={styles.subrow}>
             <ThemedText type="details" textAlign='left'>
-              {recipes?.length || 0} recetas
+              {groupObj.recipes?.length || 0} recetas
             </ThemedText>
             <ThemedText type="default" style={{ fontWeight: 'bold', marginRight: 6 }}>•</ThemedText>
             <ThemedText type="details" textAlign='left'>
@@ -118,6 +146,9 @@ export default function GrupoScreen() {
         servings={item.servings}
         rating={item.rating}
         onPressRecipe={() => handlePressRecipe(item)}
+        recipe = {item}
+        recipeId = {item._id}
+        onRecipeDelete={() => fetchRecipes(1) }
       />
     </View>
     

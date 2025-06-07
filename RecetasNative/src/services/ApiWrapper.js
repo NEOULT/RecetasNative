@@ -71,6 +71,19 @@ export class ApiWrapper {
 
   toggleFollowUser(data) {
     return this.#postData(`user/follow`, data);
+
+  }
+  
+  getUserProfile(user_id) {
+    return this.#getData(`user/${user_id}`);
+  }
+
+  updateProfile(user_id, data) {
+    return this.#putData(`user/profile/${user_id}`, data);
+  }
+
+  softDeleteUser(user_id) {
+    return this.#putData(`user/softDelete/${user_id}`);
   }
 
   //Block from Recipes
@@ -120,8 +133,8 @@ export class ApiWrapper {
     return this.#postData(`recipe/paginated`, data);
   }
 
-  paginateRecipesByGroup(currentPage = 1, limit = 10, groupId) {
-    const data = { currentPage, limit, groups:groupId, isPublic: true };
+  paginateRecipesByGroup(currentPage = 1, limit = 10, groups, isOwner = false) {
+    const data = isOwner ? { currentPage, limit, groups } : { currentPage, limit, groups, isPublic:true };
     return this.#postData(`recipe/paginated`, data);
   }
 
@@ -160,17 +173,17 @@ export class ApiWrapper {
   }
 
   getPaginatedGroups(currentPage = 1, limit = 10) {
-    const data = { currentPage, limit, isPublic: true };
+    const data = { currentPage, limit, isPublic: true, deletedAt: '' };
     return this.#postData(`group/paginate`, data);
   }
 
   getPaginateGroupsByUser(currentPage = 1, limit = 10, userId) {
-    const data = { currentPage, limit, userId};
+    const data = { currentPage, limit, userId, deletedAt: ''};
     return this.#postData(`group/paginate`, data);
   }
 
   getPaginatePublicGroupsByUser(currentPage = 1, limit = 10, userId, isPublic = true) {
-    const data = { currentPage, limit, userId, isPublic };
+    const data = { currentPage, limit, userId, isPublic, deletedAt: '' };
     return this.#postData(`group/paginate`, data);
   }
 

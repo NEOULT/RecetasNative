@@ -71,8 +71,8 @@ export default function ProfileScreen({ userId : propUserId }) {
   const handlerPressProfile = (profile) => {
     console.log('Pressed profile:', profile._id);
     
-    router.push({
-      pathname: '/profile/[userId]',
+    router.navigate({
+      pathname: `/profile/[userId]/${profile._id}`,
       params: { userId: profile._id }
     });
   }

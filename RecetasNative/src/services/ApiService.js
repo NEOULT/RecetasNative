@@ -33,6 +33,11 @@ export class ApiService {
         return this._callApi("deleteAccount",user_id)
     }
 
+    softDeleteUser(user_id) {
+        return this._callApi("softDeleteUser", user_id);
+    }
+    
+
     getProfile(user_id) {
         return this._callApi("getProfile", user_id);
     }
@@ -40,6 +45,13 @@ export class ApiService {
     toggleFollowUser(current_user_id, target_user_id) {
         const data = { current_user_id, target_user_id };
         return this._callApi("toggleFollowUser", data);
+    }
+    getUserProfile(user_id) {
+        return this._callApi("getUserProfile", user_id);
+    }
+
+    updateProfile(user_id, data) {
+        return this._callApi("updateProfile", user_id, data);
     }
 
     // Block from Recipes
@@ -90,8 +102,8 @@ export class ApiService {
         return this._callApi("paginateRecipesByCategory", currentPage, limit, categoryId);
     }
 
-    paginateRecipesByGroup(currentPage = 1, limit = 10, groupId) {
-        return this._callApi("paginateRecipesByGroup", currentPage, limit, groupId);
+    paginateRecipesByGroup(currentPage = 1, limit = 10, groupId, isOwner) {
+        return this._callApi("paginateRecipesByGroup", currentPage, limit, groupId, isOwner);
     }
 
     paginateRecipesByGroupUser(currentPage = 1, limit = 10, groupId, userId) {

@@ -8,6 +8,7 @@ export default function InputV1 ({
     height = 33, 
     style, 
     value,
+    inactive = false,
     onChangeText,
     ...props 
     })
@@ -21,7 +22,7 @@ export default function InputV1 ({
             placeholderTextColor="gray"
             value={value}
             onChangeText={onChangeText}
-            style={[styles.input, style, {height}]}
+            style={[styles.input, style, {height},  inactive && styles.inactiveInput]}
             {...props}
             />
         </View>
@@ -44,5 +45,11 @@ inputContainer:{
     flexDirection: 'column',
     justifyContent: 'flex-start',
     gap: 10,
+},
+inactiveInput: {
+  backgroundColor: '#f0f0f0',
+  color: '#aaa'
 }
+
+
 });

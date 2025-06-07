@@ -6,7 +6,7 @@ export function useApiMessage() {
   const callApiWithMessage = async (apiCall) => {
     try {
       const res = await apiCall();
-      console.log("API Response:", res);
+      // console.log("API Response:", res);
       
       if (res.success === false) {
         // Si el mensaje es un array, únelos con saltos de línea

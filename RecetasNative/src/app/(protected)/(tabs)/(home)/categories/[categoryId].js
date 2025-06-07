@@ -24,6 +24,7 @@ export default function CategoriesIDScreen() {
             const res = await callApiWithMessage(() =>
             api.paginateRecipesByCategory(pageToFetch, 5, categoryId)
         );
+        clearInfo(); 
         setRecipes(prev =>
             pageToFetch === 1
             ? res.data.data

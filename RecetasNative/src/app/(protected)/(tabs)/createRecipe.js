@@ -33,21 +33,16 @@ export default function CreateRecipeScreen({}) {
 
   let recipeValues = null;
 
+
   if (recipe){
 
     const recipe2 = JSON.parse(recipe);
 
     const {time, unit} = convertIsoToTime(recipe2.preparation_time);
     
-
-    console.log('recipe2:', recipe2);
-
-    console.log(recipe2.ingredients);
     
     
     recipeValues = {
-
-      //Falta arreglar la imagen
         images: [{ url: recipe2.images[0]?.url }],
         title: recipe2.title,
         description: recipe2.description,

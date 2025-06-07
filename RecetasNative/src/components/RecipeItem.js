@@ -26,8 +26,7 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
   const { colors } = useTheme();
   const pathname = usePathname();
   const router = useRouter();
-  const showMoreButton = pathname === '/profile/recipes';
-
+  const showMoreButton = pathname === '/profile/recipes' || pathname.startsWith('/profile/groups/');
   
   const { openModal } = useAddToGroup();
 
@@ -135,20 +134,37 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
                   styles.menuContainer,
                   { top: menuPos.top, right: menuPos.right }, { backgroundColor: colors.card}
                 ]}>
-                  <Pressable style={styles.menuItem} onPress={() => {
+                  { !pathname.startsWith('/profile/groups') && (
+                    
+                    <Pressable style={styles.menuItem} onPress={() => {
                         setShowOptions(false); 
                         if (recipeId) openModal(recipeId); }}>
                     <Feather name="plus" size={21} color={colors.regular_textcolor} />
                     <ThemedText>Añadir</ThemedText>
-                  </Pressable>
+                  </Pressable>)
+                  }
                   <Pressable style={styles.menuItem} onPress={() => { 
+
                       setShowOptions(false);
+              
+                      if (pathname.startsWith('/profile/groups/')) {
+
+                      const pathParts = pathname.split('/');
+                      const groupId = pathParts[3];
+
                       
-                      recipe = JSON.stringify(recipe);
+                      const path = `/profile/groups/${groupId}/editRecipe`;
+
                       router.navigate({
-                        pathname: `/profile/recipes/editRecipe`,
-                        params: { recipe, recipeId },
+                        pathname: path,
+                        params: { recipe: JSON.stringify(recipe), recipeId },
                       });
+                    } else {
+                      router.navigate({
+                        pathname: '/profile/recipes/editRecipe',
+                        params: { recipe: JSON.stringify(recipe), recipeId },
+                      });
+                    }
                       }}>
                     <Feather name="edit-2" size={17} color={colors.regular_textcolor} />
                     <ThemedText>Editar</ThemedText>
@@ -158,10 +174,15 @@ const RecipeItem = ({ imageUrl, title, time, difficulty, servings, rating, onPre
 
                       try{
                       
-                        const response =  await callApiWithMessage(() => api.deleteRecipe(recipeId));
+                        if ( pathname.startsWith('/profile/groups/')) {
+                          const response = await callApiWithMessage(() => api.removeRecipeFromGroup(pathname.split('/')[3], recipeId));
+                          if(response.success) onRecipeDelete();
+                        }else{
+
+                          const response =  await callApiWithMessage(() => api.deleteRecipe(recipeId));
                         
-                        if(response.success) onRecipeDelete();
-                        
+                          if(response.success) onRecipeDelete();
+                        }
                       }catch (error) {
                         console.error("Error al eliminar la receta:", error);
                       }
