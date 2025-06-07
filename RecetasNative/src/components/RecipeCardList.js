@@ -12,7 +12,7 @@ const RecipeCardList = ({
 }) => {
   const renderItem = ({ item }) => (
     // console.log("Rendering item:", item.id),
-      console.log("Rendering item:", item.isFavorite),
+      // console.log("Rendering item:", item.isFavorite),
       
     <RecipeCard  
       avatar={item.user_id.profileImage}

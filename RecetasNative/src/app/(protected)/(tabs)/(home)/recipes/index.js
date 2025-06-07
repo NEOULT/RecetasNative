@@ -103,8 +103,8 @@ export default function RecipesScreen() {
 
   const handlePressAvatar = (user) => {
     console.log('user pressed:', user);
-    router.navigate({
-      pathname: '/profile/[userId]',
+    router.push({
+      pathname: `/recipes/[userId]/${user}`,
       params: { userId: user }
     });
   }

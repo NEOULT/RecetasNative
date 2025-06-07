@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import ProfileScreen from "./index";
+import ProfileScreen from "../../../profile/index";
 
 export default function profileByIdScreen() {
 
