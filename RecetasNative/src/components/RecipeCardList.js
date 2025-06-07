@@ -23,7 +23,7 @@ const RecipeCardList = ({
       isFavorite={item.isFavorite}
       onFavoriteToggle={() => onFavoriteToggle(item._id)}
       onPressRecipe={() => onPressRecipe(item)}
-      onPressAvatar={() => onPressAvatar(item)}
+      onPressAvatar={() => onPressAvatar(item.user_id._id)}
     />
   );
 

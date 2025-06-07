@@ -5,68 +5,76 @@ import Feather from '@expo/vector-icons/Feather';
 import { useTheme } from '../../../../styles/theme/ThemeContext'
 import RecipeItemV2 from '../../../../components/RecipeItemV2';
 import { useRouter } from 'expo-router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ApiService } from '../../../../services/ApiService';
 import InfoBox from '../../../../components/common/InfoBox';
 import { useApiMessage } from '../../../../hooks/useApiMessage';
 import { getUserId } from '../../../../hooks/useGetUserId';
+import { useFocusEffect } from '@react-navigation/native';
 
 const api = new ApiService();
 
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ userId : propUserId }) {
 
   const { colors } = useTheme();
   const [user, setUser] = useState(null);
   const [authUserId, setAuthUserId] = useState(null);
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
-
-  const user2 = {
-    username: 'ChefMaster',
-    avatar: 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
-    recipes: 120,
-    groups: 5,
-    followers: 300,
-    following: 150
-  }
-
+  
   const router = useRouter();
 
-  useEffect(() => {
-  async function fetchUser() {
-    try {
-      const userId = await getUserId();
-      setAuthUserId(userId);
-      
-      const res = await callApiWithMessage(() => api.getProfile(userId));
-      const userData = res.data.user.user;
-      const recipes = res.data.user.recipes;
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchUser() {
+        try {
+          const userId = propUserId || await getUserId();
+          setAuthUserId(await getUserId());
+          console.log("UserId:", userId, "AuthUserId:", authUserId, "PropUserId:", propUserId);
+          
+          console.log("Respuetsa",userId !== authUserId);
+          
 
-      const mappedUser = {
-        _id: userData._id,
-        username: `${userData.name} ${userData.lastName}`,
-        avatar:
-          (recipes[0]?.images[0]?.url) ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
-        recipes: recipes.length,
-        groups: userData.createdGroups?.length || 0,
-        followers: userData.followers?.length || 0,   // <-- No existe, será 0
-        following: userData.following?.length || 0,   // <-- No existe, será 0
-        recipesList: recipes,
-        groupsList: userData.createdGroups || []
-      };
-      setUser(mappedUser);
-    } catch (e) {
-      setUser(null);
-    }
-  }
-  fetchUser();
-}, []);
+          const res = await callApiWithMessage(() => api.getProfile(userId));
+          const userData = res.data.user.user;
+          const recipes = res.data.user.recipes;
+
+          const mappedUser = {
+            _id: userData._id,
+            username: `${userData.name} ${userData.lastName}`,
+            avatar: (recipes[0]?.images[0]?.url) ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
+            recipes: recipes.length,
+            groups: userData.createdGroups?.length || 0,
+            followers: userData.followers?.length || 0,
+            following: userData.following?.length || 0,
+            recipesList: recipes,
+            groupsList: userData.createdGroups || [],
+            followingList: userData.following || [],
+          };
+          setUser(mappedUser);
+
+        } catch (e) {
+          setUser(null);
+        }
+      }
+      fetchUser();
+    }, [propUserId])
+  );
 
   const handleSeeMoreRecipes = () => {
     router.push('/profile/recipes');
   }
   const handleSeeMoreGroups = () => {
     router.push('/profile/groups');
+  }
+
+  const handlerPressProfile = (profile) => {
+    console.log('Pressed profile:', profile._id);
+    
+    router.push({
+      pathname: '/profile/[userId]',
+      params: { userId: profile._id }
+    });
   }
 
   const ItemBarProfile = ({value, title}) => {
@@ -113,10 +121,10 @@ export default function ProfileScreen() {
       )}
 
       <View style={[styles.row, styles.barProfile, {backgroundColor: colors.card}]}>
-        <ItemBarProfile value={user.recipes} title="recipes" />
-        <ItemBarProfile value={user.groups} title="groups" />
-        <ItemBarProfile value={user.followers} title="followers" />
-        <ItemBarProfile value={user.following} title="following" />
+        <ItemBarProfile value={user.recipes} title="recetas" />
+        <ItemBarProfile value={user.groups} title="grupos" />
+        <ItemBarProfile value={user.followers} title="Seguidores" />
+        <ItemBarProfile value={user.following} title="Seguidos" />
       </View>
 
       <View style={[styles.column, {alignSelf: 'stretch'}]}>
@@ -142,6 +150,29 @@ export default function ProfileScreen() {
                 style={{ width: 300, height: 150, borderRadius: 10, marginRight: 10 }}
               />
             ))}
+          </ScrollView>
+      </View>
+
+      <View style={[styles.column, {alignSelf: 'stretch'}]}>
+        <SeeMoreButton title="Seguidores" />
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {user.followers > 0 ? (
+              user.followingList.map(follower => (
+                console.log(follower._id),
+                
+                <Pressable
+                  key={follower._id || idx}
+                  onPress={() => handlerPressProfile(follower)} 
+                >
+                  <Image
+                    source={{ uri: follower.profileImage ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
+                    style={{ width: 100, height: 100, borderRadius: 50, marginRight: 10 }}
+                  />
+                </Pressable>
+              ))
+            ) : (
+              <InfoBox type="succes" message="No tienes seguidores aún." />
+            )}
           </ScrollView>
       </View>
     </View>

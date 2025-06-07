@@ -101,8 +101,12 @@ export default function RecipesScreen() {
     router.navigate(`/recipes/${recipe.id}`); 
   }
 
-  const handlePressAvatar = (avatar) => {
-    console.log('Avatar selected:', avatar._id);
+  const handlePressAvatar = (user) => {
+    console.log('user pressed:', user);
+    router.navigate({
+      pathname: '/profile/[userId]',
+      params: { userId: user }
+    });
   }
 
   if (loading) {
@@ -132,7 +136,7 @@ export default function RecipesScreen() {
           onEndReached={handleLoadMore}
           isFetchingMore={info.loading && pagination.page > 1}
           onFavoriteToggle={toggleFavorite}
-          onPressAvatar={handlePressAvatar}
+          onPressAvatar={(user) => handlePressAvatar(user)}
           onPressRecipe={handlePressRecipe}
         />
       )}
