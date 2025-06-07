@@ -37,6 +37,14 @@ export class ApiService {
         return this._callApi("getProfile", user_id);
     }
 
+    getUserProfile(user_id) {
+        return this._callApi("getUserProfile", user_id);
+    }
+
+    updateProfile(user_id, data) {
+        return this._callApi("updateProfile", user_id, data);
+    }
+
     // Block from Recipes
 
     createRecipe(data) {

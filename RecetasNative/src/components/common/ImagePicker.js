@@ -10,6 +10,8 @@ export default function ImageSelector({
   onChange,
   uploadType,
   uploadMetadata = {},
+  style,
+  title
 }) {
   const { imageUri, setImageUri, pickImage, takePhoto } = useImagePicker();
   const [image, setImage] = useState(value || null);
@@ -116,7 +118,7 @@ export default function ImageSelector({
 
   return (
     <TouchableOpacity
-      style={[styles.square, { width, height }]}
+      style={[styles.square, { width, height }, style]}
       onPress={handlePress}
       disabled={uploading} // Opcional, bloquea mientras sube
     >
@@ -125,9 +127,9 @@ export default function ImageSelector({
       ) : (
         <View style={styles.placeholder}>
           <MaterialIcons name="photo-camera" size={40} color="#999" />
-          <Text style={{ color: "#999", marginTop: 5 }}>
-            {uploading ? "Subiendo..." : "Agregar foto"}
-          </Text>
+          { title && <Text style={{ color: "#999", marginTop: 5 }}>
+            {uploading ? "Subiendo..." : title = "Agrega una foto"}
+          </Text>}
         </View>
       )}
     </TouchableOpacity>

@@ -69,6 +69,14 @@ export class ApiWrapper {
     return this.#getData(`user/me/${user_id}`);
   }
 
+  getUserProfile(user_id) {
+    return this.#getData(`user/${user_id}`);
+  }
+
+  updateProfile(user_id, data) {
+    return this.#putData(`user/profile/${user_id}`, data);
+  }
+
   //Block from Recipes
 
   createRecipe(data) {
