@@ -90,8 +90,8 @@ export class ApiService {
         return this._callApi("paginateRecipesByUser", currentPage, limit, userId);
     }
 
-    paginateRecipesPublic(currentPage = 1, limit = 10, viewer_id = null) {
-        return this._callApi("paginateRecipesPublic", currentPage, limit,viewer_id);
+    paginateRecipesPublic(currentPage = 1, limit = 10, viewer_id = null, rest) {
+        return this._callApi("paginateRecipesPublic", currentPage, limit,viewer_id, rest);
     }
 
     paginateRecipesPublicByUser(currentPage = 1, limit = 10, userId, isPublic) {

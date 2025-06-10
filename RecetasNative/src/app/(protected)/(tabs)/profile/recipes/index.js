@@ -17,7 +17,6 @@ export default function RecipesProfileScreen() {
   const [pagination, setPagination] = useState({ page: 1, hasMore: true });
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
 
-
   const fetchRecipes = useCallback(async (pageToFetch = 1) => {
 
     const userId = await getUserId();

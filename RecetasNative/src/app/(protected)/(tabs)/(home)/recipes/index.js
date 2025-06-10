@@ -23,10 +23,12 @@ export default function RecipesScreen() {
       // console.log("Fetching recipes for viewer_id:", viewer_id);
       
       const response = await callApiWithMessage(() =>  
-        api.paginateRecipesPublic(pageToFetch, 5, viewer_id)  
+        api.paginateRecipesPublic(pageToFetch, 5, viewer_id, { "$ne": viewer_id })  
       );
       //console.log("Fetched recipes:", JSON.stringify(response.data.data, null, 2));
       
+      clearInfo();
+
       setRecipes(prev => 
         pageToFetch === 1 
           ? response.data.data 
@@ -38,10 +40,6 @@ export default function RecipesScreen() {
         hasMore: pageToFetch < response.data.totalPages
       });
       
-      setInfo({
-        message: "Recetas cargadas",
-        type: "success"
-      });
     } catch (error) {
       console.error("Error fetching recipes:", error);
     } finally {
