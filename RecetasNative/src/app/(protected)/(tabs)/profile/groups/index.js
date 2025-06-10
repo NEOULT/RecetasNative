@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     paddingHorizontal: 15,
     marginBottom: 10,
+    marginTop: 20,
   },
   loaderContainer: {
     flex: 1,

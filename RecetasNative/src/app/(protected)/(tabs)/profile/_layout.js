@@ -20,7 +20,7 @@ export default function PerfilLayout() {
     <Stack
       screenOptions={{
         title: 'Perfil',
-        headerTitleAlign: 'center',
+        headerTitleAlign: 'right',
         // headerShown: false,
         headerStyle: {
           backgroundColor: colors.card,

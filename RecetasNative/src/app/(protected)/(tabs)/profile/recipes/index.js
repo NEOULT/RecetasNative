@@ -33,7 +33,6 @@ export default function RecipesProfileScreen() {
       );
     } else {
       response = await callApiWithMessage(() =>
-        //Falta el fetch para los recipes de usuario
         api.paginateRecipesByUser(pageToFetch, 5, userId)
       );
     }
@@ -131,9 +130,7 @@ export default function RecipesProfileScreen() {
         onHide={clearInfo} 
         duration={2000} 
       />
-      <View style={styles.search}>
-        <Text>Search</Text>
-      </View>
+
 
       <View style={styles.row}>
         <SelectTags name="Todas" />
@@ -160,17 +157,6 @@ const styles = StyleSheet.create({
     flex: 1,
 
   },
-  search: {
-    width: "90%",
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 10,
-    padding: 8,
-    marginHorizontal: 20,
-    marginBottom: 10,
-    marginTop: 20,
-  },
   tags: {
     borderWidth: 1,
     borderRadius: 10,
@@ -194,6 +180,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     paddingHorizontal: 15,
     marginBottom: 10,
+    marginTop: 20,
   },
   loaderContainer: {
   flex: 1,

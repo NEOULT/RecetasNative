@@ -64,7 +64,10 @@ export default function RecipeDetail() {
         />
 
         <View style={styles.container}>
-          <ThemedText type="title" textAlign='left'>{recipe.title}</ThemedText>
+          <View style={{alignSelf: "flex-start"}}>
+            <ThemedText type="title" textAlign='left'>{recipe.title}</ThemedText>
+          </View>
+          
           <ThemedText type="subtitle2">{recipe.description}</ThemedText>
 
           <View style={styles.row}>
@@ -85,12 +88,8 @@ export default function RecipeDetail() {
                 <MaterialIcons
                   name="whatshot"
                   size={22}
-                  color={
-                    difficulty === 'easy' ? 'green' :
-                      difficulty === 'medium' ? '#ffe806' :
-                        difficulty === 'hard' ? 'red' :
-                          'gray'
-                  }
+                  color="gray"
+                  
                 />
               }
             >{difficulty}</ThemedText>
@@ -119,15 +118,17 @@ export default function RecipeDetail() {
             </View>
             <View style={styles.subrow}>
               
-              <ThemedText type="details" style={{ marginLeft: 5 }}>
+              {/* <ThemedText type="details" style={{ marginLeft: 5 }}>
                 {rating?.toFixed(1)}
-              </ThemedText>
+              </ThemedText> */}
             </View>
           </View>
 
-          <ThemedText type="subtitle1" style={{ marginTop: 10 }}>
-            Ingredientes
-          </ThemedText>
+          <View style={styles.subtitle}> 
+            <ThemedText type="subtitle1">
+              Ingredientes
+            </ThemedText>
+          </View>
 
           <View>
             {ingredients.map((ingredient, index) => (
@@ -145,16 +146,18 @@ export default function RecipeDetail() {
             ))}
           </View>
 
-          <ThemedText type="subtitle1" style={{ marginVertical: 10 }}>
-            Preparación
-          </ThemedText>
+          <View style={[styles.subtitle, {marginBottom: 10}]}>
+            <ThemedText type="subtitle1" >
+              Preparación
+            </ThemedText>
+          </View>
 
           <View style={{ gap: 35 }}>
             {steps.map((step, index) => (
               <View key={index} style={[styles.column, { minWidth: '100%' }]}>
                 <View style={[styles.column, styles.cardContainer]}>
                   <View style={[styles.row, styles.cardContent]}>
-                    <ThemedText type="subtitle3">
+                    <ThemedText type="subtitle3" style={{color: "black"}}> 
                       Paso {index + 1}
                     </ThemedText>
                   </View>
@@ -206,8 +209,16 @@ const styles = StyleSheet.create({
     alignItems: 'left'
   },
   cardContainer: {
-    backgroundColor: '#dadada',
-    borderRadius: 10,
+    backgroundColor: "white",
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -10,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   cardContent: {
     paddingHorizontal: 16
@@ -215,7 +226,9 @@ const styles = StyleSheet.create({
   stepImage: {
     width: '100%',
     height: 180,
-    borderRadius: 10,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    
   },
   recipeImage: {
     width: '100%',
@@ -227,5 +240,9 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     marginRight: 5,
-  }
+  },
+  subtitle: {
+    alignSelf: 'flex-start',
+    marginTop: 20,
+  },
 });

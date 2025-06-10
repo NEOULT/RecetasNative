@@ -21,9 +21,9 @@ const RecipeCard = ({ avatar, username, rating, recipeImage, recipeTitle, isFavo
         </TouchableOpacity>
         <View style={styles.userInfo}>
           <Text style={styles.username}>{username}</Text>
-          <View style={styles.ratingContainer}>
+          {/* <View style={styles.ratingContainer}>
             <Text>{rating}</Text>
-          </View>
+          </View> */}
         </View>
         <TouchableOpacity onPress={onFavoriteToggle} style={styles.favIcon}>
           <Icon name={isFavorite ? 'heart' : 'heart-outline'} size={24} color="red" />

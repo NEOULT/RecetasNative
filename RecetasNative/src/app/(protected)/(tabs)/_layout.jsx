@@ -107,6 +107,7 @@ function TabLayout() {
         }} />
       
       <Tabs.Screen name="createRecipe" options={{
+        title: 'Nueva receta',
         href: null
       }} />
       <Tabs.Screen name="index" options={{ 

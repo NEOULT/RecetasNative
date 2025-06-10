@@ -6,12 +6,12 @@ import ThemedText from "./common/ThemedText";
 import SelectPicker from "./common/SelectPicker";
 import { unitOptions } from "../constants/options";
 
-export default function IngredientItem({ value = {}, onChange, onPressDelete }) {
+export default function IngredientItem({ value = {}, onChange, onPressDelete, ingredient = 1 }) {
 
     return (
         <View style={styles.container}>
             <ItemTag
-                number={1}
+                number={ingredient}
                 position={{ position: "absolute", top: -15, left: -13 }}
                 scale={0.9}
             />

@@ -13,12 +13,12 @@ import { ApiService } from '../../../services/ApiService';
 import { useApiMessage } from '../../../hooks/useApiMessage';
 import { difficultyOptions, unitTimeOptions } from '../../../constants/options';
 import InfoBox from '../../../components/common/InfoBox';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useLayoutEffect} from 'react';
 import { convertTimeToIso, convertIsoToTime} from '../../../hooks/useTimeIso.js';
 import PlusPicker from '../../../components/PlusPicker';
 import CategoryTag from '../../../components/CategoryTag.js'
 import { getUserId } from '../../../hooks/useGetUserId.js';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useNavigation} from 'expo-router';
 const api = new ApiService();
 
 export default function CreateRecipeScreen({}) {
@@ -70,7 +70,20 @@ export default function CreateRecipeScreen({}) {
         }
   }
  //Aca uso useRef para evitar que el efecto se ejecute en el primer renderizado y solo lo haga escuchando al info y los otros componentes
-  
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <ThemedButton
+          title="Guardar"
+          onPress={handleSubmit(onSubmit)}
+          style={{ marginRight: 10 }}
+        />
+      ),
+    });
+  }, [navigation, handleSubmit, onSubmit]);
+
   useEffect(() => {
 
     const fetchCategories = async () => {
@@ -152,7 +165,7 @@ export default function CreateRecipeScreen({}) {
 
   const onSubmit = async (data) => {
 
-    //Faltan por implementar
+
     data.user_id = await getUserId();
     data.preparation_time =`${convertTimeToIso(data.time, data.timeUnit)}`;
     
@@ -176,8 +189,12 @@ export default function CreateRecipeScreen({}) {
 
       if(response.success && recipeValues){
         console.log('Receta actualizada exitosamente:');
+        navigation.goBack();
+        reset();
       }else{
         console.log('Receta creada exitosamente:');
+        navigation.goBack();
+        reset();
       }
 
 
@@ -229,7 +246,6 @@ export default function CreateRecipeScreen({}) {
           )}
         />
 
-        <ThemedButton title="Guardar" onPress={handleSubmit(onSubmit)}/>
 
         <Controller
           control={control}
@@ -363,8 +379,10 @@ export default function CreateRecipeScreen({}) {
             </View>
           )}
         />
+        <View style={styles.subtitle}>
+          <ThemedText type='subtitle1' style={{alignSelf: 'left'}}>Ingredientes:</ThemedText>
+        </View>
         
-        <ThemedText type='subtitle1' style={{alignSelf: 'left'}}>Ingredientes:</ThemedText>
         <View style={styles.listContainer}>
           {ingredientFields.map((field, index) => (
             <Controller
@@ -376,6 +394,7 @@ export default function CreateRecipeScreen({}) {
                   value={value}
                   onChange={onChange}
                   onPressDelete={() => removeIngredient(index)}
+                  ingredient={index + 1}
                 />
               )}
             />
@@ -386,7 +405,11 @@ export default function CreateRecipeScreen({}) {
           />
         </View>
 
-        <ThemedText type='subtitle1' textAlign='left'>Preparación:</ThemedText>
+
+        <View style={styles.subtitle}>
+          <ThemedText type='subtitle1' textAlign='left'>Preparación:</ThemedText>
+        </View>
+        
         <View style={styles.listContainer}>
           {stepFields.map((field, index) => (
             <Controller
@@ -395,7 +418,7 @@ export default function CreateRecipeScreen({}) {
               name={`steps.${index}`}
               render={({ field: { value, onChange } }) => (
                 <StepItem
-                  step={field.id}
+                  step={index + 1}
                   recipe={recipeId}
                   value={value}
                   onChange={onChange}
@@ -408,6 +431,7 @@ export default function CreateRecipeScreen({}) {
             title="Agregar paso"
             onPress={() => appendStep({ description: '', stepImage: '' })}
           />
+          
         </View>
 
       </View>
@@ -462,6 +486,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     flexWrap: 'wrap',
-  }
+  },
+  subtitle: {
+    alignSelf: 'flex-start',
+    marginVertical: 15,
+  },
   
 });
