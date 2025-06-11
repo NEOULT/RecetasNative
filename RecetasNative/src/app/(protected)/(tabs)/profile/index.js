@@ -11,6 +11,7 @@ import InfoBox from '../../../../components/common/InfoBox';
 import { useApiMessage } from '../../../../hooks/useApiMessage';
 import { getUserId } from '../../../../hooks/useGetUserId';
 import { useFocusEffect } from '@react-navigation/native';
+import GroupCardV2 from '../../../../components/GroupCardV2';
 
 
 const api = new ApiService();
@@ -38,13 +39,13 @@ export default function ProfileScreen({ userId : propUserId }) {
           const userData = res.data.user.user;
           const recipes = res.data.user.recipes;
 
-          console.log("asd",userData); 
+          // console.log("asd",userData); 
           
  
           const mappedUser = {
             _id: userData._id,
             username: `${userData.name} ${userData.lastName}`,
-            avatar: (recipes[0]?.images[0]?.url) ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
+            avatar: userData.profileImage ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
             recipes: recipes.length,
             groups: userData.createdGroups?.length || 0,
             followers: userData.followers?.length || 0,
@@ -85,7 +86,7 @@ export default function ProfileScreen({ userId : propUserId }) {
     const mappedUser = {
       _id: userData._id,
       username: `${userData.name} ${userData.lastName}`,
-      avatar: (recipes[0]?.images[0]?.url) ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
+      avatar: userData.profileImage ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
       recipes: recipes.length,
       groups: userData.createdGroups?.length || 0,
       followersList: followersArr,
@@ -171,10 +172,11 @@ export default function ProfileScreen({ userId : propUserId }) {
         <SeeMoreButton title="Grupos de cocina" onPress={handleSeeMoreGroups} />
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {user.groupsList.map(group => (
-              <Image
+              <GroupCardV2
                 key={group._id}
-                source={{ uri: group.image ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg' }}
-                style={{ width: 300, height: 150, borderRadius: 10, marginRight: 10 }}
+                group={group}
+                onPress={() => console.log('Grupo seleccionado:', group.name)}
+                
               />
             ))}
           </ScrollView>

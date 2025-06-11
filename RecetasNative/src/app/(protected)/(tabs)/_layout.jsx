@@ -6,9 +6,13 @@ import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useTheme } from '../../../styles/theme/ThemeContext.js';
 import AddButton from '../../../components/AddButtonModal.js';
-import { useState } from 'react';
+import { useState, useEffect, use } from 'react';
 import AddToGroupModal from '../../../components/AddToGroupModal';
 import { useAddToGroup, AddToGroupProvider } from '../../../context/AddToGroupContext';
+import { ApiService } from '../../../services/ApiService.js';
+import { getUserId } from '../../../hooks/useGetUserId.js';
+
+const api = new ApiService();
 
 const router = useRouter(); 
 
@@ -26,6 +30,24 @@ function TabLayout() {
   const { setScheme, isDark } = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
   const { isVisible, closeModal, recipeId } = useAddToGroup();
+  const [ userProfileImage, setUserProfileImage ] = useState(null);
+
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const userId = await getUserId();
+      
+      const res = await api.getProfile(userId);
+      const userData = res.data.user.user;
+
+      setUserProfileImage(userData.profileImage || 'https://randomuser.me/api/portraits')
+      console.log('userData', userData);
+      
+    };
+    fetchUserProfile();
+  }
+  , [router]);
+
 
   return (
     <>
@@ -51,7 +73,7 @@ function TabLayout() {
             <Pressable onPress={() => router.push('/profile')}>
                 <Image 
                 source={{
-                  uri: 'https://randomuser.me/api/portraits/women/79.jpg'
+                  uri: userProfileImage || 'https://randomuser.me/api/portraits'
                 }}
                 style={{ width: 40, height: 40, borderRadius: 20, marginRight: 20 }}
                 />

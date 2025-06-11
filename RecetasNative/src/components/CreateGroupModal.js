@@ -78,6 +78,7 @@ export default function ModalCreateGroup({ isVisible, onClose, title = "Crear un
 
                 if(response.success){
                     console.log('Receta actualizada exitosamente', response.data);
+                    onClose(); // Cerrar el modal después de actualizar
                 }
             }else{
 
@@ -85,6 +86,8 @@ export default function ModalCreateGroup({ isVisible, onClose, title = "Crear un
 
                 if(response.success){
                     console.log('Receta creada exitosamente', response.data);
+                    onClose(); // Cerrar el modal después de crear
+                    reset(); // Limpiar el formulario después de crear
                 }
             }
             
