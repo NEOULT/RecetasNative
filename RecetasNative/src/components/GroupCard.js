@@ -46,6 +46,7 @@ const GroupCard = ({ imageUrl, title, recipesCount, membersCount, onPress, onDel
               {recipesCount} recetas • {membersCount} miembros
             </Text>
           </View>
+          {!showMoreButton && <Feather name="chevron-right" size={24} color="gray" />}
         </View>
       </TouchableOpacity>
  
