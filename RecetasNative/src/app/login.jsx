@@ -38,7 +38,7 @@ export default function LoginScreen() {
   return (
     <View style={styles.screenContainer}>
       <ImageBackground
-        source={{ uri: 'https://i.postimg.cc/vmWLhMxX/descarga-1.jpg' }}
+        source={require('../../assets/login.jpg')}
         style={styles.container}
         resizeMode="cover"
         imageStyle={{ opacity: 0.7 }}

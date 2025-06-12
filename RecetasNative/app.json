@@ -5,26 +5,26 @@
     "slug": "RecetasNative2",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/cocina.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/cocina.png",
+      "resizeMode": "cover",
+      "backgroundColor": "white"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/cocina.png",
+        "backgroundColor": "white"
       },
       "package": "com.ange1024.RecetasNative2"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/cocina.png"
     },
     "plugins": [
       "expo-router"
