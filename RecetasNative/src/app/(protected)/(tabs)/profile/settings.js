@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View , Pressable} from 'react-native';
+import { StyleSheet, Text, View , Pressable, ScrollView,KeyboardAvoidingView} from 'react-native';
 import ImageSelector from '../../../../components/common/ImagePicker';
 import ThemedText from '../../../../components/common/ThemedText';
 import InputV1 from '../../../../components/common/InputV1';
@@ -140,7 +140,10 @@ export default function ConfigScreen() {
 
 
   return (
-    <View style={styles.container}>
+
+    <KeyboardAvoidingView style={{flex: 1}}  behavior="height" keyboardVerticalOffset={120}>
+   
+   <ScrollView contentContainerStyle={styles.container}>
 
       <Pressable style={{ position: 'absolute', right: 25, top: 20}} onPress={handleSoftDelete}>
         <Feather name="trash-2" size={30} color="black" />
@@ -284,14 +287,13 @@ export default function ConfigScreen() {
             style={{ marginTop: 20 }}
             disabled={!formState.isDirty}
           />
-        
-    </View>
+        </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingHorizontal: 20,
     paddingVertical: 35,
     gap: 20,
