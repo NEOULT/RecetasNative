@@ -6,6 +6,7 @@ import { useApiMessage } from '../../../../../hooks/useApiMessage';
 import InfoBox from '../../../../../components/common/InfoBox';
 import { getUserId } from '../../../../../hooks/useGetUserId.js';
 import { useRouter } from 'expo-router';
+import ThemedText from '../../../../../components/common/ThemedText.js';
 import ModalCreateGroup from '../../../../../components/CreateGroupModal.js';
 
 const api = new ApiService();
@@ -19,8 +20,10 @@ export default function GroupsProfileScreen() {
   const [selectedGroup, setSelectedGroup] = useState(null);
   const [pagination, setPagination] = useState({ page: 1, hasMore: true });
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
+  const [loading, setLoading] = useState(true); 
 
   const fetchGroups = useCallback(async (pageToFetch = 1) => {
+    setLoading(pageToFetch === 1);
     const userId = await getUserId();
     try {
       let response;
@@ -52,12 +55,14 @@ export default function GroupsProfileScreen() {
       });
     } catch (error) {
       setGroups([]);
+    } finally {
+      setLoading(false);
     }
-  }, [callApiWithMessage, selectedTag]);
+  }, [selectedTag]);
 
   useEffect(() => {
     fetchGroups(1);
-  }, [selectedTag]);
+  }, [selectedTag, fetchGroups]);
 
   useEffect(() => {
     if (info.message) {
@@ -114,14 +119,6 @@ export default function GroupsProfileScreen() {
     );
   }
 
-  if (info.loading && pagination.page === 1) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#FF9100" />
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       <InfoBox 
@@ -139,24 +136,38 @@ export default function GroupsProfileScreen() {
         <SelectTags name="Privadas" />
       </View>
 
-      <GroupCardList
-        groups={groups}
-        onEndReached={handleLoadMore}
-        isFetchingMore={info.loading && pagination.page > 1}
-        onPressGroup={(groupData) => {
+      {loading ?
+      
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#FF9100" />
+      </View>
 
-          const group  = JSON.stringify(groupData);
+      : (groups.length === 0 ?
 
-          router.navigate({
-          pathname: `/profile/groups/${groupData._id}`,
-          params: { userId: groupData.user_id, group}
-        })}}
-        onDeleteGroup={()=> fetchGroups(1)}
-        onEditGroup={(group)=> {
-            setIsVisible(true)
-            setSelectedGroup(group);  
-          }}
-      />
+        <View style={styles.loaderContainer}>
+            <ThemedText>No hay grupos disponibles</ThemedText>
+        </View>
+
+        :
+
+        <GroupCardList
+          groups={groups}
+          onEndReached={handleLoadMore}
+          isFetchingMore={info.loading && pagination.page > 1}
+          onPressGroup={(groupData) => {
+            const group  = JSON.stringify(groupData);
+            router.navigate({
+              pathname: `/profile/groups/${groupData._id}`,
+              params: { userId: groupData.user_id, group}
+            })}}
+          onDeleteGroup={()=> fetchGroups(1)}
+          onEditGroup={(group)=> {
+              setIsVisible(true)
+              setSelectedGroup(group);  
+            }}
+        />
+        )
+      }
     </View>
   );
 }
@@ -194,5 +205,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 20,
   },
 });

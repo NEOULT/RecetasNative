@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import ThemedText from '../../../../components/common/ThemedText';
 import ThemedButton from '../../../../components/common/ThemedButton';
 import Feather from '@expo/vector-icons/Feather';
@@ -13,24 +13,23 @@ import { getUserId } from '../../../../hooks/useGetUserId';
 import { useFocusEffect } from '@react-navigation/native';
 import GroupCardV2 from '../../../../components/GroupCardV2';
 
-
 const api = new ApiService();
-
 
 export default function ProfileScreen({ userId : propUserId }) {
 
   const { colors } = useTheme();
   const [user, setUser] = useState(null);
   const [authUserId, setAuthUserId] = useState(null);
+  const [loading, setLoading] = useState(true); 
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
   
   const router = useRouter();
   console.log(propUserId);
-  
 
   useFocusEffect(
     useCallback(() => {
       async function fetchUser() {
+        setLoading(true); 
         try {
           const userId = propUserId || await getUserId();
           setAuthUserId(await getUserId());
@@ -38,10 +37,7 @@ export default function ProfileScreen({ userId : propUserId }) {
           const res = await callApiWithMessage(() => api.getProfile(userId));
           const userData = res.data.user.user;
           const recipes = res.data.user.recipes;
-
-          // console.log("asd",userData); 
           
- 
           const mappedUser = {
             _id: userData._id,
             username: `${userData.name} ${userData.lastName}`,
@@ -59,6 +55,8 @@ export default function ProfileScreen({ userId : propUserId }) {
 
         } catch (e) {
           setUser(null);
+        } finally {
+          setLoading(false);
         }
       }
       fetchUser();
@@ -73,43 +71,42 @@ export default function ProfileScreen({ userId : propUserId }) {
   }
 
   const handlerPressFollowButton = async () => {
-  await callApiWithMessage(() => api.toggleFollowUser(authUserId, user._id));
-  // Vuelve a cargar el perfil actualizado
-  try {
-    const res = await callApiWithMessage(() => api.getProfile(user._id));
-    const userData = res.data.user.user;
-    const recipes = res.data.user.recipes;
+    await callApiWithMessage(() => api.toggleFollowUser(authUserId, user._id));
+    // Vuelve a cargar el perfil actualizado
+    try {
+      const res = await callApiWithMessage(() => api.getProfile(user._id));
+      const userData = res.data.user.user;
+      const recipes = res.data.user.recipes;
 
-    const followersArr = Array.isArray(userData.followers) ? userData.followers : [];
-    const followingArr = Array.isArray(userData.following) ? userData.following : [];
+      const followersArr = Array.isArray(userData.followers) ? userData.followers : [];
+      const followingArr = Array.isArray(userData.following) ? userData.following : [];
 
-    const mappedUser = {
-      _id: userData._id,
-      username: `${userData.name} ${userData.lastName}`,
-      avatar: userData.profileImage ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
-      recipes: recipes.length,
-      groups: userData.createdGroups?.length || 0,
-      followersList: followersArr,
-      followingList: followingArr,
-      followers: followersArr.length,
-      following: followingArr.length,
-      recipesList: recipes,
-      groupsList: userData.createdGroups || [],
-    };
-    setUser(mappedUser);
-  } catch (e) {
-    // Maneja el error si lo deseas
-  }
-};
+      const mappedUser = {
+        _id: userData._id,
+        username: `${userData.name} ${userData.lastName}`,
+        avatar: userData.profileImage ?? 'https://i.postimg.cc/9f3hBvvT/pasta1.jpg',
+        recipes: recipes.length,
+        groups: userData.createdGroups?.length || 0,
+        followersList: followersArr,
+        followingList: followingArr,
+        followers: followersArr.length,
+        following: followingArr.length,
+        recipesList: recipes,
+        groupsList: userData.createdGroups || [],
+      };
+      setUser(mappedUser);
+    } catch (e) {
+      // Maneja el error si lo deseas
+    }
+  };
 
   const ItemBarProfile = ({value, title}) => {
-
-      return(
-        <View style={[styles.column, {gap: 0}]}>
-          <ThemedText type="subtitle3" style={{fontWeight:'bold'}}>{value}</ThemedText>
-          <ThemedText type="details">{title}</ThemedText>
-        </View>
-      )
+    return(
+      <View style={[styles.column, {gap: 0}]}>
+        <ThemedText type="subtitle3" style={{fontWeight:'bold'}}>{value}</ThemedText>
+        <ThemedText type="details">{title}</ThemedText>
+      </View>
+    )
   }
 
   const SeeMoreButton = ({title, onPress}) => {
@@ -118,6 +115,14 @@ export default function ProfileScreen({ userId : propUserId }) {
         <ThemedText type="subtitle1">{title}</ThemedText>
         <Feather name="chevron-right" size={30} color="black" />
       </Pressable>
+    );
+  }
+
+  if (loading) {
+    return (
+      <View style={[styles.container, {justifyContent: 'center', alignItems: 'center', flex: 1}]}>
+        <ActivityIndicator size="large" color="#FF9100" />
+      </View>
     );
   }
 
@@ -145,7 +150,6 @@ export default function ProfileScreen({ userId : propUserId }) {
         user?.followersList?.includes(authUserId) ? 
         <ThemedButton onPress={() => handlerPressFollowButton(user._id)} title="Dejar de Seguir" /> :
         <ThemedButton onPress={() => handlerPressFollowButton(user._id)} title="Seguir" />
-  
       )}
 
       <View style={[styles.row, styles.barProfile, {backgroundColor: colors.card}]}>
@@ -176,7 +180,6 @@ export default function ProfileScreen({ userId : propUserId }) {
                 key={group._id}
                 group={group}
                 onPress={() => console.log('Grupo seleccionado:', group.name)}
-                
               />
             ))}
           </ScrollView>

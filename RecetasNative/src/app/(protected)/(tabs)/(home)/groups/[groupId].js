@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image, ActivityIndicator, FlatList } from 'react-native';
+import { StyleSheet, View, Image, ActivityIndicator, FlatList, Text } from 'react-native';
 import { useLocalSearchParams, useRouter, usePathname } from 'expo-router';
 import ThemedText from '../../../../../components/common/ThemedText';
 import ThemedButton from '../../../../../components/common/ThemedButton';
@@ -7,7 +7,6 @@ import { ApiService } from '../../../../../services/ApiService';
 import { useApiMessage } from '../../../../../hooks/useApiMessage';
 import { useEffect, useState, useCallback } from 'react';
 import { getUserId } from '../../../../../hooks/useGetUserId';
-
 
 const api = new ApiService();
 
@@ -24,38 +23,19 @@ export default function GrupoScreen() {
   const [pagination, setPagination] = useState({ page: 1, hasMore: true });
   const [loading, setLoading] = useState(true);
 
-  console.log('GrupoScreen', groupId, groupObj, userId);
-  
   const fetchRecipes = useCallback(async (pageToFetch = 1) => {
-
-    setLoading(true);
+    setLoading(pageToFetch === 1);
     try {
-
       let res;
-
-
-      if (pathname.startsWith('/profile/groups')  && userId === groupObj.user_id){
-
-        console.log("Estoy en mi perfil");
-        
-          res = await callApiWithMessage(() =>
+      if (pathname.startsWith('/profile/groups') && userId === groupObj.user_id) {
+        res = await callApiWithMessage(() =>
           api.paginateRecipesByGroup(pageToFetch, 5, groupId, true)
-          
         );
-
-        console.log(" respuesta"+ res);
-        
-      }else{
-
-        console.log("No estoy en mi perfil");
-        
-          res = await callApiWithMessage(() =>
+      } else {
+        res = await callApiWithMessage(() =>
           api.paginateRecipesByGroup(pageToFetch, 5, groupId)
         );
       }
-      console.log('fetchRecipes', JSON.stringify(res, null, 2));
-      
-
       setRecipes(prev =>
         pageToFetch === 1
           ? res.data.data
@@ -70,7 +50,7 @@ export default function GrupoScreen() {
     } finally {
       setLoading(false);
     }
-  }, [callApiWithMessage, groupId]);
+  }, [groupId, pathname, groupObj?.user_id, userId]);
 
   useEffect(() => {
     fetchRecipes(1);
@@ -83,7 +63,6 @@ export default function GrupoScreen() {
   };
 
   const handlePressRecipe = (recipe) => {
-
     if (userId){
       router.navigate({
         pathname: `/profile/groups/${groupId}/${recipe._id}`,
@@ -92,7 +71,7 @@ export default function GrupoScreen() {
       return;
     }else{
       router.navigate({
-      pathname: `/groups/${groupId}/${recipe._id}`,
+        pathname: `/groups/${groupId}/${recipe._id}`,
       })
     }
   };
@@ -132,6 +111,12 @@ export default function GrupoScreen() {
         <View style={[styles.row, { marginVertical: 10 }]}>
           <ThemedText type="subtitle1">Recetas</ThemedText>
         </View>
+
+        {!loading && recipes.length === 0 && 
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 80 }}>
+            <ThemedText>No hay recetas en este grupo</ThemedText>
+          </View>
+        }
       </View>
     </>
   );
@@ -151,8 +136,17 @@ export default function GrupoScreen() {
         onRecipeDelete={() => fetchRecipes(1) }
       />
     </View>
-    
   );
+
+  // Loader principal (pantalla completa)
+  if (loading && pagination.page === 1) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#FF9100" />
+      </View>
+    );
+  }
+
 
   return (
     <View style={{ flex: 1 }}>
