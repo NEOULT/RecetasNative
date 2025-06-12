@@ -4,7 +4,7 @@ import ItemTag from './common/ItemTag';
 import DeleteButton from './common/DeleteButton';
 import InputV1 from './common/InputV1';
 
-export default function StepItem({ recipe, step = 0, onPressDelete = () => {}, value = {}, onChange }) {
+export default function StepItem({ recipe, step = 0, onPressDelete = () => {}, value = {}, onChange, styleInputError={} }) {
     return (
         <View style={styles.container}>
         <ItemTag
@@ -31,6 +31,7 @@ export default function StepItem({ recipe, step = 0, onPressDelete = () => {}, v
             multiline
             value={value.description}
             onChangeText={(description) => onChange({ ...value, description })}
+            style={styleInputError}
         />
 
         <DeleteButton onPress={onPressDelete} />

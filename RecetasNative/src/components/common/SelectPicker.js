@@ -19,6 +19,7 @@ export default function SelectPicker({
     value,
     onChange,
     options = [],
+    style
   }) 
   
   {
@@ -38,11 +39,11 @@ export default function SelectPicker({
   };
 
   return (
-    <View style={{width}}>
+    <View style={[{width}]}>
 
       <View style={{gap: 10}}>
         {(label && <ThemedText>{label}</ThemedText>)}
-        <TouchableOpacity style={[styles.input, {height}]} onPress={() => setVisible(true)}>
+        <TouchableOpacity style={[styles.input, {height}, style]} onPress={() => setVisible(true)}>
           <Text style={[styles.inputText, { color: selected ? 'black' : '#999' }]}>
             {selected || placeholder}
           </Text>

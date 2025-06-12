@@ -6,7 +6,7 @@ import ThemedText from "./common/ThemedText";
 import SelectPicker from "./common/SelectPicker";
 import { unitOptions } from "../constants/options";
 
-export default function IngredientItem({ value = {}, onChange, onPressDelete, ingredient = 1 }) {
+export default function IngredientItem({ value = {}, onChange, onPressDelete, ingredient = 1 , styleInputError = {}}) {
 
     return (
         <View style={styles.container}>
@@ -27,6 +27,7 @@ export default function IngredientItem({ value = {}, onChange, onPressDelete, in
                 width="100%"
                 value={value.ingredient_name}
                 onChangeText={ingredient_name => onChange({ ...value, ingredient_name })}
+                style={styleInputError}
                 />
                 <View style={styles.row}>
                     <InputV1
@@ -35,6 +36,7 @@ export default function IngredientItem({ value = {}, onChange, onPressDelete, in
                         value={String(value.unit_quantity)}
                         onChangeText={unit_quantity => onChange({ ...value, unit_quantity: Number(unit_quantity) })}
                         keyboardType="numeric"
+                        style={styleInputError}
                     />
                     
                     <ThemedText style={styles.dash}>-</ThemedText>
@@ -44,6 +46,7 @@ export default function IngredientItem({ value = {}, onChange, onPressDelete, in
                     value={value.unit}
                     onChange={unit => onChange({ ...value, unit })}
                     options={unitOptions}
+                    style={styleInputError}
                     />
             </View>
         </View>

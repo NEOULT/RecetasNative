@@ -134,12 +134,12 @@ export default function CreateRecipeScreen({}) {
       images: [{url: ""}],
       title: '',
       description: '',
-      time: 0,
+      time: '',
       timeUnit: '',
-      servings: 0,
+      servings: '',
       difficulty: '',
       isPublic: false,
-      ingredients:[{ ingredient_name: '', unit: '', unit_quantity: 0}],
+      ingredients:[{ ingredient_name: '', unit: '', unit_quantity: ''}],
       steps: [{ stepImage: '', description: '' }],
       categories: [],
     }
@@ -250,13 +250,15 @@ export default function CreateRecipeScreen({}) {
         <Controller
           control={control}
           name="title"
-          render={({ field: { onChange, value } }) => (
+          rules={{ required: true }}
+          render={({ field: { onChange, value }, fieldState: {error}}) => (
             <InputV1
               label="Titulo:"
               placeholder="Ingrese el titulo"
               width="99%"
               value={value}
               onChangeText={onChange}
+              style ={error && styles.inputError} 
             />
           )}
         />
@@ -264,7 +266,8 @@ export default function CreateRecipeScreen({}) {
         <Controller
           control={control}
           name="description"
-          render={({ field: { onChange, value } }) => (
+          rules={{ required: true }}
+          render={({ field: { onChange, value }, fieldState: {error} }) => (
             <InputV1
               label="Descripcion:"
               placeholder="Ingrese la descripcion"
@@ -273,6 +276,7 @@ export default function CreateRecipeScreen({}) {
               value={value}
               onChangeText={onChange}
               multiline={true}
+              style={error && styles.inputError}
             />
           )}
         />
@@ -284,27 +288,31 @@ export default function CreateRecipeScreen({}) {
               <Controller
                 control={control}
                 name="time"
-                render={({ field: { onChange, value } }) => (
+                rules={{ required: true }}
+                render={({ field: { onChange, value }, fieldState: {error} }) => (
                   <InputV1
                     placeholder="Cant"
                     width="35%"
                     value={String(value)}
                     onChangeText={onChange}
                     keyboardType="numeric"
+                    style={error && styles.inputError}
                   />
                 )}
               />
               <ThemedText style={styles.dash}>-</ThemedText>
               <Controller
                 control={control}
+                rules={{ required: true }}
                 name="timeUnit"
-                render={({ field: { onChange, value } }) => (
+                render={({ field: { onChange, value }, fieldState: {error} }) => (
                   <SelectPicker
                     width="45%"
                     placeholder="Min"
                     value={value}
                     onChange={onChange}
                     options={unitTimeOptions}
+                    style={error && styles.inputError}
                   />
                 )}
               />
@@ -312,8 +320,9 @@ export default function CreateRecipeScreen({}) {
           </View>
           <Controller
             control={control}
+            rules={{ required: true }}
             name="servings"
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange, value }, fieldState: {error} }) => (
               <InputV1
                 label="Porciones:"
                 placeholder="Unidades"
@@ -321,6 +330,7 @@ export default function CreateRecipeScreen({}) {
                 value={String(value)}
                 onChangeText={onChange}
                 keyboardType="numeric"
+                style={error && styles.inputError}
               />
             )}
           />
@@ -329,8 +339,9 @@ export default function CreateRecipeScreen({}) {
         <View style={styles.row}>
           <Controller
             control={control}
+            rules={{ required: true }}
             name="difficulty"
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange, value }, fieldState: {error} }) => (
               <SelectPicker
                 width="45%"
                 placeholder="Medio"
@@ -338,13 +349,14 @@ export default function CreateRecipeScreen({}) {
                 value={value}
                 onChange={onChange}
                 options={difficultyOptions}
+                style={error && styles.inputError}
               />
             )}
           />
           <Controller
             control={control}
             name="isPublic"
-            render={({ field: { onChange, value } }) => (
+            render={({ field: { onChange, value }}) => (
               <ThemedSwitch title='Public:' width="40%" value={value} onValueChange={onChange}/>
             )}
           />
@@ -388,20 +400,22 @@ export default function CreateRecipeScreen({}) {
             <Controller
               key={field.id}
               control={control}
+              rules={{ required: true }}
               name={`ingredients.${index}`}
-              render={({ field: { value, onChange } }) => (
+              render={({ field: { value, onChange }, fieldState: {error} }) => (
                 <IngredientItem
                   value={value}
                   onChange={onChange}
                   onPressDelete={() => removeIngredient(index)}
                   ingredient={index + 1}
+                  styleInputError={error && styles.inputError}
                 />
               )}
             />
           ))}
           <ThemedButton
             title="Agregar ingrediente"
-            onPress={() => appendIngredient({ ingredient_name: '', unit: 0, unit_quantity: 0})}
+            onPress={() => appendIngredient({ ingredient_name: '', unit: '', unit_quantity: ''})}
           />
         </View>
 
@@ -415,14 +429,16 @@ export default function CreateRecipeScreen({}) {
             <Controller
               key={field.id}
               control={control}
+              rules={{ required: true }}
               name={`steps.${index}`}
-              render={({ field: { value, onChange } }) => (
+              render={({ field: { value, onChange }, fieldState: {error} }) => (
                 <StepItem
                   step={index + 1}
                   recipe={recipeId}
                   value={value}
                   onChange={onChange}
                   onPressDelete={() => removeStep(index)}
+                  styleInputError={error && styles.inputError}
                 />
               )}
             />
@@ -490,6 +506,9 @@ const styles = StyleSheet.create({
   subtitle: {
     alignSelf: 'flex-start',
     marginVertical: 15,
+  },
+  inputError: {
+    borderColor: 'red',
   },
   
 });

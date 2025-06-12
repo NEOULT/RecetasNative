@@ -128,7 +128,7 @@ export default function GroupsProfileScreen() {
         duration={2000} 
       />
 
-      <ModalCreateGroup defaultValues= {selectedGroup} isVisible={isVisible} onClose={()=> setIsVisible(false) } title='         Editar Grupo' />
+      <ModalCreateGroup defaultValues= {selectedGroup} isVisible={isVisible} onSuccess={()=> fetchGroups(1)} onClose={()=> setIsVisible(false) } title='         Editar Grupo' />
 
       <View style={styles.row}>
         <SelectTags name="Todas" />

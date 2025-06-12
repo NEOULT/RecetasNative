@@ -6,6 +6,7 @@ import { useApiMessage } from '../../../../../hooks/useApiMessage';
 import InfoBox from '../../../../../components/common/InfoBox';
 import { getUserId } from '../../../../../hooks/useGetUserId.js';
 import { useRouter } from 'expo-router';
+import { useIsFocused } from '@react-navigation/native';
 import ThemedText from '../../../../../components/common/ThemedText.js';
 
 const api = new ApiService();
@@ -15,6 +16,7 @@ export default function RecipesProfileScreen() {
   const router = useRouter();
   const [selectedTag, setSelectedTag] = useState('Todas');
   const [recipes, setRecipes] = useState([]);
+  const isFocused = useIsFocused();
   const [pagination, setPagination] = useState({ page: 1, hasMore: true });
   const { info, callApiWithMessage, clearInfo } = useApiMessage();
   const [loading, setLoading] = useState(true); 
@@ -59,8 +61,10 @@ export default function RecipesProfileScreen() {
   }, [selectedTag]);
 
   useEffect(() => {
+    if (isFocused) {
     fetchRecipes(1);
-  }, [selectedTag, fetchRecipes]);
+    }
+  }, [selectedTag, fetchRecipes, isFocused]);
 
   useEffect(() => {
     if (info.message) {

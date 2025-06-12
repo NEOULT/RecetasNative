@@ -74,17 +74,14 @@ export default function RecipesScreen() {
       
 
       await callApiWithMessage(() => api.toggleFavorite(id, user_id));
+
+      clearInfo();
+
       setRecipes((prevRecipes) =>
         prevRecipes.map((recipe) =>
           recipe._id === id ? { ...recipe, isFavorite: !recipe.isFavorite } : recipe
         )
       );
-      setInfo({
-        message: wasFavorite
-          ? "Receta eliminada de favoritos"
-          : "¡Receta agregada a favoritos!",
-        type: "success"
-      });
     } catch (error) {
       console.error("Error al cambiar favorito:", error);
       setInfo({

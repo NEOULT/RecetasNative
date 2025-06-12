@@ -30,6 +30,8 @@ export default function FavoritesScreen() {
       const response = await callApiWithMessage(() =>
         api.paginateFavorites(user_id, pageToFetch, 5)
       );
+
+      clearInfo();
       setRecipes(prev =>
         pageToFetch === 1
           ? response.data.data
@@ -38,10 +40,6 @@ export default function FavoritesScreen() {
       setPagination({
         page: pageToFetch,
         hasMore: pageToFetch < response.data.totalPages
-      });
-      setInfo({
-        message: "Favoritos cargados",
-        type: "success"
       });
     } catch (error) {
       setRecipes([]);
