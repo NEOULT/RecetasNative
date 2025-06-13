@@ -6,12 +6,15 @@ import {AuthContext} from '../context/authContext.jsx';
 import { ApiService } from '../services/ApiService.js';
 import {Ionicons} from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
+import { useApiMessage } from '../hooks/useApiMessage.js';
+import InfoBox  from '../components/common/InfoBox.js';
 
 const apiService = new ApiService();
 
 export default function LoginScreen() {
 
   const [showPassword, setShowPassword] = useState(false);
+  const { info, setInfo, clearInfo } = useApiMessage();
   const {logIn} = useContext(AuthContext);
   const {
     control,
@@ -28,15 +31,29 @@ export default function LoginScreen() {
         if (!result.success) throw new Error(result.message);
 
         await logIn(result.data);
+        setInfo({
+        message: "¡Inicio de sesión exitoso!",
+        type: "success"
+      });
 
     }catch (error) {
         console.error('Error al iniciar sesion:', error);
+        setInfo({
+          message: "Usuario o contraseña incorrectos.",
+          type: "error"
+        });
     }
   };
 
 
   return (
     <View style={styles.screenContainer}>
+      <InfoBox 
+        message={info.message} 
+        type={info.type} 
+        onHide={clearInfo} 
+        duration={2000} 
+      />
       <ImageBackground
         source={require('../../assets/login.jpg')}
         style={styles.container}

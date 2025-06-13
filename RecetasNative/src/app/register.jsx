@@ -11,13 +11,15 @@ import { Link } from "expo-router";
 import { ApiService } from "../services/ApiService";
 import { Ionicons } from "@expo/vector-icons";
 import { useState,useEffect } from "react";
+import InfoBox from "../components/common/InfoBox";
+import { useApiMessage } from "../hooks/useApiMessage";
 
 const apiService = new ApiService();
 
 export default function SignUpScreen() {
 
   const [showPassword, setShowPassword] = useState(false);
-
+  const { info, setInfo, clearInfo } = useApiMessage();
 const {
 control,
 handleSubmit,
@@ -29,14 +31,35 @@ const onSubmit = async (data) => {
 //console.log("Datos del formulario:", data);
 try {
     const resultado = await apiService.signUp(data);
+    
+    setInfo({
+        message: "Registro de usuario exitoso!",
+        type: "success"
+      });
     console.log("Respuesta del servidor:", resultado);
 } catch (error) {
-    console.error("Error al registrar:", error);
+    setInfo({
+          message:error,
+          type: "error"
+    });
+    if(error == "Error: User already exists") {
+      setInfo({
+          message:"El usuario ya existe.",
+          type: "error"
+    });
+    }
+    
 }
 };
 
 return (
 <View style={styles.screenContainer}>
+    <InfoBox
+        message={info.message}
+        type={info.type}
+        onHide={clearInfo}
+        duration={2000}
+    />
     <ImageBackground
     source={require('../../assets/login.jpg')}
     style={styles.container}
@@ -54,26 +77,34 @@ return (
         <Controller
         control={control}
         name="name"
-        rules={{ required: "El nombre es obligatorio" }}
+        rules={{ 
+          required: "El nombre es obligatorio", 
+          maxLength: 
+          { value: 30, message: "El nombre no puede exceder los 30 caracteres" } 
+        }}
         render={({ field: { onChange, value } }) => (
             <TextInput
             placeholder="Nombre"
             placeholderTextColor={"white"}
-            style={[styles.input, errors.firstName && styles.inputError]}
+            style={[styles.input, errors.name && styles.inputError]}
             onChangeText={onChange}
             value={value}
             />
         )}
         />
-        {errors.firstName && (
-        <Text style={styles.error}>{errors.firstName.message}</Text>
+        {errors.name && (
+        <Text style={styles.error}>{errors.name.message}</Text>
         )}
 
         {/*---------------Last Name--------------- */}
         <Controller
         control={control}
         name="lastName"
-        rules={{ required: "El apellido es obligatorio" }}
+        rules={{ 
+          required: "El apellido es obligatorio",
+          maxLength: 
+          { value: 30, message: "El apellido no puede exceder los 30 caracteres" }
+        }}
         render={({ field: { onChange, value } }) => (
             <TextInput
             placeholder="Apellido"
@@ -97,6 +128,10 @@ return (
             pattern: {
             value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             message: "Correo no válido",
+            },
+            maxLength: {
+            value: 50,
+            message: "El correo no puede exceder los 50 caracteres",
             },
         }}
         render={({ field: { onChange, value } }) => (
