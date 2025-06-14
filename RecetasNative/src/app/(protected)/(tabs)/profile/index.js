@@ -129,7 +129,7 @@ export default function ProfileScreen({ userId : propUserId }) {
   if (!user) {
     return (
       <View style={[styles.container, {justifyContent: 'center', alignItems: 'center'}]}>
-        <ThemedText type="title" textAlign='center'>No hay datos de usuario disponibles</ThemedText>
+        <ActivityIndicator size="large" color={colors.primary} style={{allingSelf: 'center'}} />
       </View>
     );
   }
