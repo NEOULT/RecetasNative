@@ -34,7 +34,17 @@ export default function IngredientItem({ value = {}, onChange, onPressDelete, in
                         placeholder="cantidad"
                         width="45%"
                         value={String(value.unit_quantity)}
-                        onChangeText={unit_quantity => onChange({ ...value, unit_quantity: Number(unit_quantity) })}
+                        onChangeText={unit_quantity => {
+                            const safeValue = unit_quantity.replace(',', '.');
+                            if (safeValue === '') {
+                            onChange({ ...value, unit_quantity: '' });
+                            return;
+                            }
+                            const num = Number(safeValue);
+                            if (!isNaN(num)) {
+                            onChange({ ...value, unit_quantity: safeValue });
+                            }
+                        }}
                         keyboardType="numeric"
                         style={styleInputError}
                     />

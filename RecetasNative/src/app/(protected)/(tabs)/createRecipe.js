@@ -101,7 +101,7 @@ export default function CreateRecipeScreen({}) {
 
   useEffect(() => {
       if (info.message) {
-          const timeout = setTimeout(clearInfo, 3000);
+          const timeout = setTimeout(clearInfo, 1500);
           return () => clearTimeout(timeout);
       }
   }, [info.message, clearInfo]);
@@ -111,7 +111,7 @@ export default function CreateRecipeScreen({}) {
   useEffect(() => {
       if (didMount.current) {
         if (info.message) {
-          const timeout = setTimeout(clearInfo, 3000);
+          const timeout = setTimeout(clearInfo, 1500);
           return () => clearTimeout(timeout);
         }
     } else {
@@ -205,7 +205,7 @@ export default function CreateRecipeScreen({}) {
         setTimeout(() => {
           navigation.goBack();
           reset();
-        }, 2000);
+        }, 1000);
         
       }else{
         console.log('Receta creada exitosamente:');
@@ -218,7 +218,7 @@ export default function CreateRecipeScreen({}) {
         setTimeout(() => {
           navigation.goBack();
           reset();
-        }, 2000);
+        }, 1000);
         
       }
 
@@ -249,7 +249,7 @@ export default function CreateRecipeScreen({}) {
       message={info.message} 
       type={info.type} 
       onHide={clearInfo} 
-      duration={2000} 
+      duration={1500} 
     />
     <ScrollView style={[styles.scroll, { backgroundColor: colors.card}]}>
       <View style={styles.container}>

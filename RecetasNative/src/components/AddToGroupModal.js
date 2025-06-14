@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback} from 'react';
 import { useApiMessage } from '../hooks/useApiMessage.js';
 import ThemedText from './common/ThemedText.js';
 import InfoBox from './common/InfoBox.js';
+import { getUserId } from '../hooks/useGetUserId.js';
 
 const api = new ApiService();
 
@@ -16,8 +17,9 @@ export default function AddToGroupModal({isVisible, onClose, data}) {
 
     const fetchGroups = useCallback(async (pageToFetch = 1) => {
         try {
+            const userId = await getUserId();
             const response = await callApiWithMessage(() =>
-            api.paginateGroups(pageToFetch, 10)
+            api.getPaginateGroupsByUser(pageToFetch, 10, userId)
             );
             
             setGroups(prev =>

@@ -72,16 +72,21 @@ export default function ModalCreateGroup({ isVisible, onClose, title = "Crear un
                 if (response.success) {
                     console.log('Grupo actualizado exitosamente', response.data);
                     if (onSuccess) onSuccess()
-                    onClose();
-                    reset();
+                    setTimeout(() => {
+                    onClose(); 
+                    reset(); 
+                    }, 1000);
                 }
             } else {
                 response = await callApiWithMessage(() => api.createGroup(data));
                 if (response.success) {
                     console.log('Grupo creado exitosamente', response.data);
                     if (onSuccess) onSuccess();
+
+                    setTimeout(() => {
                     onClose(); 
                     reset(); 
+                    }, 1000);
                 }
             }
         } catch (e) {
