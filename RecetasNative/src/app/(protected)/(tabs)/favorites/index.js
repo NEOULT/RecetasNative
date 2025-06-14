@@ -10,6 +10,7 @@ import { getUserId } from "../../../../hooks/useGetUserId";
 import { ActivityIndicator } from "react-native-paper";
 import { useFocusEffect } from '@react-navigation/native';
 import { Pressable } from 'react-native';
+import { useTheme } from "../../../../styles/theme/ThemeContext";
 
 const api = new ApiService();
 
@@ -21,6 +22,8 @@ export default function FavoritesScreen() {
 
   const [showFavoriteRecipes, setShowFavoriteRecipes] = useState(true);
   const [showFavoriteGroups, setShowFavoriteGroups] = useState(false);
+
+  const { colors } = useTheme();
 
   const favoriteGroups = []
 
@@ -125,7 +128,7 @@ export default function FavoritesScreen() {
 
       {/* Recetas favoritas */}
       <Pressable 
-      style={styles.pressableDropdown}
+      style={[styles.pressableDropdown, {backgroundColor: colors.card}]}
       onPress={() => setShowFavoriteRecipes((prev) => !prev)}>
         <ThemedText type="title" style={{marginTop: 10, marginBottom: 5}}>
           {showFavoriteRecipes ? "Ocultar recetas favoritas ▲" : "Mostrar recetas favoritas ▼"}
@@ -150,7 +153,7 @@ export default function FavoritesScreen() {
 
       {/* Grupos favoritos */}
       <Pressable 
-      style={styles.pressableDropdown}
+      style={[styles.pressableDropdown, {backgroundColor: colors.card}]}
       onPress={() => setShowFavoriteGroups((prev) => !prev)}>
         <ThemedText type="title" style={{marginTop: 20, marginBottom: 5}}>
           {showFavoriteGroups ? "Ocultar grupos Seguidos ▲" : "Mostrar grupos Seguidos ▼"}

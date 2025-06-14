@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router';
 import { useContext } from 'react';
 import { AuthContext } from '../../../../context/authContext.jsx';
 import { useTheme } from '../../../../styles/theme/ThemeContext.js'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function PerfilLayout() {
 
@@ -17,6 +18,8 @@ export default function PerfilLayout() {
       router.push('/profile/settings');
     }
   return (
+
+  <SafeAreaView style={{ flex: 1, backgroundColor: colors.card }}>
     <Stack
       screenOptions={{
         title: 'Perfil',
@@ -26,6 +29,9 @@ export default function PerfilLayout() {
           backgroundColor: colors.card,
         },
         headerTintColor: '#333',
+        headerTitleStyle: {
+          color: colors.regular_textcolor,
+        },
       }}
     >
         <Stack.Screen name="index" options={{ 
@@ -49,5 +55,6 @@ export default function PerfilLayout() {
 
     
     </Stack>
+    </SafeAreaView>
   )
 }

@@ -113,7 +113,7 @@ export default function ProfileScreen({ userId : propUserId }) {
     return (
       <Pressable onPress={onPress} style={[styles.row, styles.seeMoreButton]}>
         <ThemedText type="subtitle1">{title}</ThemedText>
-        <Feather name="chevron-right" size={30} color="black" />
+        <Feather name="chevron-right" size={30} color={colors.secundary_textcolor} />
       </Pressable>
     );
   }

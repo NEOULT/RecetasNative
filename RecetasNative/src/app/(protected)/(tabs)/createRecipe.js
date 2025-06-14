@@ -23,7 +23,7 @@ const api = new ApiService();
 
 export default function CreateRecipeScreen({}) {
 
-  const { info, callApiWithMessage, clearInfo } = useApiMessage();   
+  const { info, callApiWithMessage, clearInfo, setInfo} = useApiMessage();   
   
   const [categories, setCategories] = useState([]); 
 
@@ -98,6 +98,13 @@ export default function CreateRecipeScreen({}) {
 
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+      if (info.message) {
+          const timeout = setTimeout(clearInfo, 3000);
+          return () => clearTimeout(timeout);
+      }
+  }, [info.message, clearInfo]);
 
   const didMount = useRef(false);
   
@@ -189,12 +196,30 @@ export default function CreateRecipeScreen({}) {
 
       if(response.success && recipeValues){
         console.log('Receta actualizada exitosamente:');
-        navigation.goBack();
-        reset();
+
+        setInfo({
+          message: 'Receta actualizada exitosamente',
+          type: 'success'
+        });
+
+        setTimeout(() => {
+          navigation.goBack();
+          reset();
+        }, 2000);
+        
       }else{
         console.log('Receta creada exitosamente:');
-        navigation.goBack();
-        reset();
+
+        setInfo({
+          message: 'Receta creada exitosamente',
+          type: 'success'
+        });
+
+        setTimeout(() => {
+          navigation.goBack();
+          reset();
+        }, 2000);
+        
       }
 
 

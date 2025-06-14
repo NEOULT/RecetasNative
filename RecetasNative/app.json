@@ -5,13 +5,13 @@
     "slug": "RecetasNative2",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/cocina.png",
+    "icon": "./assets/gorro-cocina.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/cocina.png",
       "resizeMode": "cover",
-      "backgroundColor": "white"
+      "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true
@@ -19,7 +19,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/cocina.png",
-        "backgroundColor": "white"
+        "backgroundColor": "#ffffff"
       },
       "package": "com.ange1024.RecetasNative2"
     },
